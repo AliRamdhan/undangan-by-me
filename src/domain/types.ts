@@ -1,0 +1,157 @@
+// Mirrors docs/STRUCTURE.md. Keys are the sheet header names verbatim so the
+// Apps Script adapter maps rows without a translation table.
+
+export const AKSES = ['VIP', 'KELUARGA', 'REGULAR', 'PUBLIC'] as const
+export type Akses = (typeof AKSES)[number]
+
+export const SISI = ['PRIA', 'WANITA', 'BERSAMA'] as const
+
+export const GELAR = ['Bapak', 'Ibu', 'Bapak/Ibu', 'Sdr.', 'Sdri.', 'Keluarga', 'dr.', 'Prof.'] as const
+
+export const STATUS_RSVP = ['BELUM', 'HADIR', 'TIDAK_HADIR', 'RAGU'] as const
+export type StatusRSVP = (typeof STATUS_RSVP)[number]
+
+export const STATUS_KIRIM = ['BELUM', 'ANTRI', 'TERKIRIM', 'DIBACA', 'GAGAL'] as const
+export type StatusKirim = (typeof STATUS_KIRIM)[number]
+
+export const TEMPLATE_TIPE = [
+  'UNDANGAN',
+  'REMINDER',
+  'KONFIRMASI_RSVP',
+  'TERIMA_KASIH',
+  'INFO_HARI_H',
+] as const
+export type TemplateTipe = (typeof TEMPLATE_TIPE)[number]
+
+export const TEMPLATE_AKSES = ['SEMUA', ...AKSES] as const
+export type TemplateAkses = (typeof TEMPLATE_AKSES)[number]
+
+export type HpValid = '✅' | '⚠️ format' | '⚠️ duplikat' | '⚠️ kosong'
+
+/**
+ * One row of 02_Tamu. PIN and HP are always strings — a PIN may start with 0
+ * and HP must keep its leading 0 / + (UIUX.md § Number formats).
+ * `Akses`, `Gelar`, `Sisi` stay `string` because imported data can hold
+ * anything; `cekDuplikat` reports the invalid values instead of the type
+ * system silently hiding them.
+ */
+export interface Guest {
+  // A — formula
+  No: number
+  // B–K — manual block (B is script-written PIN)
+  PIN: string
+  Gelar: string
+  Nama: string
+  HP: string
+  Email: string
+  Akses: string
+  Grup: string
+  Sisi: string
+  Q_S1: number
+  Q_S2: number
+  // L–Q — RSVP block, webhook-written
+  Status_RSVP: StatusRSVP
+  RSVP_S1: number
+  RSVP_S2: number
+  RSVP_Waktu: string
+  Nama_Pax: string
+  Pesan_Tamu: string
+  // R–U — send block, blast-written
+  Status_Kirim: StatusKirim
+  Kirim_Terakhir: string
+  Kirim_Count: number
+  Kirim_Error: string
+  // V–X — operational, manual
+  Meja: string
+  Note_Unik: string
+  Catatan: string
+  // Y–Z — formula
+  HP_Valid: HpValid
+  Link_Undangan: string
+  // AA–AB — script (renderer)
+  Preview_Pesan: string
+  Link_WA: string
+}
+
+export type GuestKey = keyof Guest
+
+/** The columns a human (and therefore this UI) is allowed to write. */
+export const MANUAL_KEYS = [
+  'Gelar',
+  'Nama',
+  'HP',
+  'Email',
+  'Akses',
+  'Grup',
+  'Sisi',
+  'Q_S1',
+  'Q_S2',
+  'Meja',
+  'Note_Unik',
+  'Catatan',
+] as const satisfies readonly GuestKey[]
+export type ManualKey = (typeof MANUAL_KEYS)[number]
+
+export type GuestInput = Pick<Guest, ManualKey>
+
+/**
+ * A write to 02_Tamu. `PIN` identifies the row (never the row index —
+ * BLAST-FLOW.md); an empty PIN means "append a new guest".
+ */
+export interface GuestWrite {
+  PIN: string
+  fields: Partial<GuestInput>
+}
+
+export interface Session {
+  kode: string
+  label: string
+  tanggal: string
+  mulai: string
+  selesai: string
+  tempat: string
+  alamat: string
+  maps: string
+  dress_code: string
+  live_stream: string
+}
+
+/** The export payload from URL-CONTRACT.md § 2, minus fields this UI never reads. */
+export interface EventInfo {
+  slug: string
+  domain: string
+  nama_event: string
+  tipe: string
+  bahasa: string
+  timezone: string
+  couple: {
+    pria: { panggilan: string; lengkap: string; ortu: string }
+    wanita: { panggilan: string; lengkap: string; ortu: string }
+    hashtag: string
+  }
+  tanggal_utama: string
+  batas_rsvp: string
+  sesi: Session[]
+  cs: { nama: string; hp: string }
+  kapasitas: { s1: number; s2: number }
+}
+
+export type GatewayMode = 'DRY-RUN' | 'LIVE'
+
+export interface Meta {
+  mode: GatewayMode
+  event: EventInfo
+  /** `{{greet}}` variants (_Config). */
+  greetings: string[]
+}
+
+/** One row of 03_Template. */
+export interface Template {
+  Kode: string
+  Tipe: TemplateTipe
+  Akses: TemplateAkses
+  Bahasa: string
+  Header_Image_URL: string
+  Isi_Pesan: string
+  Aktif: boolean
+}
