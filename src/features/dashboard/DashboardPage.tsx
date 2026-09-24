@@ -1,8 +1,8 @@
 import { useState, type ReactNode } from 'react'
 import { Card, EmptyState } from '../../components/ui'
-import { computeStats, type Breakdown, type SessionPax } from '../../domain/stats'
+import { computeStats, type Breakdown /* HIDDEN(sementara): , type SessionPax */ } from '../../domain/stats'
 import { useStore } from '../../state/store'
-import { KIRIM_META, RSVP_META } from '../guests/statusMeta'
+import { /* HIDDEN(sementara): KIRIM_META, */ RSVP_META } from '../guests/statusMeta'
 
 const pct = (n: number, d: number) => (d ? Math.round((n / d) * 100) : 0)
 const nf = new Intl.NumberFormat('id-ID')
@@ -14,13 +14,14 @@ const RSVP_FILL: Record<string, string> = {
   TIDAK_HADIR: 'var(--neutral)',
   BELUM: 'color-mix(in oklab, var(--neutral) 35%, var(--surface))',
 }
-const KIRIM_FILL: Record<string, string> = {
-  DIBACA: 'var(--good)',
-  TERKIRIM: 'color-mix(in oklab, var(--good) 50%, var(--surface))',
-  ANTRI: 'var(--series-1)',
-  GAGAL: 'var(--critical)',
-  BELUM: 'color-mix(in oklab, var(--neutral) 35%, var(--surface))',
-}
+// HIDDEN(sementara): Status_Kirim is hidden
+// const KIRIM_FILL: Record<string, string> = {
+//   DIBACA: 'var(--good)',
+//   TERKIRIM: 'color-mix(in oklab, var(--good) 50%, var(--surface))',
+//   ANTRI: 'var(--series-1)',
+//   GAGAL: 'var(--critical)',
+//   BELUM: 'color-mix(in oklab, var(--neutral) 35%, var(--surface))',
+// }
 
 function StatTile({ label, value, sub, tone }: { label: string; value: ReactNode; sub?: ReactNode; tone?: 'critical' | 'good' }) {
   return (
@@ -98,48 +99,49 @@ function StackedBar({ segments, total }: { segments: Segment[]; total: number })
   )
 }
 
-/** Allocated quota vs confirmed attendance on one axis, venue capacity as a reference tick. */
-function SessionMeter({ s }: { s: SessionPax }) {
-  const max = Math.max(s.kapasitas, s.kuota, s.hadir, 1)
-  const over = s.kuota > s.kapasitas && s.kapasitas > 0
-  const rows = [
-    { label: 'Kuota dialokasikan', value: s.kuota, fill: 'var(--series-2)' },
-    { label: 'Konfirmasi hadir', value: s.hadir, fill: 'var(--series-1)' },
-  ]
-  return (
-    <div className="flex flex-col gap-2">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h3 className="text-sm font-semibold">
-          {s.kode} · {s.label}
-        </h3>
-        <span className="text-xs text-ink-3">Kapasitas {nf.format(s.kapasitas)}</span>
-      </div>
-      {rows.map((r) => (
-        <div key={r.label} className="grid grid-cols-[130px_1fr_48px] items-center gap-3 text-sm" title={`${r.label}: ${r.value} pax`}>
-          <span className="text-ink-2">{r.label}</span>
-          <div className="relative h-3">
-            <div className="absolute inset-0 rounded bg-surface-2" />
-            <div
-              className="absolute inset-y-0 left-0 rounded"
-              style={{ width: `${(r.value / max) * 100}%`, minWidth: r.value ? 4 : 0, background: r.fill }}
-            />
-            <div
-              aria-hidden
-              className="absolute -inset-y-1 w-0.5 bg-ink"
-              style={{ left: `calc(${(s.kapasitas / max) * 100}% - 1px)` }}
-            />
-          </div>
-          <span className="text-right font-medium tabular-nums">{nf.format(r.value)}</span>
-        </div>
-      ))}
-      {over && (
-        <p className="text-xs text-serious-ink">
-          ⚠ Kuota {nf.format(s.kuota)} pax melebihi kapasitas venue ({nf.format(s.kapasitas)}).
-        </p>
-      )}
-    </div>
-  )
-}
+// HIDDEN(sementara): quota and RSVP_S* are hidden
+// /** Allocated quota vs confirmed attendance on one axis, venue capacity as a reference tick. */
+// function SessionMeter({ s }: { s: SessionPax }) {
+//   const max = Math.max(s.kapasitas, s.kuota, s.hadir, 1)
+//   const over = s.kuota > s.kapasitas && s.kapasitas > 0
+//   const rows = [
+//     { label: 'Kuota dialokasikan', value: s.kuota, fill: 'var(--series-2)' },
+//     { label: 'Konfirmasi hadir', value: s.hadir, fill: 'var(--series-1)' },
+//   ]
+//   return (
+//     <div className="flex flex-col gap-2">
+//       <div className="flex flex-wrap items-baseline justify-between gap-2">
+//         <h3 className="text-sm font-semibold">
+//           {s.kode} · {s.label}
+//         </h3>
+//         <span className="text-xs text-ink-3">Kapasitas {nf.format(s.kapasitas)}</span>
+//       </div>
+//       {rows.map((r) => (
+//         <div key={r.label} className="grid grid-cols-[130px_1fr_48px] items-center gap-3 text-sm" title={`${r.label}: ${r.value} pax`}>
+//           <span className="text-ink-2">{r.label}</span>
+//           <div className="relative h-3">
+//             <div className="absolute inset-0 rounded bg-surface-2" />
+//             <div
+//               className="absolute inset-y-0 left-0 rounded"
+//               style={{ width: `${(r.value / max) * 100}%`, minWidth: r.value ? 4 : 0, background: r.fill }}
+//             />
+//             <div
+//               aria-hidden
+//               className="absolute -inset-y-1 w-0.5 bg-ink"
+//               style={{ left: `calc(${(s.kapasitas / max) * 100}% - 1px)` }}
+//             />
+//           </div>
+//           <span className="text-right font-medium tabular-nums">{nf.format(r.value)}</span>
+//         </div>
+//       ))}
+//       {over && (
+//         <p className="text-xs text-serious-ink">
+//           ⚠ Kuota {nf.format(s.kuota)} pax melebihi kapasitas venue ({nf.format(s.kapasitas)}).
+//         </p>
+//       )}
+//     </div>
+//   )
+// }
 
 function BreakdownBars({ rows }: { rows: Breakdown[] }) {
   const max = Math.max(...rows.map((r) => r.total), 1)
@@ -183,9 +185,11 @@ export function DashboardPage() {
 
   const s = computeStats(guests, meta.event)
   const answered = s.total - (s.rsvp.BELUM ?? 0)
-  const delivered = (s.kirim.TERKIRIM ?? 0) + (s.kirim.DIBACA ?? 0)
-  const gagal = s.kirim.GAGAL ?? 0
-  const attention = s.pinKosong + s.hpBermasalah + s.pinDuplikat + s.lebihKuota.length + gagal
+  // HIDDEN(sementara): send status, HP_Valid and quota no longer count toward "Perlu perhatian".
+  // const delivered = (s.kirim.TERKIRIM ?? 0) + (s.kirim.DIBACA ?? 0)
+  // const gagal = s.kirim.GAGAL ?? 0
+  // const attention = s.pinKosong + s.hpBermasalah + s.pinDuplikat + s.lebihKuota.length + gagal
+  const attention = s.pinKosong + s.pinDuplikat
 
   const rsvpSegments: Segment[] = (['HADIR', 'RAGU', 'TIDAK_HADIR', 'BELUM'] as const).map((k) => ({
     key: k,
@@ -194,28 +198,31 @@ export function DashboardPage() {
     count: s.rsvp[k] ?? 0,
     fill: RSVP_FILL[k],
   }))
-  const kirimSegments: Segment[] = (['DIBACA', 'TERKIRIM', 'ANTRI', 'GAGAL', 'BELUM'] as const).map((k) => ({
-    key: k,
-    label: KIRIM_META[k].label,
-    icon: KIRIM_META[k].icon,
-    count: s.kirim[k] ?? 0,
-    fill: KIRIM_FILL[k],
-  }))
+  // HIDDEN(sementara): Status_Kirim is hidden
+  // const kirimSegments: Segment[] = (['DIBACA', 'TERKIRIM', 'ANTRI', 'GAGAL', 'BELUM'] as const).map((k) => ({
+  //   key: k,
+  //   label: KIRIM_META[k].label,
+  //   icon: KIRIM_META[k].icon,
+  //   count: s.kirim[k] ?? 0,
+  //   fill: KIRIM_FILL[k],
+  // }))
 
   const warnings: { label: string; count: number; detail: string }[] = [
-    { label: 'HP bermasalah', count: s.hpBermasalah, detail: 'kosong, format salah, atau duplikat — jalankan Normalisasi HP' },
+    // HIDDEN(sementara): { label: 'HP bermasalah', count: s.hpBermasalah, detail: 'kosong, format salah, atau duplikat — jalankan Normalisasi HP' },
     { label: 'PIN kosong', count: s.pinKosong, detail: 'belum punya link undangan — jalankan Generate PIN' },
     { label: 'PIN duplikat', count: s.pinDuplikat, detail: 'RSVP untuk PIN ini ditolak (DUPLICATE_PIN)' },
-    { label: 'Gagal kirim', count: gagal, detail: 'kirim manual lewat Link WA' },
-    { label: 'RSVP melebihi kuota', count: s.lebihKuota.length, detail: s.lebihKuota.map((g) => g.Nama).join(', ') },
+    // HIDDEN(sementara): { label: 'Gagal kirim', count: gagal, detail: 'kirim manual lewat Link WA' },
+    // HIDDEN(sementara): { label: 'RSVP melebihi kuota', count: s.lebihKuota.length, detail: s.lebihKuota.map((g) => g.Nama).join(', ') },
   ].filter((w) => w.count > 0)
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
         <StatTile label="Total tamu" value={nf.format(s.total)} sub={`${s.akses.find((a) => a.key === 'VIP')?.total ?? 0} VIP`} />
         <StatTile label="Sudah RSVP" value={`${pct(answered, s.total)}%`} sub={`${answered} dari ${s.total} tamu menjawab`} />
+        {/* HIDDEN(sementara):
         <StatTile label="Undangan tersampaikan" value={`${pct(delivered, s.total)}%`} sub={`${delivered} terkirim/dibaca`} />
+        */}
         <StatTile
           label="Perlu perhatian"
           value={attention ? `! ${attention}` : '✓ 0'}
@@ -224,15 +231,16 @@ export function DashboardPage() {
         />
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Card title="Status RSVP">
-          <StackedBar segments={rsvpSegments} total={s.total} />
-        </Card>
-        <Card title="Status kirim">
-          <StackedBar segments={kirimSegments} total={s.total} />
-        </Card>
-      </div>
+      <Card title="Status RSVP">
+        <StackedBar segments={rsvpSegments} total={s.total} />
+      </Card>
+      {/* HIDDEN(sementara): Status kirim — restore by putting both cards back in <div className="grid gap-4 lg:grid-cols-2">
+      <Card title="Status kirim">
+        <StackedBar segments={kirimSegments} total={s.total} />
+      </Card>
+      */}
 
+      {/* HIDDEN(sementara): quota and RSVP_S* are hidden
       <Card title="Pax per sesi">
         <div className="grid gap-6 md:grid-cols-2">
           {s.sesi.map((x) => (
@@ -251,6 +259,7 @@ export function DashboardPage() {
           </span>
         </p>
       </Card>
+      */}
 
       <div className="grid gap-4 lg:grid-cols-3">
         <Card title="Per akses">

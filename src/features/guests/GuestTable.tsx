@@ -1,7 +1,7 @@
 import { useSyncExternalStore, type ReactNode } from 'react'
 import { FROZEN_COUNT, ZONE_LABEL, type Column, type Zone } from '../../domain/schema'
 import { AKSES, type Guest, type GuestKey } from '../../domain/types'
-import { KirimBadge, RsvpBadge } from './status'
+// HIDDEN(sementara): import { KirimBadge, RsvpBadge } from './status'
 
 export type SortState = { key: GuestKey; dir: 1 | -1 } | null
 
@@ -20,19 +20,21 @@ function hasData(g: Guest) {
 
 /** Row-level conditional formatting: GAGAL, or data present but Nama empty → red row. */
 function rowCritical(g: Guest): boolean {
-  return g.Status_Kirim === 'GAGAL' || (!g.Nama.trim() && hasData(g))
+  // HIDDEN(sementara): g.Status_Kirim === 'GAGAL' ||
+  return !g.Nama.trim() && hasData(g)
 }
 
 /** Cell-level conditional formatting (UIUX.md § Conditional formatting). */
 function cellTint(g: Guest, key: GuestKey): string {
   switch (key) {
-    case 'HP':
-    case 'HP_Valid':
-      return g.HP_Valid !== '✅' ? 'tint-serious' : ''
-    case 'RSVP_S1':
-      return g.RSVP_S1 > g.Q_S1 ? 'tint-critical text-critical-ink font-semibold' : ''
-    case 'RSVP_S2':
-      return g.RSVP_S2 > g.Q_S2 ? 'tint-critical text-critical-ink font-semibold' : ''
+    // HIDDEN(sementara): orange HP tint comes from HP_Valid
+    // case 'HP':
+    // case 'HP_Valid':
+    //   return g.HP_Valid !== '✅' ? 'tint-serious' : ''
+    // case 'RSVP_S1':
+    //   return g.RSVP_S1 > g.Q_S1 ? 'tint-critical text-critical-ink font-semibold' : ''
+    // case 'RSVP_S2':
+    //   return g.RSVP_S2 > g.Q_S2 ? 'tint-critical text-critical-ink font-semibold' : ''
     case 'Nama':
       return !g.Nama.trim() ? 'tint-critical' : ''
     case 'Akses':
@@ -61,10 +63,10 @@ function renderCell(g: Guest, col: Column, onOpen: (g: Guest) => void): ReactNod
           {g.Nama || <span className="text-critical-ink italic">(tanpa nama)</span>}
         </button>
       )
-    case 'Status_RSVP':
-      return <RsvpBadge status={g.Status_RSVP} />
-    case 'Status_Kirim':
-      return <KirimBadge status={g.Status_Kirim} title={g.Kirim_Error || undefined} />
+    // case 'Status_RSVP':
+    //   return <RsvpBadge status={g.Status_RSVP} />
+    // case 'Status_Kirim':
+    //   return <KirimBadge status={g.Status_Kirim} title={g.Kirim_Error || undefined} />
     case 'Link_Undangan':
       return g.Link_Undangan ? (
         <a href={g.Link_Undangan} target="_blank" rel="noreferrer" className="font-mono text-xs text-accent hover:underline">
@@ -84,12 +86,12 @@ function renderCell(g: Guest, col: Column, onOpen: (g: Guest) => void): ReactNod
       ) : (
         <span className="text-xs text-ink-3">—</span>
       )
-    case 'Q_S1':
-    case 'Q_S2':
-    case 'RSVP_S1':
-    case 'RSVP_S2':
-    case 'Kirim_Count':
-      return <span className="tabular-nums">{String(v)}</span>
+    // case 'Q_S1':
+    // case 'Q_S2':
+    // case 'RSVP_S1':
+    // case 'RSVP_S2':
+    // case 'Kirim_Count':
+    //   return <span className="tabular-nums">{String(v)}</span>
     default:
       return <span title={String(v)}>{String(v)}</span>
   }

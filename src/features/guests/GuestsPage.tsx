@@ -4,7 +4,7 @@ import { Button, Dialog, EmptyState, fieldBase } from '../../components/ui'
 import type { Issue } from '../../domain/checks'
 import { exportGuestsCsv } from '../../domain/csv'
 import { TAMU_COLUMNS } from '../../domain/schema'
-import { AKSES, SISI, STATUS_KIRIM, STATUS_RSVP, type Guest, type GuestKey } from '../../domain/types'
+import { AKSES, SISI, type Guest, type GuestKey } from '../../domain/types'
 import { useStore } from '../../state/store'
 import { LinksDialog } from '../templates/LinksDialog'
 import { PreviewDialog } from '../templates/PreviewDialog'
@@ -13,7 +13,7 @@ import { GuestDrawer } from './GuestDrawer'
 import { GuestTable, type SortState } from './GuestTable'
 import { ImportDialog } from './ImportDialog'
 import { IssuesPanel } from './IssuesPanel'
-import { KIRIM_META, RSVP_META } from './statusMeta'
+// import { KIRIM_META, RSVP_META } from './statusMeta'
 
 interface Filters {
   q: string
@@ -36,17 +36,18 @@ function matches(g: Guest, f: Filters): boolean {
   if (f.akses && g.Akses !== f.akses) return false
   if (f.sisi && g.Sisi !== f.sisi) return false
   if (f.grup && g.Grup !== f.grup) return false
-  if (f.rsvp && g.Status_RSVP !== f.rsvp) return false
-  if (f.kirim && g.Status_Kirim !== f.kirim) return false
+  // if (f.rsvp && g.Status_RSVP !== f.rsvp) return false
+  // if (f.kirim && g.Status_Kirim !== f.kirim) return false
   if (f.masalah) {
     const bad =
       !g.Nama.trim() ||
       !g.PIN ||
-      g.HP_Valid !== '✅' ||
-      !(AKSES as readonly string[]).includes(g.Akses) ||
-      g.RSVP_S1 > g.Q_S1 ||
-      g.RSVP_S2 > g.Q_S2 ||
-      g.Status_Kirim === 'GAGAL'
+      // HIDDEN(sementara): g.HP_Valid !== '✅' ||
+      !(AKSES as readonly string[]).includes(g.Akses)
+      // HIDDEN(sementara):
+      // || g.RSVP_S1 > g.Q_S1 ||
+      // g.RSVP_S2 > g.Q_S2 ||
+      // g.Status_Kirim === 'GAGAL'
     if (!bad) return false
   }
   return true
@@ -165,7 +166,8 @@ export function GuestsPage() {
   }
   const check = async () => {
     const r = await run('Cek Duplikat & Error', (api) => api.checkGuests())
-    if (r) setIssues(r)
+    // HIDDEN(sementara): quota is hidden, so its over-quota issues are too.
+    if (r) setIssues(r.filter((i) => i.kind !== 'LEBIH_KUOTA'))
   }
   const exportCsv = () => {
     const rows = selectedGuests.length ? selectedGuests : visible
@@ -222,18 +224,18 @@ export function GuestsPage() {
         <FilterSelect label="Akses" value={filters.akses} onChange={setF('akses')} options={AKSES} />
         <FilterSelect label="Sisi" value={filters.sisi} onChange={setF('sisi')} options={SISI} />
         <FilterSelect label="Grup" value={filters.grup} onChange={setF('grup')} options={groups} />
-        <FilterSelect
+        {/* <FilterSelect
           label="RSVP"
           value={filters.rsvp}
           onChange={setF('rsvp')}
           options={STATUS_RSVP.map((s) => ({ value: s, label: RSVP_META[s].label }))}
-        />
-        <FilterSelect
+        /> */}
+        {/* <FilterSelect
           label="Kirim"
           value={filters.kirim}
           onChange={setF('kirim')}
           options={STATUS_KIRIM.map((s) => ({ value: s, label: KIRIM_META[s].label }))}
-        />
+        /> */}
         <label className={`flex h-9 cursor-pointer items-center gap-2 rounded-lg border px-2.5 text-sm ${filters.masalah ? 'border-accent text-accent' : 'border-line text-ink-2'}`}>
           <input
             type="checkbox"

@@ -1,10 +1,10 @@
 import { useId, useState, type ReactNode } from 'react'
 import { refOf } from '../../api/types'
-import { Badge, Button, Drawer, Field, fieldBase, inputCls } from '../../components/ui'
+import { /* HIDDEN(sementara): Badge, */ Button, Drawer, Field, fieldBase, inputCls } from '../../components/ui'
 import { HP_PATTERN, normalizePhone } from '../../domain/phone'
 import { AKSES, GELAR, MANUAL_KEYS, SISI, type Guest, type GuestInput } from '../../domain/types'
 import { useStore } from '../../state/store'
-import { KirimBadge, RsvpBadge } from './status'
+import { /* HIDDEN(sementara): KirimBadge, */ RsvpBadge } from './status'
 
 type Form = Record<keyof GuestInput, string>
 
@@ -121,7 +121,7 @@ export function GuestDrawer({
               PIN <span className="font-mono">{guest.PIN || 'belum ada'}</span>
             </span>
             <RsvpBadge status={guest.Status_RSVP} />
-            <KirimBadge status={guest.Status_Kirim} />
+            {/* HIDDEN(sementara): <KirimBadge status={guest.Status_Kirim} /> */}
           </span>
         ) : (
           'PIN dibuat otomatis saat disimpan.'
@@ -212,7 +212,7 @@ export function GuestDrawer({
         </fieldset>
 
         <fieldset className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <legend className="mb-2 text-xs font-semibold tracking-wide text-ink-3 uppercase">Segmentasi & kuota</legend>
+          <legend className="mb-2 text-xs font-semibold tracking-wide text-ink-3 uppercase">Segmentasi</legend>
           <Field label="Akses" htmlFor={fid('akses')} error={showErr('Akses')}>
             <select id={fid('akses')} className={inputCls} value={form.Akses} onChange={set('Akses')}>
               {!(AKSES as readonly string[]).includes(form.Akses) && (
@@ -241,12 +241,14 @@ export function GuestDrawer({
               ))}
             </datalist>
           </Field>
+          {/* HIDDEN(sementara): quota inputs. Values are still carried in the form but never sent unless changed.
           <Field label="Kuota S1 (pax)" htmlFor={fid('q1')} error={showErr('Q_S1')}>
             <input id={fid('q1')} type="number" min={0} step={1} inputMode="numeric" className={inputCls} value={form.Q_S1} onChange={set('Q_S1')} />
           </Field>
           <Field label="Kuota S2 (pax)" htmlFor={fid('q2')} error={showErr('Q_S2')}>
             <input id={fid('q2')} type="number" min={0} step={1} inputMode="numeric" className={inputCls} value={form.Q_S2} onChange={set('Q_S2')} />
           </Field>
+          */}
           <Field label="Meja" htmlFor={fid('meja')}>
             <input id={fid('meja')} className={inputCls} value={form.Meja} onChange={set('Meja')} />
           </Field>
@@ -268,19 +270,24 @@ export function GuestDrawer({
               ⚙ Otomatis <span className="font-normal normal-case">— diisi script/formula, tidak bisa diedit</span>
             </h3>
             <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3">
+              {/* HIDDEN(sementara):
               <ReadOnly label="HP_Valid">
                 <Badge tone={guest.HP_Valid === '✅' ? 'good' : 'serious'}>{guest.HP_Valid}</Badge>
               </ReadOnly>
+              */}
               <ReadOnly label="Status RSVP">
                 <RsvpBadge status={guest.Status_RSVP} />
               </ReadOnly>
+              {/* HIDDEN(sementara):
               <ReadOnly label="RSVP S1 / S2">
                 <span className={guest.RSVP_S1 > guest.Q_S1 || guest.RSVP_S2 > guest.Q_S2 ? 'font-semibold text-critical-ink' : ''}>
                   {guest.RSVP_S1} / {guest.RSVP_S2}
                 </span>
               </ReadOnly>
+              */}
               <ReadOnly label="Waktu RSVP">{guest.RSVP_Waktu}</ReadOnly>
               <ReadOnly label="Nama pax">{guest.Nama_Pax}</ReadOnly>
+              {/* HIDDEN(sementara):
               <ReadOnly label="Status kirim">
                 <KirimBadge status={guest.Status_Kirim} />
                 {guest.Kirim_Count > 0 && <span className="ml-2 text-xs text-ink-3">{guest.Kirim_Count}× · {guest.Kirim_Terakhir}</span>}
@@ -292,6 +299,7 @@ export function GuestDrawer({
                   </ReadOnly>
                 </div>
               )}
+              */}
               {guest.Pesan_Tamu && (
                 <div className="col-span-2">
                   <ReadOnly label="Ucapan tamu">“{guest.Pesan_Tamu}”</ReadOnly>

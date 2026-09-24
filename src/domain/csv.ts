@@ -1,4 +1,4 @@
-import { IMPORT_COLUMNS, TAMU_COLUMNS } from './schema'
+import { IMPORT_COLUMNS, SHEET_COLUMNS } from './schema'
 import type { Guest, GuestInput } from './types'
 
 /** RFC 4180 parser: quoted fields, embedded commas/newlines, "" escapes, CRLF, BOM. */
@@ -60,7 +60,7 @@ export function serializeCsv(rows: readonly (readonly string[])[]): string {
 
 /** Every column A–AB, for a backup or a handover. */
 export function exportGuestsCsv(guests: readonly Guest[]): string {
-  const header = TAMU_COLUMNS.map((c) => c.key)
+  const header = [...SHEET_COLUMNS]
   const body = guests.map((g) => header.map((k) => String(g[k] ?? '')))
   return serializeCsv([header, ...body])
 }
