@@ -33,10 +33,10 @@ describe('validateEvent', () => {
     const errs = validateEvent(e)
     for (const k of [
       'slug',
-      'domain',
+      // HIDDEN(sementara): 'domain',
       'nama_event',
       'tanggal_utama',
-      'batas_rsvp',
+      // HIDDEN(sementara): 'batas_rsvp',
       'couple.pria.lengkap',
       'couple.pria.panggilan',
       'couple.pria.ortu',

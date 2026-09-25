@@ -72,10 +72,12 @@ export function validateEvent(e: EventInfo): EventErrors {
 
   need('nama_event', e.nama_event)
   need('tipe', e.tipe)
-  need('domain', e.domain)
+  // HIDDEN(sementara): Domain undangan is hidden in the form
+  // need('domain', e.domain)
   need('timezone', e.timezone)
   need('tanggal_utama', e.tanggal_utama)
-  need('batas_rsvp', e.batas_rsvp)
+  // HIDDEN(sementara): Batas RSVP is hidden in the form
+  // need('batas_rsvp', e.batas_rsvp)
 
   if (!e.slug.trim()) errs.slug = REQUIRED
   else if (!SLUG_PATTERN.test(e.slug)) errs.slug = 'Huruf kecil, angka dan tanda hubung; harus diawali huruf'

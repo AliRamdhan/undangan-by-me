@@ -1,10 +1,10 @@
 import { DatePicker } from '@/components/DatePicker'
 import { Card, CardContent } from '@/components/ui/card'
 import { FieldLegend, FieldSet } from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
+// HIDDEN(sementara): import { Input } from '@/components/ui/input'
 import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from '@/components/ui/input-group'
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
-import { BAHASA, EVENT_TIPE, TIMEZONES, WEB_TEMPLATES } from '@/core/domain/types'
+import { BAHASA, EVENT_TIPE, TIMEZONES /* HIDDEN(sementara): , WEB_TEMPLATES */ } from '@/core/domain/types'
 import { FormField, SectionHeader, TextField, type SectionProps } from './form'
 
 /** `https://undangan.by.me/` — what the slug is appended to (URL-CONTRACT.md § 1). */
@@ -16,11 +16,12 @@ function urlPrefix(domain: string): string {
 
 /** #A.2 Data Event, with #A.2.1 Pengaturan Event nested inside (as in the design). */
 export function EventDataCard({ draft, update, err, touch }: SectionProps) {
-  const [remDate = '', remTime = ''] = draft.tanggal_pengingat.split('T')
-  const setReminder = (date: string, time: string) =>
-    update((d) => {
-      d.tanggal_pengingat = date ? `${date}T${time || '09:00'}` : ''
-    })
+  // HIDDEN(sementara): Pengingat acara is hidden
+  // const [remDate = '', remTime = ''] = draft.tanggal_pengingat.split('T')
+  // const setReminder = (date: string, time: string) =>
+  //   update((d) => {
+  //     d.tanggal_pengingat = date ? `${date}T${time || '09:00'}` : ''
+  //   })
 
   return (
     <Card>
@@ -112,6 +113,7 @@ export function EventDataCard({ draft, update, err, touch }: SectionProps) {
               />
             </InputGroup>
           </FormField>
+          {/* HIDDEN(sementara): Pengingat acara, Template web, Batas RSVP
           <FormField id="ev-pengingat" label="Pengingat acara" hint="Kapan pesan REMINDER dikirim">
             <div className="flex gap-2">
               <DatePicker id="ev-pengingat" value={remDate} onChange={(v) => setReminder(v, remTime)} className="flex-1" />
@@ -152,6 +154,7 @@ export function EventDataCard({ draft, update, err, touch }: SectionProps) {
               }}
             />
           </FormField>
+          */}
         </div>
 
         <Card className="gap-0 overflow-hidden pt-0">
@@ -192,6 +195,7 @@ export function EventDataCard({ draft, update, err, touch }: SectionProps) {
                     ))}
                   </NativeSelect>
                 </FormField>
+                {/* HIDDEN(sementara): Domain undangan
                 <div className="sm:col-span-2">
                   <TextField
                     id="ev-domain"
@@ -204,6 +208,7 @@ export function EventDataCard({ draft, update, err, touch }: SectionProps) {
                     error={err('domain')}
                   />
                 </div>
+                */}
               </div>
             </FieldSet>
           </CardContent>
