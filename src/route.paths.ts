@@ -1,0 +1,10 @@
+/** Every URL the app routes to, in one place — used by route.ts and by links. */
+export const PATHS = {
+  root: '/',
+  tamu: '/tamu',
+  template: '/template',
+  dashboard: '/dashboard',
+  pengaturan: '/pengaturan',
+} as const
+
+export const templatePath = (kode: string) => `${PATHS.template}/${encodeURIComponent(kode)}`

@@ -24,11 +24,23 @@ npm run build
 ## Layout
 
 ```
-src/domain/     pure logic — phone, PIN, checks, strict {{ns.token}} renderer, CSV, stats
-src/api/        UndanganApi interface · mock adapter + seed · Apps Script adapter
-src/state/      store: load, run(action) → refetch, toasts
-src/features/   guests (table, drawer, import, issues) · templates · dashboard · settings
+src/
+├── core/            backend & data, no UI
+│   ├── domain/        pure logic: types, schema, phone, PIN, checks, {{token}} renderer, CSV, stats
+│   ├── api/           UndanganApi interface · mock adapter + seed · Apps Script adapter
+│   └── store/         StoreProvider, useStore, errors — load, run(action) → refetch, toasts
+├── components/      generic UI, one folder each (Name.tsx + index.ts, *.styles.ts for class maps)
+├── layouts/         AppLayout — header, mode badge, navigation, <Outlet/>
+├── pages/           route components; page-only parts live in pages/<Page>/components/
+├── hooks/           useMediaQuery
+├── utils/           download, format
+├── route.ts         React Router routes (/tamu, /template/:kode, /dashboard, /pengaturan)
+├── route.paths.ts   URL constants shared by routes and links
+└── App.tsx          StoreProvider + RouterProvider
 ```
+
+Imports use the `@/` alias (`@/core/store`, `@/components/Button`). A deployed build
+needs an SPA fallback to `index.html` so deep links such as `/template/UND-VIP` resolve.
 
 The TS renderer in `domain/template.ts` runs only inside the mock adapter. With
 the Apps Script adapter, every preview, draft render and link generation goes to
