@@ -83,13 +83,18 @@ function wholeNumber(raw: string): number | null {
   return /^\d+$/.test(v) ? Number(v) : null
 }
 
-/**
- * Parses a 02_Tamu_import.csv. The header must be exactly PIN…Q_S2 (B–K) in
- * order — unlike connectied's importer, which reads by column index and
- * silently shifts data when a column is added.
- */
+/** Parses a 02_Tamu_import.csv (or pasted CSV text). */
 export function parseImport(text: string): ImportResult {
-  const table = parseCsv(text)
+  return parseImportTable(parseCsv(text))
+}
+
+/**
+ * Validates an import table, from CSV or the first sheet of an .xlsx. The
+ * header must be exactly PIN…Q_S2 (B–K) in order — unlike connectied's
+ * importer, which reads by column index and silently shifts data when a
+ * column is added.
+ */
+export function parseImportTable(table: readonly (readonly string[])[]): ImportResult {
   if (!table.length) return { rows: [], errors: ['File kosong'] }
   const header = table[0].map((h) => h.trim())
   const expected = [...IMPORT_COLUMNS]

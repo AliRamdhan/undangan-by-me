@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/empty'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -35,10 +36,11 @@ import type { Issue } from '@/core/domain/checks'
 import { exportGuestsCsv } from '@/core/domain/csv'
 import { TAMU_COLUMNS } from '@/core/domain/schema'
 import { /* HIDDEN(sementara): AKSES, SISI, */ type Guest, type GuestKey } from '@/core/domain/types'
+import { exportGuestsXlsx } from '@/core/domain/xlsx'
 import { useStore } from '@/core/store'
 import { GenerateLinksDialog } from '@/components/GenerateLinksDialog'
 import { MessagePreviewDialog } from '@/components/MessagePreviewDialog'
-import { downloadText } from '@/utils/download'
+import { downloadBlob, downloadText } from '@/utils/download'
 import { GuestDrawer } from '@/pages/Guests/components/GuestDrawer'
 import { GuestTable, type SortState } from '@/pages/Guests/components/GuestTable'
 import { ImportDialog } from '@/pages/Guests/components/ImportDialog'
@@ -206,10 +208,10 @@ export function Guests() {
     // HIDDEN(sementara): Akses is hidden too, so its issues are as well.
     if (r) setIssues(r.filter((i) => i.kind !== 'LEBIH_KUOTA' && i.kind !== 'AKSES_INVALID'))
   }
-  const exportCsv = () => {
-    const rows = selectedGuests.length ? selectedGuests : visible
-    downloadText(`02_Tamu_${new Date().toISOString().slice(0, 10)}.csv`, exportGuestsCsv(rows))
-  }
+  const exportRows = () => (selectedGuests.length ? selectedGuests : visible)
+  const exportName = (ext: string) => `02_Tamu_${new Date().toISOString().slice(0, 10)}.${ext}`
+  const exportCsv = () => downloadText(exportName('csv'), exportGuestsCsv(exportRows()))
+  const exportXlsx = async () => downloadBlob(exportName('xlsx'), await exportGuestsXlsx(exportRows()))
   const deleteSelected = async () => {
     const n = await run('Hapus tamu', (api) => api.deleteGuests(selectedGuests.map(refOf)))
     setConfirmDelete(false)
@@ -240,12 +242,18 @@ export function Guests() {
         <ToolGroup label="Data">
           <Button variant="outline" onClick={() => setImportOpen(true)} disabled={!!busy}>
             <HugeiconsIcon icon={Upload04Icon} strokeWidth={2} data-icon="inline-start" />
-            Import CSV
+            Import
           </Button>
-          <Button variant="outline" onClick={exportCsv} disabled={!visible.length}>
-            <HugeiconsIcon icon={Download04Icon} strokeWidth={2} data-icon="inline-start" />
-            Export CSV{selectedGuests.length ? ` (${selectedGuests.length})` : ''}
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger render={<Button variant="outline" disabled={!visible.length} />}>
+              <HugeiconsIcon icon={Download04Icon} strokeWidth={2} data-icon="inline-start" />
+              Export{selectedGuests.length ? ` (${selectedGuests.length})` : ''}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-44">
+              <DropdownMenuItem onClick={exportCsv}>CSV (.csv)</DropdownMenuItem>
+              <DropdownMenuItem onClick={exportXlsx}>Excel (.xlsx)</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </ToolGroup>
         <Separator orientation="vertical" className="hidden h-6 lg:block" />
         <ToolGroup label="Pesan">
@@ -341,7 +349,7 @@ export function Guests() {
             <EmptyHeader>
               <EmptyTitle>Belum ada tamu</EmptyTitle>
               <EmptyDescription>
-                Tambah satu per satu, atau <b>Import CSV</b> dengan kolom PIN…Q_S2 lalu jalankan Generate PIN.
+                Tambah satu per satu, atau <b>Import</b> CSV/Excel dengan kolom PIN…Q_S2 lalu jalankan Generate PIN.
               </EmptyDescription>
             </EmptyHeader>
           </Empty>
