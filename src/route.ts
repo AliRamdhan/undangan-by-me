@@ -3,7 +3,6 @@ import { AppLayout } from '@/layouts/AppLayout'
 import { Dashboard } from '@/pages/Dashboard'
 import { Guests } from '@/pages/Guests'
 import { NotFound } from '@/pages/NotFound'
-import { Settings } from '@/pages/Settings'
 import { Templates } from '@/pages/Templates'
 import { PATHS } from '@/route.paths'
 
@@ -17,7 +16,6 @@ export const router = createBrowserRouter([
       { path: PATHS.template, Component: Templates },
       { path: `${PATHS.template}/:kode`, Component: Templates },
       { path: PATHS.dashboard, Component: Dashboard },
-      { path: PATHS.pengaturan, Component: Settings },
       { path: '*', Component: NotFound },
     ],
   },

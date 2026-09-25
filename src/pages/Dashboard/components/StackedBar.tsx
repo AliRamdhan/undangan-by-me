@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { nf, pct } from '@/utils/format'
 
 export interface Segment {
@@ -35,32 +36,33 @@ export function StackedBar({ segments, total }: { segments: Segment[]; total: nu
             style={{ flexGrow: s.count, flexBasis: 0, minWidth: 4, background: s.fill }}
           />
         ))}
-        {!shown.length && <div className="h-full flex-1 rounded bg-surface-2" />}
+        {!shown.length && <div className="h-full flex-1 rounded bg-muted" />}
       </div>
-      <table className="w-full text-sm">
-        <tbody>
+      <Table className="text-sm">
+        <TableBody>
           {segments.map((s) => (
-            <tr
+            <TableRow
               key={s.key}
               onMouseEnter={() => setHover(s.key)}
               onMouseLeave={() => setHover(null)}
-              className={hover === s.key ? 'bg-surface-2' : ''}
+              data-state={hover === s.key ? 'selected' : undefined}
+              className="border-0"
             >
-              <td className="py-1 pr-2">
+              <TableCell className="w-5 py-1 pr-2 pl-0">
                 <span className="inline-block size-3 rounded-sm align-[-1px]" style={{ background: s.fill }} aria-hidden />
-              </td>
-              <td className="w-full py-1 text-ink-2">
+              </TableCell>
+              <TableCell className="w-full py-1 text-muted-foreground">
                 <span aria-hidden className="mr-1 text-ink-3">
                   {s.icon}
                 </span>
                 {s.label}
-              </td>
-              <td className="py-1 pl-4 text-right font-medium tabular-nums">{nf.format(s.count)}</td>
-              <td className="w-12 py-1 pl-3 text-right text-ink-3 tabular-nums">{pct(s.count, total)}%</td>
-            </tr>
+              </TableCell>
+              <TableCell className="py-1 pl-4 text-right font-medium tabular-nums">{nf.format(s.count)}</TableCell>
+              <TableCell className="w-12 py-1 pr-0 pl-3 text-right text-ink-3 tabular-nums">{pct(s.count, total)}%</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   )
 }

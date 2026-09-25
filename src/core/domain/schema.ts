@@ -33,8 +33,9 @@ export const TAMU_COLUMNS: readonly Column[] = [
   c('HP', 'E', 'manual', 'identitas', 150, true),
   c('Email', 'F', 'manual', 'identitas', 180),
   // c('Akses', 'G', 'manual', 'segmentasi', 100, true),
-  c('Grup', 'H', 'manual', 'segmentasi', 120, true),
-  c('Sisi', 'I', 'manual', 'segmentasi', 90, true),
+  // HIDDEN(sementara): segmentasi (Akses above, Grup, Sisi)
+  // c('Grup', 'H', 'manual', 'segmentasi', 120, true),
+  // c('Sisi', 'I', 'manual', 'segmentasi', 90, true),
   // c('Q_S1', 'J', 'manual', 'rsvp', 64, true),
   // c('Q_S2', 'K', 'manual', 'rsvp', 64, true),
   // c('Status_RSVP', 'L', 'script', 'rsvp', 120, true),

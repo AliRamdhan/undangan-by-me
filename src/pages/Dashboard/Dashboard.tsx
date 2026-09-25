@@ -1,11 +1,12 @@
-import { Card } from '@/components/Card'
-import { EmptyState } from '@/components/EmptyState'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/empty'
+import { Skeleton } from '@/components/ui/skeleton'
 import { StatTile } from '@/components/StatTile'
 import { computeStats /* HIDDEN(sementara): , type SessionPax */ } from '@/core/domain/stats'
 import { useStore } from '@/core/store'
 import { /* HIDDEN(sementara): KIRIM_META, */ RSVP_META } from '@/components/StatusBadge'
 import { nf, pct } from '@/utils/format'
-import { BreakdownBars } from './components/BreakdownBars'
+// HIDDEN(sementara): import { BreakdownBars } from './components/BreakdownBars'
 import { StackedBar, type Segment } from './components/StackedBar'
 
 // Status colours are fixed and always shown next to their label + count.
@@ -70,8 +71,16 @@ const RSVP_FILL: Record<string, string> = {
 
 export function Dashboard() {
   const { guests, meta, loading } = useStore()
-  if (loading || !meta) return <div className="h-96 animate-pulse rounded-2xl bg-surface" />
-  if (!guests.length) return <EmptyState title="Belum ada data tamu">Dashboard terisi otomatis dari 02_Tamu.</EmptyState>
+  if (loading || !meta) return <Skeleton className="h-96 rounded-xl" />
+  if (!guests.length)
+    return (
+      <Empty>
+        <EmptyHeader>
+          <EmptyTitle>Belum ada data tamu</EmptyTitle>
+          <EmptyDescription>Dashboard terisi otomatis dari 02_Tamu.</EmptyDescription>
+        </EmptyHeader>
+      </Empty>
+    )
 
   const s = computeStats(guests, meta.event)
   const answered = s.total - (s.rsvp.BELUM ?? 0)
@@ -108,7 +117,10 @@ export function Dashboard() {
   return (
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
+        {/* HIDDEN(sementara): VIP count comes from Akses
         <StatTile label="Total tamu" value={nf.format(s.total)} sub={`${s.akses.find((a) => a.key === 'VIP')?.total ?? 0} VIP`} />
+        */}
+        <StatTile label="Total tamu" value={nf.format(s.total)} />
         <StatTile label="Sudah RSVP" value={`${pct(answered, s.total)}%`} sub={`${answered} dari ${s.total} tamu menjawab`} />
         {/* HIDDEN(sementara):
         <StatTile label="Undangan tersampaikan" value={`${pct(delivered, s.total)}%`} sub={`${delivered} terkirim/dibaca`} />
@@ -121,61 +133,93 @@ export function Dashboard() {
         />
       </div>
 
-      <Card title="Status RSVP">
-        <StackedBar segments={rsvpSegments} total={s.total} />
+      <Card>
+        <CardHeader>
+          <CardTitle>Status RSVP</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <StackedBar segments={rsvpSegments} total={s.total} />
+        </CardContent>
       </Card>
       {/* HIDDEN(sementara): Status kirim — restore by putting both cards back in <div className="grid gap-4 lg:grid-cols-2">
-      <Card title="Status kirim">
-        <StackedBar segments={kirimSegments} total={s.total} />
+      <Card>
+        <CardHeader>
+          <CardTitle>Status kirim</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <StackedBar segments={kirimSegments} total={s.total} />
+        </CardContent>
       </Card>
       */}
 
       {/* HIDDEN(sementara): quota and RSVP_S* are hidden
-      <Card title="Pax per sesi">
-        <div className="grid gap-6 md:grid-cols-2">
-          {s.sesi.map((x) => (
-            <SessionMeter key={x.kode} s={x} />
-          ))}
-        </div>
-        <p className="mt-4 flex flex-wrap gap-4 text-xs text-ink-3">
-          <span className="flex items-center gap-1.5">
-            <span className="size-2.5 rounded-sm bg-series-2" /> Kuota dialokasikan (Σ Q_Sn)
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="size-2.5 rounded-sm bg-series-1" /> Konfirmasi hadir (Σ RSVP_Sn, status Hadir)
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="h-3 w-0.5 bg-ink" /> Kapasitas venue
-          </span>
-        </p>
+      <Card>
+        <CardHeader>
+          <CardTitle>Pax per sesi</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-6 md:grid-cols-2">
+            {s.sesi.map((x) => (
+              <SessionMeter key={x.kode} s={x} />
+            ))}
+          </div>
+          <p className="mt-4 flex flex-wrap gap-4 text-xs text-ink-3">
+            <span className="flex items-center gap-1.5">
+              <span className="size-2.5 rounded-sm bg-series-2" /> Kuota dialokasikan (Σ Q_Sn)
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="size-2.5 rounded-sm bg-series-1" /> Konfirmasi hadir (Σ RSVP_Sn, status Hadir)
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="h-3 w-0.5 bg-ink" /> Kapasitas venue
+            </span>
+          </p>
+        </CardContent>
       </Card>
       */}
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <Card title="Per akses">
-          <BreakdownBars rows={s.akses} />
+        {/* HIDDEN(sementara): breakdowns by segmentasi (Akses, Sisi)
+        <Card>
+          <CardHeader>
+            <CardTitle>Per akses</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <BreakdownBars rows={s.akses} />
+          </CardContent>
         </Card>
-        <Card title="Per sisi">
-          <BreakdownBars rows={s.sisi} />
+        <Card>
+          <CardHeader>
+            <CardTitle>Per sisi</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <BreakdownBars rows={s.sisi} />
+          </CardContent>
         </Card>
-        <Card title="Perlu perhatian">
-          {warnings.length === 0 ? (
-            <p className="text-sm text-good-ink">✓ Tidak ada masalah.</p>
-          ) : (
-            <ul className="flex flex-col gap-3 text-sm">
-              {warnings.map((w) => (
-                <li key={w.label} className="flex gap-3">
-                  <span className="w-8 shrink-0 text-right font-semibold text-critical-ink tabular-nums">{w.count}</span>
-                  <span className="min-w-0">
-                    <span className="font-medium">{w.label}</span>
-                    <span className="block truncate text-xs text-ink-3" title={w.detail}>
-                      {w.detail}
+        */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Perlu perhatian</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {warnings.length === 0 ? (
+              <p className="text-sm text-good-ink">✓ Tidak ada masalah.</p>
+            ) : (
+              <ul className="flex flex-col gap-3 text-sm">
+                {warnings.map((w) => (
+                  <li key={w.label} className="flex gap-3">
+                    <span className="w-8 shrink-0 text-right font-semibold text-critical-ink tabular-nums">{w.count}</span>
+                    <span className="min-w-0">
+                      <span className="font-medium">{w.label}</span>
+                      <span className="block truncate text-xs text-ink-3" title={w.detail}>
+                        {w.detail}
+                      </span>
                     </span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </CardContent>
         </Card>
       </div>
     </div>

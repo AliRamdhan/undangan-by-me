@@ -1,4 +1,9 @@
+import { ArrowDown01Icon, ArrowUp01Icon, LinkSquare02Icon, Settings02Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import type { ReactNode } from 'react'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { FROZEN_COUNT, ZONE_LABEL, type Column, type Zone } from '@/core/domain/schema'
 import { AKSES, type Guest, type GuestKey } from '@/core/domain/types'
@@ -56,13 +61,9 @@ function renderCell(g: Guest, col: Column, onOpen: (g: Guest) => void): ReactNod
       return <span className="font-mono">{g.HP || <span className="font-sans text-ink-3 italic">—</span>}</span>
     case 'Nama':
       return (
-        <button
-          type="button"
-          onClick={() => onOpen(g)}
-          className="max-w-full truncate text-left font-medium text-ink underline-offset-2 hover:text-accent hover:underline"
-        >
+        <Button variant="link" onClick={() => onOpen(g)} className="h-auto max-w-full justify-start truncate p-0 text-[13px] text-foreground hover:text-primary">
           {g.Nama || <span className="text-critical-ink italic">(tanpa nama)</span>}
-        </button>
+        </Button>
       )
     // case 'Status_RSVP':
     //   return <RsvpBadge status={g.Status_RSVP} />
@@ -70,19 +71,15 @@ function renderCell(g: Guest, col: Column, onOpen: (g: Guest) => void): ReactNod
     //   return <KirimBadge status={g.Status_Kirim} title={g.Kirim_Error || undefined} />
     case 'Link_Undangan':
       return g.Link_Undangan ? (
-        <a href={g.Link_Undangan} target="_blank" rel="noreferrer" className="font-mono text-xs text-accent hover:underline">
+        <a href={g.Link_Undangan} target="_blank" rel="noreferrer" className="font-mono text-xs text-primary hover:underline">
           {g.Link_Undangan.replace(/^https?:\/\//, '')}
         </a>
       ) : null
     case 'Link_WA':
       return g.Link_WA ? (
-        <a
-          href={g.Link_WA}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex h-6 items-center rounded-md bg-[#25d366]/15 px-2 text-xs font-medium text-good-ink hover:bg-[#25d366]/25"
-        >
-          Buka WA ↗
+        <a href={g.Link_WA} target="_blank" rel="noreferrer" className={buttonVariants({ variant: 'secondary', size: 'sm', className: 'text-good-ink' })}>
+          Buka WA
+          <HugeiconsIcon icon={LinkSquare02Icon} strokeWidth={2} data-icon="inline-end" />
         </a>
       ) : (
         <span className="text-xs text-ink-3">—</span>
@@ -147,16 +144,16 @@ export function GuestTable({
   const stickyShadow = 'shadow-[inset_-1px_0_0_var(--line),4px_0_6px_-4px_rgba(0,0,0,0.12)]'
 
   return (
-    <table className="w-max min-w-full border-separate border-spacing-0 text-[13px]">
+    <Table containerClassName="overflow-visible" className="w-max min-w-full border-separate border-spacing-0 text-[13px]">
       <colgroup>
         <col style={{ width: CHECK_W }} />
         {columns.map((c) => (
           <col key={c.key} style={{ width: c.width }} />
         ))}
       </colgroup>
-      <thead>
-        <tr>
-          <th
+      <TableHeader>
+        <TableRow className="hover:bg-transparent">
+          <TableHead
             className="sticky top-0 left-0 z-30 border-b border-line bg-surface"
             style={{ height: HEAD_H }}
             aria-hidden
@@ -164,7 +161,7 @@ export function GuestTable({
           {bands.map((b) => {
             const isFrozen = !narrow && frozen(b.start)
             return (
-              <th
+              <TableHead
                 key={b.start}
                 colSpan={b.span}
                 scope="colgroup"
@@ -172,30 +169,26 @@ export function GuestTable({
                 style={{ ...zoneStyle(b.zone), height: HEAD_H, left: isFrozen ? left[b.start] : undefined }}
               >
                 {ZONE_LABEL[b.zone]}
-              </th>
+              </TableHead>
             )
           })}
-        </tr>
-        <tr>
-          <th
+        </TableRow>
+        <TableRow className="hover:bg-transparent">
+          <TableHead
             className="sticky left-0 z-30 border-b border-line bg-surface px-2"
             style={{ top: HEAD_H }}
           >
-            <input
-              type="checkbox"
+            <Checkbox
               aria-label="Pilih semua baris yang tampil"
               checked={allOn}
-              ref={(el) => {
-                if (el) el.indeterminate = someOn && !allOn
-              }}
-              onChange={(e) => onToggleAll(e.target.checked)}
-              className="size-4 accent-[var(--accent)]"
+              indeterminate={someOn && !allOn}
+              onCheckedChange={(on) => onToggleAll(on)}
             />
-          </th>
+          </TableHead>
           {columns.map((c, i) => {
             const active = sort?.key === c.key
             return (
-              <th
+              <TableHead
                 key={c.key}
                 scope="col"
                 aria-sort={active ? (sort.dir === 1 ? 'ascending' : 'descending') : undefined}
@@ -205,64 +198,63 @@ export function GuestTable({
                 <button
                   type="button"
                   onClick={() => onSort(c.key)}
-                  className="flex h-9 w-full items-center gap-1 px-2 text-left hover:text-accent"
+                  className="flex h-9 w-full items-center gap-1 px-2 text-left hover:text-primary"
                   title={`Kolom ${c.col} · ${c.owner === 'manual' ? 'diisi manual' : c.owner === 'formula' ? 'formula (otomatis)' : 'diisi script (otomatis)'}`}
                 >
                   <span className="text-[10px] font-normal text-ink-3">{c.col}</span>
                   <span className="truncate">{c.key}</span>
                   {c.owner !== 'manual' && (
-                    <span aria-label="otomatis" className="text-[10px] text-ink-3">
-                      ⚙
-                    </span>
+                    <HugeiconsIcon icon={Settings02Icon} strokeWidth={2} aria-label="otomatis" className="size-3 shrink-0 text-ink-3" />
                   )}
-                  <span aria-hidden className={`ml-auto text-[10px] ${active ? 'text-accent' : 'text-transparent'}`}>
-                    {active && sort.dir === -1 ? '▼' : '▲'}
-                  </span>
+                  <HugeiconsIcon
+                    icon={active && sort.dir === -1 ? ArrowDown01Icon : ArrowUp01Icon}
+                    strokeWidth={2}
+                    aria-hidden
+                    className={`ml-auto size-3 shrink-0 ${active ? 'text-primary' : 'text-transparent'}`}
+                  />
                 </button>
-              </th>
+              </TableHead>
             )
           })}
-        </tr>
-      </thead>
-      <tbody>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         {guests.map((g) => {
           const isSel = selected.has(g.No)
           const crit = rowCritical(g)
           return (
-            <tr
+            <TableRow
               key={`${g.No}-${g.PIN}`}
               id={`row-${g.No}`}
               className={`group ${flashNo === g.No ? 'row-flash' : ''}`}
             >
-              <td
-                className={`sticky left-0 z-10 border-b border-line px-2 ${isSel ? 'bg-accent-soft' : crit ? 'tint-row-critical' : 'bg-surface'}`}
+              <TableCell
+                className={`sticky left-0 z-10 border-b border-line px-2 ${isSel ? 'bg-primary-soft' : crit ? 'tint-row-critical' : 'bg-surface'}`}
               >
-                <input
-                  type="checkbox"
+                <Checkbox
                   aria-label={`Pilih ${g.Nama || `baris ${g.No}`}`}
                   checked={isSel}
-                  onChange={() => onToggle(g.No)}
-                  className="size-4 accent-[var(--accent)]"
+                  onCheckedChange={() => onToggle(g.No)}
                 />
-              </td>
+              </TableCell>
               {columns.map((c, i) => {
                 const tint = cellTint(g, c.key)
                 // Cell tint beats row tint beats the grey "automatic column" base.
                 const base = tint || (crit ? 'tint-row-critical' : c.owner !== 'manual' ? 'bg-surface-2' : 'bg-surface')
                 return (
-                  <td
+                  <TableCell
                     key={c.key}
                     className={`h-10 max-w-0 truncate border-b border-line px-2 ${base} ${frozen(i) ? 'sticky z-10' : ''} ${i === lastFrozen ? stickyShadow : ''} group-hover:brightness-[0.97] dark:group-hover:brightness-110`}
                     style={{ left: frozen(i) ? left[i] : undefined }}
                   >
                     {renderCell(g, c, onOpen)}
-                  </td>
+                  </TableCell>
                 )
               })}
-            </tr>
+            </TableRow>
           )
         })}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   )
 }

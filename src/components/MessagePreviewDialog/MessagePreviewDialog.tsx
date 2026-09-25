@@ -1,9 +1,14 @@
+import { Copy01Icon, LinkSquare02Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { useEffect, useState } from 'react'
-import { refOf, type Preview } from '@/core/api/types'
+import { toast } from 'sonner'
 import { WhatsAppBubble } from '@/components/WhatsAppBubble'
-import { Button } from '@/components/Button'
-import { Dialog } from '@/components/Dialog'
-import { fieldBase } from '@/components/Input'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Field, FieldLabel } from '@/components/ui/field'
+import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
+import { Skeleton } from '@/components/ui/skeleton'
+import { refOf, type Preview } from '@/core/api/types'
 import { TEMPLATE_TIPE, type Guest, type TemplateTipe } from '@/core/domain/types'
 import { errorText, useStore } from '@/core/store'
 
@@ -11,7 +16,7 @@ type Loaded = { key: string; preview?: Preview; error?: string }
 
 /** Blast → Preview Pesan: exactly what THIS guest will receive, from the one renderer. */
 export function MessagePreviewDialog({ guest, onClose }: { guest: Guest | null; onClose: () => void }) {
-  const { api, toast } = useStore()
+  const { api } = useStore()
   const [tipe, setTipe] = useState<TemplateTipe>('UNDANGAN')
   const [loaded, setLoaded] = useState<Loaded | null>(null)
   const key = guest ? `${guest.No}|${guest.PIN}|${tipe}` : ''
@@ -34,71 +39,62 @@ export function MessagePreviewDialog({ guest, onClose }: { guest: Guest | null; 
     if (!current?.preview) return
     try {
       await navigator.clipboard.writeText(current.preview.text)
-      toast('ok', 'Pesan disalin')
+      toast.success('Pesan disalin')
     } catch {
-      toast('error', 'Tidak bisa menyalin — izin clipboard ditolak')
+      toast.error('Tidak bisa menyalin — izin clipboard ditolak')
     }
   }
 
   return (
-    <Dialog
-      open={!!guest}
-      onClose={onClose}
-      title={`Preview Pesan — ${guest?.Nama || ''}`}
-      footer={
-        <>
-          <Button onClick={copy} disabled={!current?.preview}>
+    <Dialog open={!!guest} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>Preview Pesan — {guest?.Nama || ''}</DialogTitle>
+          <DialogDescription>
+            {current?.preview
+              ? `Template ${current.preview.kode} · ${current.preview.text.length} karakter`
+              : 'Pesan persis seperti yang diterima tamu ini.'}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex max-h-[65vh] flex-col gap-3 overflow-y-auto">
+          <Field orientation="horizontal" className="w-auto">
+            <FieldLabel htmlFor="preview-tipe">Tipe</FieldLabel>
+            <NativeSelect id="preview-tipe" value={tipe} onChange={(e) => setTipe(e.target.value as TemplateTipe)}>
+              {TEMPLATE_TIPE.map((t) => (
+                <NativeSelectOption key={t} value={t}>
+                  {t}
+                </NativeSelectOption>
+              ))}
+            </NativeSelect>
+          </Field>
+          {!current && <Skeleton className="h-48 rounded-xl" />}
+          {current?.error && (
+            <p role="alert" className="rounded-lg tint-critical p-3 text-sm text-critical-ink">
+              {current.error}
+            </p>
+          )}
+          {current?.preview && <WhatsAppBubble text={current.preview.text} />}
+          {current?.preview && !current.preview.waLink && (
+            <p className="text-sm text-serious-ink">HP tamu ini belum valid, jadi link WhatsApp tidak bisa dibuat.</p>
+          )}
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={copy} disabled={!current?.preview}>
+            <HugeiconsIcon icon={Copy01Icon} strokeWidth={2} data-icon="inline-start" />
             Salin teks
           </Button>
           {current?.preview?.waLink ? (
-            <a
-              href={current.preview.waLink}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex h-9 items-center rounded-lg bg-accent px-3.5 text-sm font-medium text-accent-ink hover:opacity-90"
-            >
-              Buka di WhatsApp ↗
+            <a href={current.preview.waLink} target="_blank" rel="noreferrer" className={buttonVariants()}>
+              Buka di WhatsApp
+              <HugeiconsIcon icon={LinkSquare02Icon} strokeWidth={2} data-icon="inline-end" />
             </a>
           ) : (
-            <Button variant="primary" disabled title="HP tidak valid">
+            <Button disabled title="HP tidak valid">
               Buka di WhatsApp
             </Button>
           )}
-        </>
-      }
-    >
-      <div className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-center gap-2 text-sm">
-          <label htmlFor="preview-tipe" className="text-ink-2">
-            Tipe
-          </label>
-          <select
-            id="preview-tipe"
-            className={`${fieldBase} h-9 w-auto`}
-            value={tipe}
-            onChange={(e) => setTipe(e.target.value as TemplateTipe)}
-          >
-            {TEMPLATE_TIPE.map((t) => (
-              <option key={t}>{t}</option>
-            ))}
-          </select>
-          {current?.preview && (
-            <span className="text-ink-3">
-              Template <span className="font-mono">{current.preview.kode}</span> · {current.preview.text.length} karakter
-            </span>
-          )}
-        </div>
-        {!current && <div className="h-48 animate-pulse rounded-xl bg-surface-2" />}
-        {current?.error && (
-          <p role="alert" className="rounded-lg tint-critical p-3 text-sm text-critical-ink">
-            {current.error}
-          </p>
-        )}
-        {current?.preview && <WhatsAppBubble text={current.preview.text} />}
-        {current?.preview && !current.preview.waLink && (
-          <p className="text-sm text-serious-ink">HP tamu ini belum valid, jadi link WhatsApp tidak bisa dibuat.</p>
-        )}
-      </div>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   )
 }

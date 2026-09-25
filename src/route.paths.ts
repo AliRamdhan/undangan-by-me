@@ -4,7 +4,6 @@ export const PATHS = {
   tamu: '/tamu',
   template: '/template',
   dashboard: '/dashboard',
-  pengaturan: '/pengaturan',
 } as const
 
 export const templatePath = (kode: string) => `${PATHS.template}/${encodeURIComponent(kode)}`

@@ -1,4 +1,5 @@
-import type { Tone } from '@/components/Badge'
+/** Badge variants from `components/ui/badge.tsx` used for status. */
+export type Tone = 'good' | 'warning' | 'serious' | 'critical' | 'muted' | 'info' | 'plain'
 import type { StatusKirim, StatusRSVP } from '@/core/domain/types'
 
 export const RSVP_META: Record<StatusRSVP, { tone: Tone; label: string; icon: string }> = {

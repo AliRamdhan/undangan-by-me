@@ -1,13 +1,20 @@
 import { Link } from 'react-router'
-import { EmptyState } from '@/components/EmptyState'
+import { buttonVariants } from '@/components/ui/button'
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/empty'
 import { PATHS } from '@/route.paths'
 
 export function NotFound() {
   return (
-    <EmptyState title="Halaman tidak ditemukan">
-      <Link to={PATHS.tamu} className="text-accent hover:underline">
-        Kembali ke daftar tamu
-      </Link>
-    </EmptyState>
+    <Empty>
+      <EmptyHeader>
+        <EmptyTitle>Halaman tidak ditemukan</EmptyTitle>
+        <EmptyDescription>Alamat ini tidak ada di aplikasi.</EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
+        <Link to={PATHS.tamu} className={buttonVariants({ variant: 'outline' })}>
+          Kembali ke daftar tamu
+        </Link>
+      </EmptyContent>
+    </Empty>
   )
 }

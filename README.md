@@ -29,14 +29,15 @@ src/
 │   ├── domain/        pure logic: types, schema, phone, PIN, checks, {{token}} renderer, CSV, stats
 │   ├── api/           UndanganApi interface · mock adapter + seed · Apps Script adapter
 │   └── store/         StoreProvider, useStore, errors — load, run(action) → refetch, toasts
-├── components/      generic UI, one folder each (Name.tsx + index.ts, *.styles.ts for class maps)
+├── components/ui/   shadcn (base-mira, Base UI + hugeicons) — add more with `npx shadcn add <name>`
+├── components/      app components built on ui/: SettingsSheet, StatusBadge, StatTile, ThemeToggle, WhatsAppBubble, dialogs
 ├── layouts/         AppLayout — header, mode badge, navigation, <Outlet/>
 ├── pages/           route components; page-only parts live in pages/<Page>/components/
 ├── hooks/           useMediaQuery
 ├── utils/           download, format
-├── route.ts         React Router routes (/tamu, /template/:kode, /dashboard, /pengaturan)
+├── route.ts         React Router routes (/tamu, /template/:kode, /dashboard)
 ├── route.paths.ts   URL constants shared by routes and links
-└── App.tsx          StoreProvider + RouterProvider
+└── App.tsx          ThemeProvider (next-themes) + StoreProvider + RouterProvider + sonner Toaster
 ```
 
 Imports use the `@/` alias (`@/core/store`, `@/components/Button`). A deployed build

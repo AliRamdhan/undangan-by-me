@@ -19,4 +19,9 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
+  {
+    // shadcn components export their cva variants (buttonVariants, badgeVariants…) next to the component.
+    files: ['src/components/ui/**/*.{ts,tsx}'],
+    rules: { 'react-refresh/only-export-components': 'off' },
+  },
 ])

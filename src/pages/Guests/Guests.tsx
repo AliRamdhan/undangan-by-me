@@ -1,13 +1,40 @@
 import { useState, type ReactNode } from 'react'
+import { toast } from 'sonner'
 import { refOf } from '@/core/api/types'
-import { Button } from '@/components/Button'
-import { Dialog } from '@/components/Dialog'
-import { EmptyState } from '@/components/EmptyState'
-import { fieldBase } from '@/components/Input'
+import {
+  Add01Icon,
+  Delete02Icon,
+  Download04Icon,
+  FileSearchIcon,
+  Link04Icon,
+  Search01Icon,
+  Upload04Icon,
+} from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/empty'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+// HIDDEN(sementara): import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
+import { Separator } from '@/components/ui/separator'
+import { Skeleton } from '@/components/ui/skeleton'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { cn } from '@/lib/utils'
 import type { Issue } from '@/core/domain/checks'
 import { exportGuestsCsv } from '@/core/domain/csv'
 import { TAMU_COLUMNS } from '@/core/domain/schema'
-import { AKSES, SISI, type Guest, type GuestKey } from '@/core/domain/types'
+import { /* HIDDEN(sementara): AKSES, SISI, */ type Guest, type GuestKey } from '@/core/domain/types'
 import { useStore } from '@/core/store'
 import { GenerateLinksDialog } from '@/components/GenerateLinksDialog'
 import { MessagePreviewDialog } from '@/components/MessagePreviewDialog'
@@ -33,7 +60,8 @@ const NO_FILTERS: Filters = { q: '', akses: '', sisi: '', grup: '', rsvp: '', ki
 function matches(g: Guest, f: Filters): boolean {
   if (f.q) {
     const q = f.q.toLowerCase()
-    const hay = `${g.Nama} ${g.PIN} ${g.HP} ${g.Grup} ${g.Email} ${g.Meja}`.toLowerCase()
+    // HIDDEN(sementara): Grup dropped from search while segmentasi is hidden — was `${g.Grup} `
+    const hay = `${g.Nama} ${g.PIN} ${g.HP} ${g.Email} ${g.Meja}`.toLowerCase()
     if (!hay.includes(q) && !g.HP.replace(/\D/g, '').includes(q.replace(/\D/g, '') || '\0')) return false
   }
   if (f.akses && g.Akses !== f.akses) return false
@@ -44,9 +72,9 @@ function matches(g: Guest, f: Filters): boolean {
   if (f.masalah) {
     const bad =
       !g.Nama.trim() ||
-      !g.PIN ||
-      // HIDDEN(sementara): g.HP_Valid !== '✅' ||
-      !(AKSES as readonly string[]).includes(g.Akses)
+      !g.PIN
+      // HIDDEN(sementara): || g.HP_Valid !== '✅'
+      // HIDDEN(sementara): || !(AKSES as readonly string[]).includes(g.Akses)
       // HIDDEN(sementara):
       // || g.RSVP_S1 > g.Q_S1 ||
       // g.RSVP_S2 > g.Q_S2 ||
@@ -63,49 +91,50 @@ function compare(a: Guest, b: Guest, key: GuestKey): number {
   return String(x).localeCompare(String(y), 'id', { numeric: true, sensitivity: 'base' })
 }
 
-function FilterSelect({
-  label,
-  value,
-  onChange,
-  options,
-}: {
-  label: string
-  value: string
-  onChange: (v: string) => void
-  options: readonly (string | { value: string; label: string })[]
-}) {
-  return (
-    <select
-      aria-label={label}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className={`${fieldBase} h-9 w-auto min-w-0 pr-7 ${value ? 'border-accent text-accent' : 'text-ink-2'}`}
-    >
-      <option value="">{label}: semua</option>
-      {options.map((o) => {
-        const v = typeof o === 'string' ? o : o.value
-        const l = typeof o === 'string' ? o : o.label
-        return (
-          <option key={v} value={v}>
-            {label}: {l}
-          </option>
-        )
-      })}
-    </select>
-  )
-}
+// HIDDEN(sementara): only the hidden segmentasi filters use this
+// function FilterSelect({
+//   label,
+//   value,
+//   onChange,
+//   options,
+// }: {
+//   label: string
+//   value: string
+//   onChange: (v: string) => void
+//   options: readonly (string | { value: string; label: string })[]
+// }) {
+//   return (
+//     <NativeSelect
+//       aria-label={label}
+//       value={value}
+//       onChange={(e) => onChange(e.target.value)}
+//       className={cn('min-w-0 [&_select]:h-8', value && '[&_select]:border-primary [&_select]:text-primary')}
+//     >
+//       <NativeSelectOption value="">{label}: semua</NativeSelectOption>
+//       {options.map((o) => {
+//         const v = typeof o === 'string' ? o : o.value
+//         const l = typeof o === 'string' ? o : o.label
+//         return (
+//           <NativeSelectOption key={v} value={v}>
+//             {label}: {l}
+//           </NativeSelectOption>
+//         )
+//       })}
+//     </NativeSelect>
+//   )
+// }
 
 function ToolGroup({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div role="group" aria-label={label} className="flex flex-wrap items-center gap-1.5">
-      <span className="mr-0.5 hidden text-[11px] font-semibold tracking-wide text-ink-3 uppercase lg:inline">{label}</span>
+      <span className="mr-0.5 hidden text-[0.625rem] font-semibold tracking-wide text-muted-foreground uppercase lg:inline">{label}</span>
       {children}
     </div>
   )
 }
 
 export function Guests() {
-  const { guests, run, busy, toast, loading } = useStore()
+  const { guests, run, busy, loading } = useStore()
   const [filters, setFilters] = useState<Filters>(NO_FILTERS)
   const [compact, setCompact] = useState(true)
   const [sort, setSort] = useState<SortState>(null)
@@ -161,16 +190,21 @@ export function Guests() {
 
   const genPins = async () => {
     const n = await run('Generate PIN', (api) => api.generatePins())
-    if (n !== undefined) toast(n ? 'ok' : 'info', n ? `${n} PIN baru dibuat` : 'Semua tamu sudah punya PIN')
+    if (n === undefined) return
+    if (n) toast.success(`${n} PIN baru dibuat`)
+    else toast.info('Semua tamu sudah punya PIN')
   }
   const normalize = async () => {
     const n = await run('Normalisasi HP', (api) => api.normalizePhones())
-    if (n !== undefined) toast(n ? 'ok' : 'info', n ? `${n} nomor dinormalisasi ke +62…` : 'Semua nomor sudah rapi')
+    if (n === undefined) return
+    if (n) toast.success(`${n} nomor dinormalisasi ke +62…`)
+    else toast.info('Semua nomor sudah rapi')
   }
   const check = async () => {
     const r = await run('Cek Duplikat & Error', (api) => api.checkGuests())
     // HIDDEN(sementara): quota is hidden, so its over-quota issues are too.
-    if (r) setIssues(r.filter((i) => i.kind !== 'LEBIH_KUOTA'))
+    // HIDDEN(sementara): Akses is hidden too, so its issues are as well.
+    if (r) setIssues(r.filter((i) => i.kind !== 'LEBIH_KUOTA' && i.kind !== 'AKSES_INVALID'))
   }
   const exportCsv = () => {
     const rows = selectedGuests.length ? selectedGuests : visible
@@ -179,54 +213,70 @@ export function Guests() {
   const deleteSelected = async () => {
     const n = await run('Hapus tamu', (api) => api.deleteGuests(selectedGuests.map(refOf)))
     setConfirmDelete(false)
-    if (n) toast('ok', `${n} tamu dihapus`)
+    if (n) toast.success(`${n} tamu dihapus`)
   }
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3">
       {/* Menu → Tamu, as buttons: discoverable on first open, no training needed. */}
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-        <Button variant="primary" onClick={() => setDrawer({ guest: null, isNew: true })}>
-          + Tambah Tamu
+        <Button size="lg" onClick={() => setDrawer({ guest: null, isNew: true })}>
+          <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" />
+          Tambah Tamu
         </Button>
         <ToolGroup label="Tamu">
-          <Button size="sm" onClick={genPins} disabled={!!busy}>
+          <Button variant="outline" onClick={genPins} disabled={!!busy}>
             Generate PIN
           </Button>
-          <Button size="sm" onClick={normalize} disabled={!!busy}>
+          <Button variant="outline" onClick={normalize} disabled={!!busy}>
             Normalisasi HP
           </Button>
-          <Button size="sm" onClick={check} disabled={!!busy}>
+          <Button variant="outline" onClick={check} disabled={!!busy}>
+            <HugeiconsIcon icon={FileSearchIcon} strokeWidth={2} data-icon="inline-start" />
             Cek Duplikat & Error
           </Button>
         </ToolGroup>
+        <Separator orientation="vertical" className="hidden h-6 lg:block" />
         <ToolGroup label="Data">
-          <Button size="sm" onClick={() => setImportOpen(true)} disabled={!!busy}>
+          <Button variant="outline" onClick={() => setImportOpen(true)} disabled={!!busy}>
+            <HugeiconsIcon icon={Upload04Icon} strokeWidth={2} data-icon="inline-start" />
             Import CSV
           </Button>
-          <Button size="sm" onClick={exportCsv} disabled={!visible.length}>
+          <Button variant="outline" onClick={exportCsv} disabled={!visible.length}>
+            <HugeiconsIcon icon={Download04Icon} strokeWidth={2} data-icon="inline-start" />
             Export CSV{selectedGuests.length ? ` (${selectedGuests.length})` : ''}
           </Button>
         </ToolGroup>
+        <Separator orientation="vertical" className="hidden h-6 lg:block" />
         <ToolGroup label="Pesan">
-          <Button size="sm" onClick={() => setLinksOpen(true)} disabled={!!busy || !guests.length}>
+          <Button variant="outline" onClick={() => setLinksOpen(true)} disabled={!!busy || !guests.length}>
+            <HugeiconsIcon icon={Link04Icon} strokeWidth={2} data-icon="inline-start" />
             Generate Link Manual{selectedGuests.length ? ` (${selectedGuests.length})` : ''}
           </Button>
         </ToolGroup>
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        <input
-          type="search"
-          aria-label="Cari tamu"
-          placeholder="Cari nama, PIN, HP, grup…"
-          value={filters.q}
-          onChange={(e) => setF('q')(e.target.value)}
-          className={`${fieldBase} h-9 w-full sm:w-64`}
-        />
+        <div className="relative w-full sm:w-64">
+          <HugeiconsIcon
+            icon={Search01Icon}
+            strokeWidth={2}
+            className="pointer-events-none absolute top-1/2 left-2 size-3.5 -translate-y-1/2 text-muted-foreground"
+          />
+          <Input
+            type="search"
+            aria-label="Cari tamu"
+            placeholder="Cari nama, PIN, HP…"
+            value={filters.q}
+            onChange={(e) => setF('q')(e.target.value)}
+            className="h-8 pl-7"
+          />
+        </div>
+        {/* HIDDEN(sementara): segmentasi filters
         <FilterSelect label="Akses" value={filters.akses} onChange={setF('akses')} options={AKSES} />
         <FilterSelect label="Sisi" value={filters.sisi} onChange={setF('sisi')} options={SISI} />
         <FilterSelect label="Grup" value={filters.grup} onChange={setF('grup')} options={groups} />
+        */}
         {/* <FilterSelect
           label="RSVP"
           value={filters.rsvp}
@@ -239,63 +289,69 @@ export function Guests() {
           onChange={setF('kirim')}
           options={STATUS_KIRIM.map((s) => ({ value: s, label: KIRIM_META[s].label }))}
         /> */}
-        <label className={`flex h-9 cursor-pointer items-center gap-2 rounded-lg border px-2.5 text-sm ${filters.masalah ? 'border-accent text-accent' : 'border-line text-ink-2'}`}>
-          <input
-            type="checkbox"
-            checked={filters.masalah}
-            onChange={(e) => setF('masalah')(e.target.checked)}
-            className="size-4 accent-[var(--accent)]"
-          />
+        <Label
+          className={cn(
+            'h-8 cursor-pointer rounded-md border px-2.5 font-normal',
+            filters.masalah ? 'border-primary text-primary' : 'text-muted-foreground',
+          )}
+        >
+          <Checkbox checked={filters.masalah} onCheckedChange={(on) => setF('masalah')(on)} />
           Bermasalah saja
-        </label>
+        </Label>
         {activeFilters > 0 && (
           <Button variant="ghost" size="sm" onClick={() => setFilters(NO_FILTERS)}>
             Reset filter
           </Button>
         )}
-        <div className="ml-auto flex items-center gap-1 rounded-lg border border-line p-0.5" role="group" aria-label="Kolom">
-          {[
-            { on: true, label: 'Ringkas' },
-            { on: false, label: `Semua ${TAMU_COLUMNS.length} kolom` },
-          ].map((o) => (
-            <button
-              key={o.label}
-              type="button"
-              aria-pressed={compact === o.on}
-              onClick={() => setCompact(o.on)}
-              className={`h-7 rounded-md px-2.5 text-[13px] ${compact === o.on ? 'bg-surface-2 font-medium text-ink' : 'text-ink-2 hover:text-ink'}`}
-            >
-              {o.label}
-            </button>
-          ))}
-        </div>
+        <ToggleGroup
+          aria-label="Kolom"
+          variant="outline"
+          spacing={0}
+          className="ml-auto"
+          value={[compact ? 'ringkas' : 'semua']}
+          onValueChange={(v) => v.length && setCompact(v[0] === 'ringkas')}
+        >
+          <ToggleGroupItem value="ringkas">Ringkas</ToggleGroupItem>
+          <ToggleGroupItem value="semua">Semua {TAMU_COLUMNS.length} kolom</ToggleGroupItem>
+        </ToggleGroup>
       </div>
 
       {selectedGuests.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2 rounded-lg bg-accent-soft px-3 py-2 text-sm">
+        <div className="flex flex-wrap items-center gap-2 rounded-lg bg-primary-soft px-3 py-2 text-sm">
           <b>{selectedGuests.length} tamu terpilih</b>
-          <Button size="sm" variant="ghost" onClick={() => setIds(new Set())}>
+          <Button variant="ghost" onClick={() => setIds(new Set())}>
             Batal pilih
           </Button>
-          <Button size="sm" variant="danger" className="ml-auto" onClick={() => setConfirmDelete(true)} disabled={!!busy}>
+          <Button variant="destructive" className="ml-auto" onClick={() => setConfirmDelete(true)} disabled={!!busy}>
+            <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} data-icon="inline-start" />
             Hapus terpilih
           </Button>
         </div>
       )}
 
-      <div className="relative max-h-[75dvh] min-h-[320px] flex-1 overflow-auto rounded-xl border border-line bg-surface lg:max-h-[calc(100dvh-230px)]">
+      <div className="relative max-h-[75dvh] min-h-80 flex-1 overflow-auto rounded-lg border bg-card lg:max-h-[calc(100dvh-230px)]">
         {loading ? (
           <div className="space-y-2 p-4">
             {Array.from({ length: 8 }, (_, i) => (
-              <div key={i} className="h-8 animate-pulse rounded bg-surface-2" />
+              <Skeleton key={i} className="h-8" />
             ))}
           </div>
         ) : guests.length === 0 ? (
-          <EmptyState title="Belum ada tamu">
-            Tambah satu per satu, atau <b>Import CSV</b> dengan kolom PIN…Q_S2 lalu jalankan Generate PIN.
-          </EmptyState>
+          <Empty>
+            <EmptyHeader>
+              <EmptyTitle>Belum ada tamu</EmptyTitle>
+              <EmptyDescription>
+                Tambah satu per satu, atau <b>Import CSV</b> dengan kolom PIN…Q_S2 lalu jalankan Generate PIN.
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         ) : visible.length === 0 ? (
-          <EmptyState title="Tidak ada tamu yang cocok">Ubah kata kunci atau reset filter.</EmptyState>
+          <Empty>
+            <EmptyHeader>
+              <EmptyTitle>Tidak ada tamu yang cocok</EmptyTitle>
+              <EmptyDescription>Ubah kata kunci atau reset filter.</EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         ) : (
           <GuestTable
             guests={visible}
@@ -312,7 +368,7 @@ export function Guests() {
       </div>
       <p className="text-xs text-ink-3" aria-live="polite">
         {visible.length === guests.length ? `${guests.length} tamu` : `${visible.length} dari ${guests.length} tamu`}
-        {' · '}Kolom abu-abu ⚙ diisi otomatis. Klik nama untuk mengedit.
+        {' · '}Kolom abu-abu bertanda ⚙ diisi otomatis. Klik nama untuk mengedit.
       </p>
 
       {drawer && (
@@ -334,30 +390,29 @@ export function Guests() {
         onClose={() => setLinksOpen(false)}
         selection={selectedGuests.length ? selectedGuests.map(refOf) : null}
       />
-      <Dialog
-        open={confirmDelete}
-        onClose={() => setConfirmDelete(false)}
-        title="Hapus tamu terpilih?"
-        footer={
-          <>
-            <Button onClick={() => setConfirmDelete(false)}>Batal</Button>
-            <Button variant="danger" onClick={deleteSelected} disabled={!!busy}>
+      <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Hapus {selectedGuests.length} tamu terpilih?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Baris dihapus dari 02_Tamu. Riwayat di 04_Log dan 05_RSVP tetap ada. Tindakan ini tidak bisa dibatalkan.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <ul className="max-h-48 overflow-y-auto text-sm">
+            {selectedGuests.map((g) => (
+              <li key={g.No} className="truncate">
+                · {g.Nama || '(tanpa nama)'} <span className="font-mono text-muted-foreground">{g.PIN}</span>
+              </li>
+            ))}
+          </ul>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Batal</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={deleteSelected} disabled={!!busy}>
               Hapus {selectedGuests.length} tamu
-            </Button>
-          </>
-        }
-      >
-        <p className="text-sm text-ink-2">
-          Baris dihapus dari 02_Tamu. Riwayat di 04_Log dan 05_RSVP tetap ada. Tindakan ini tidak bisa dibatalkan.
-        </p>
-        <ul className="mt-3 max-h-48 overflow-y-auto text-sm">
-          {selectedGuests.map((g) => (
-            <li key={g.No} className="truncate">
-              · {g.Nama || '(tanpa nama)'} <span className="font-mono text-ink-3">{g.PIN}</span>
-            </li>
-          ))}
-        </ul>
-      </Dialog>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

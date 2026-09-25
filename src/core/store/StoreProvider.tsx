@@ -1,11 +1,10 @@
+import { toast } from 'sonner'
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { createApi, loadSettings, saveSettings, type ApiSettings } from '@/core/api'
 import type { UndanganApi } from '@/core/api/types'
 import { errorText } from './errors'
 import type { Guest, Meta, Template } from '@/core/domain/types'
-import { StoreContext, type Store, type Toast } from './context'
-
-let toastSeq = 0
+import { StoreContext, type Store } from './context'
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState(loadSettings)
@@ -16,17 +15,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [busy, setBusy] = useState<string | null>(null)
-  const [toasts, setToasts] = useState<Toast[]>([])
 
-  const dismiss = useCallback((id: number) => setToasts((t) => t.filter((x) => x.id !== id)), [])
-  const toast = useCallback(
-    (tone: Toast['tone'], text: string) => {
-      const id = ++toastSeq
-      setToasts((t) => [...t.slice(-3), { id, tone, text }])
-      setTimeout(() => dismiss(id), tone === 'error' ? 8000 : 4000)
-    },
-    [dismiss],
-  )
 
   const reload = useCallback(async () => {
     try {
@@ -54,14 +43,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       try {
         return await fn(api)
       } catch (e) {
-        toast('error', `${label}: ${errorText(e)}`)
+        toast.error(`${label}: ${errorText(e)}`)
         return undefined
       } finally {
         await reload()
         setBusy(null)
       }
     },
-    [api, reload, toast],
+    [api, reload],
   )
 
   const applySettings = useCallback((s: ApiSettings) => {
@@ -82,9 +71,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     busy,
     reload,
     run,
-    toasts,
-    toast,
-    dismiss,
   }
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }

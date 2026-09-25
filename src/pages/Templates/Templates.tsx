@@ -1,9 +1,14 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import type { TemplateReport } from '@/core/api/types'
-import { Badge } from '@/components/Badge'
-import { Button } from '@/components/Button'
-import { EmptyState } from '@/components/EmptyState'
+import { Badge } from '@/components/ui/badge'
+import { Add01Icon, FileSearchIcon, Link04Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/empty'
+import { Skeleton } from '@/components/ui/skeleton'
+import { cn } from '@/lib/utils'
 import type { Template } from '@/core/domain/types'
 import { GenerateLinksDialog } from '@/components/GenerateLinksDialog'
 import { useStore } from '@/core/store'
@@ -42,22 +47,27 @@ export function Templates() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center gap-2">
-        <Button variant="primary" onClick={() => setCreating(true)}>
-          + Template baru
+        <Button size="lg" onClick={() => setCreating(true)}>
+          <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" />
+          Template baru
         </Button>
-        <Button onClick={validate} disabled={!!busy}>
+        <Button variant="outline" onClick={validate} disabled={!!busy}>
+          <HugeiconsIcon icon={FileSearchIcon} strokeWidth={2} data-icon="inline-start" />
           Validasi Template
         </Button>
-        <Button onClick={() => setLinksOpen(true)} disabled={!!busy}>
+        <Button variant="outline" onClick={() => setLinksOpen(true)} disabled={!!busy}>
+          <HugeiconsIcon icon={Link04Icon} strokeWidth={2} data-icon="inline-start" />
           Generate Link Manual
         </Button>
-        <p className="text-sm text-ink-3 sm:ml-auto">Lookup: (Tipe, Akses) → fallback (Tipe, SEMUA)</p>
+        <p className="text-xs text-muted-foreground sm:ml-auto">Lookup: (Tipe, Akses) → fallback (Tipe, SEMUA)</p>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[260px_minmax(0,1fr)]">
-        <nav aria-label="Daftar template" className="flex flex-col gap-1 self-start rounded-2xl border border-line bg-surface p-2">
-          {loading && <div className="h-40 animate-pulse rounded-lg bg-surface-2" />}
-          {!loading && templates.length === 0 && <p className="p-3 text-sm text-ink-3">Belum ada template.</p>}
+        <Card size="sm" className="self-start">
+        <CardContent className="px-2">
+        <nav aria-label="Daftar template" className="flex flex-col gap-1">
+          {loading && <Skeleton className="h-40" />}
+          {!loading && templates.length === 0 && <p className="p-3 text-muted-foreground">Belum ada template.</p>}
           {templates.map((t) => {
             const active = !creating && current?.Kode === t.Kode
             return (
@@ -69,19 +79,21 @@ export function Templates() {
                   setCreating(false)
                   setSelected(t.Kode)
                 }}
-                className={`flex flex-col gap-1 rounded-lg px-3 py-2 text-left ${active ? 'bg-accent-soft' : 'hover:bg-surface-2'}`}
+                className={cn('flex flex-col gap-1 rounded-md px-3 py-2 text-left', active ? 'bg-primary-soft' : 'hover:bg-muted')}
               >
                 <span className="flex items-center gap-2">
                   <span className="font-mono text-[13px] font-medium">{t.Kode}</span>
-                  {!t.Aktif && <Badge tone="muted">nonaktif</Badge>}
+                  {!t.Aktif && <Badge variant="muted">nonaktif</Badge>}
                 </span>
-                <span className="text-xs text-ink-3">
+                <span className="text-muted-foreground">
                   {t.Tipe} · {t.Akses}
                 </span>
               </button>
             )
           })}
         </nav>
+        </CardContent>
+        </Card>
 
         {creating ? (
           <TemplateEditor
@@ -102,7 +114,12 @@ export function Templates() {
           />
         ) : (
           !loading && (
-            <EmptyState title="Belum ada template">Buat template pertama untuk tipe UNDANGAN, akses SEMUA.</EmptyState>
+            <Empty>
+              <EmptyHeader>
+                <EmptyTitle>Belum ada template</EmptyTitle>
+                <EmptyDescription>Buat template pertama untuk tipe UNDANGAN, akses SEMUA.</EmptyDescription>
+              </EmptyHeader>
+            </Empty>
           )
         )}
       </div>

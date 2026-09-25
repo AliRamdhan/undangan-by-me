@@ -3,12 +3,6 @@ import type { UndanganApi } from '@/core/api/types'
 import type { ApiSettings } from '@/core/api'
 import type { Guest, Meta, Template } from '@/core/domain/types'
 
-export interface Toast {
-  id: number
-  tone: 'ok' | 'error' | 'info'
-  text: string
-}
-
 export interface Store {
   api: UndanganApi
   settings: ApiSettings
@@ -26,9 +20,6 @@ export interface Store {
    * source of truth, so the UI never patches its own copy optimistically.
    */
   run: <T>(label: string, fn: (api: UndanganApi) => Promise<T>) => Promise<T | undefined>
-  toasts: Toast[]
-  toast: (tone: Toast['tone'], text: string) => void
-  dismiss: (id: number) => void
 }
 
 export const StoreContext = createContext<Store | null>(null)

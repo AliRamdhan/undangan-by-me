@@ -1,10 +1,27 @@
+import { Delete02Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { useEffect, useRef, useState } from 'react'
-import { refOf } from '@/core/api/types'
+import { toast } from 'sonner'
 import { WhatsAppBubble } from '@/components/WhatsAppBubble'
-import { Button } from '@/components/Button'
-import { Card } from '@/components/Card'
-import { Field } from '@/components/Field'
-import { fieldBase, inputCls } from '@/components/Input'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
+import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldTitle } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
+import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Textarea } from '@/components/ui/textarea'
+import { refOf } from '@/core/api/types'
 import { TOKENS, type RenderResult } from '@/core/domain/template'
 import { TEMPLATE_AKSES, TEMPLATE_TIPE, type Template } from '@/core/domain/types'
 import { errorText, useStore } from '@/core/store'
@@ -12,7 +29,7 @@ import { errorText, useStore } from '@/core/store'
 type DraftRender = { key: string; result?: RenderResult; error?: string }
 
 export function TemplateEditor({ template, isNew, onDone }: { template: Template; isNew: boolean; onDone: (kode?: string) => void }) {
-  const { api, run, busy, toast, guests } = useStore()
+  const { api, run, busy, guests } = useStore()
   const [draft, setDraft] = useState<Template>(template)
   const [pin, setPin] = useState<string>(() => guests.find((g) => g.PIN && g.Nama)?.PIN ?? '')
   const [render, setRender] = useState<DraftRender | null>(null)
@@ -56,20 +73,21 @@ export function TemplateEditor({ template, isNew, onDone }: { template: Template
 
   const save = async () => {
     if (!draft.Kode.trim()) {
-      toast('error', 'Kode template wajib diisi')
+      toast.error('Kode template wajib diisi')
       return
     }
     const ok = await run('Simpan template', (api) => api.saveTemplate(draft, isNew ? undefined : template.Kode).then(() => true))
     if (ok) {
-      toast('ok', `Template ${draft.Kode} disimpan`)
+      toast.success(`Template ${draft.Kode} disimpan`)
       onDone(draft.Kode.trim())
     }
   }
 
   const remove = async () => {
     const ok = await run('Hapus template', (api) => api.deleteTemplate(template.Kode).then(() => true))
+    setConfirmDelete(false)
     if (ok) {
-      toast('ok', `Template ${template.Kode} dihapus`)
+      toast.success(`Template ${template.Kode} dihapus`)
       onDone()
     }
   }
@@ -79,164 +97,173 @@ export function TemplateEditor({ template, isNew, onDone }: { template: Template
   return (
     <div className="grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
       <Card>
-        <div className="flex flex-col gap-4">
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <Field label="Kode *" htmlFor="tpl-kode">
-              <input id="tpl-kode" className={`${inputCls} font-mono`} value={draft.Kode} onChange={(e) => set('Kode', e.target.value)} />
-            </Field>
-            <Field label="Tipe" htmlFor="tpl-tipe">
-              <select id="tpl-tipe" className={inputCls} value={draft.Tipe} onChange={(e) => set('Tipe', e.target.value as Template['Tipe'])}>
-                {TEMPLATE_TIPE.map((t) => (
-                  <option key={t}>{t}</option>
-                ))}
-              </select>
-            </Field>
-            <Field label="Akses" htmlFor="tpl-akses">
-              <select id="tpl-akses" className={inputCls} value={draft.Akses} onChange={(e) => set('Akses', e.target.value as Template['Akses'])}>
-                {TEMPLATE_AKSES.map((t) => (
-                  <option key={t}>{t}</option>
-                ))}
-              </select>
-            </Field>
-            <Field label="Status" htmlFor="tpl-aktif">
-              <label className="flex h-9 items-center gap-2 text-sm">
-                <input
-                  id="tpl-aktif"
-                  type="checkbox"
-                  checked={draft.Aktif}
-                  onChange={(e) => set('Aktif', e.target.checked)}
-                  className="size-4 accent-[var(--accent)]"
-                />
-                Aktif
-              </label>
-            </Field>
-          </div>
-
-          <div>
-            <p className="mb-1.5 text-[13px] font-medium text-ink-2">Sisipkan token</p>
-            <div className="flex flex-col gap-2">
-              {TOKENS.map((g) => (
-                <div key={g.group} className="flex flex-wrap items-center gap-1">
-                  <span className="w-14 shrink-0 text-xs text-ink-3">{g.group}</span>
-                  {g.tokens.map((t) => (
-                    <button
-                      key={t}
-                      type="button"
-                      onClick={() => insert(t)}
-                      className="rounded-md border border-line bg-surface-2 px-1.5 py-0.5 font-mono text-[11px] text-ink-2 hover:border-accent hover:text-accent"
-                    >
-                      {t.includes('.') ? t.split('.')[1] : t}
-                    </button>
+        <CardContent>
+          <FieldGroup>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <Field>
+                <FieldLabel htmlFor="tpl-kode">Kode *</FieldLabel>
+                <Input id="tpl-kode" className="font-mono" value={draft.Kode} onChange={(e) => set('Kode', e.target.value)} />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="tpl-tipe">Tipe</FieldLabel>
+                <NativeSelect
+                  id="tpl-tipe"
+                  className="w-full"
+                  value={draft.Tipe}
+                  onChange={(e) => set('Tipe', e.target.value as Template['Tipe'])}
+                >
+                  {TEMPLATE_TIPE.map((t) => (
+                    <NativeSelectOption key={t} value={t}>
+                      {t}
+                    </NativeSelectOption>
                   ))}
-                </div>
-              ))}
+                </NativeSelect>
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="tpl-akses">Akses</FieldLabel>
+                <NativeSelect
+                  id="tpl-akses"
+                  className="w-full"
+                  value={draft.Akses}
+                  onChange={(e) => set('Akses', e.target.value as Template['Akses'])}
+                >
+                  {TEMPLATE_AKSES.map((t) => (
+                    <NativeSelectOption key={t} value={t}>
+                      {t}
+                    </NativeSelectOption>
+                  ))}
+                </NativeSelect>
+              </Field>
+              <Field orientation="horizontal" className="self-end pb-1.5">
+                <Checkbox id="tpl-aktif" checked={draft.Aktif} onCheckedChange={(on) => set('Aktif', on)} />
+                <FieldLabel htmlFor="tpl-aktif">Aktif</FieldLabel>
+              </Field>
             </div>
-          </div>
 
-          <Field
-            label="Isi pesan"
-            htmlFor="tpl-isi"
-            hint="Format WhatsApp: *tebal*, _miring_, ~coret~. Token {{…}} yang tidak dikenal akan ditolak, bukan dikirim kosong."
-          >
-            <textarea
-              id="tpl-isi"
-              ref={area}
-              rows={14}
-              spellCheck={false}
-              className={`${fieldBase} w-full py-2 font-mono text-[13px] leading-relaxed ${invalid ? 'border-critical' : ''}`}
-              value={draft.Isi_Pesan}
-              onChange={(e) => set('Isi_Pesan', e.target.value)}
-            />
-          </Field>
-          {r && (r.unknown.length > 0 || r.malformed) && (
-            <p role="alert" className="rounded-lg tint-critical p-3 text-sm text-critical-ink">
-              {r.unknown.length > 0 && (
-                <>
-                  Token tidak dikenal:{' '}
-                  {r.unknown.map((t) => (
-                    <code key={t} className="mr-1 font-mono">{`{{${t}}}`}</code>
-                  ))}
-                </>
-              )}
-              {r.malformed && <span className="block">Ada {'{{'} atau {'}}'} tanpa pasangan.</span>}
-            </p>
-          )}
-          <Field label="URL gambar header (opsional)" htmlFor="tpl-img">
-            <input id="tpl-img" className={inputCls} value={draft.Header_Image_URL} onChange={(e) => set('Header_Image_URL', e.target.value)} placeholder="https://…" />
-          </Field>
+            <Field>
+              <FieldTitle>Sisipkan token</FieldTitle>
+              <div className="flex flex-col gap-2">
+                {TOKENS.map((g) => (
+                  <div key={g.group} className="flex flex-wrap items-center gap-1">
+                    <span className="w-14 shrink-0 text-muted-foreground">{g.group}</span>
+                    {g.tokens.map((t) => (
+                      <Button key={t} variant="outline" size="xs" className="font-mono" onClick={() => insert(t)}>
+                        {t.includes('.') ? t.split('.')[1] : t}
+                      </Button>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </Field>
 
-          <div className="flex flex-wrap items-center gap-2 border-t border-line pt-4">
-            {!isNew &&
-              (confirmDelete ? (
-                <>
-                  <span className="text-sm text-critical-ink">Hapus {template.Kode}?</span>
-                  <Button size="sm" onClick={() => setConfirmDelete(false)}>
-                    Batal
-                  </Button>
-                  <Button size="sm" variant="danger" onClick={remove} disabled={!!busy}>
-                    Ya, hapus
-                  </Button>
-                </>
+            <Field data-invalid={invalid}>
+              <FieldLabel htmlFor="tpl-isi">Isi pesan</FieldLabel>
+              <Textarea
+                id="tpl-isi"
+                ref={area}
+                rows={14}
+                spellCheck={false}
+                aria-invalid={invalid}
+                className="font-mono text-[13px] leading-relaxed"
+                value={draft.Isi_Pesan}
+                onChange={(e) => set('Isi_Pesan', e.target.value)}
+              />
+              {invalid && r ? (
+                <FieldError>
+                  {r.unknown.length > 0 && (
+                    <>
+                      Token tidak dikenal:{' '}
+                      {r.unknown.map((t) => (
+                        <code key={t} className="mr-1 font-mono">{`{{${t}}}`}</code>
+                      ))}
+                    </>
+                  )}
+                  {r.malformed && <span className="block">Ada {'{{'} atau {'}}'} tanpa pasangan.</span>}
+                </FieldError>
               ) : (
-                <Button variant="danger" onClick={() => setConfirmDelete(true)} disabled={!!busy}>
-                  Hapus
-                </Button>
-              ))}
-            <span className="ml-auto" />
-            {dirty && (
-              <Button variant="ghost" onClick={() => setDraft(template)}>
-                Buang perubahan
-              </Button>
-            )}
-            <Button
-              variant="primary"
-              onClick={save}
-              disabled={!!busy || (!dirty && !isNew) || invalid}
-              title={invalid ? 'Perbaiki token dulu' : undefined}
-            >
-              {isNew ? 'Buat template' : 'Simpan'}
+                <FieldDescription>
+                  Format WhatsApp: *tebal*, _miring_, ~coret~. Token {'{{…}}'} yang tidak dikenal akan ditolak, bukan dikirim
+                  kosong.
+                </FieldDescription>
+              )}
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="tpl-img">URL gambar header (opsional)</FieldLabel>
+              <Input
+                id="tpl-img"
+                value={draft.Header_Image_URL}
+                onChange={(e) => set('Header_Image_URL', e.target.value)}
+                placeholder="https://…"
+              />
+            </Field>
+          </FieldGroup>
+        </CardContent>
+        <CardFooter className="flex-wrap gap-2 border-t">
+          {!isNew && (
+            <Button variant="destructive" onClick={() => setConfirmDelete(true)} disabled={!!busy}>
+              <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} data-icon="inline-start" />
+              Hapus
             </Button>
-          </div>
-        </div>
+          )}
+          <span className="ml-auto" />
+          {dirty && (
+            <Button variant="ghost" onClick={() => setDraft(template)}>
+              Buang perubahan
+            </Button>
+          )}
+          <Button onClick={save} disabled={!!busy || (!dirty && !isNew) || invalid} title={invalid ? 'Perbaiki token dulu' : undefined}>
+            {isNew ? 'Buat template' : 'Simpan'}
+          </Button>
+        </CardFooter>
       </Card>
 
-      <Card
-        title="Preview"
-        className="self-start xl:sticky xl:top-4"
-        action={
-          <select
-            aria-label="Tamu contoh"
-            className={`${fieldBase} h-8 w-44 text-[13px]`}
-            value={pin}
-            onChange={(e) => setPin(e.target.value)}
-          >
-            <option value="">Tamu contoh (dummy)</option>
-            {guests
-              .filter((g) => g.PIN && g.Nama)
-              .map((g) => (
-                <option key={`${g.No}-${g.PIN}`} value={g.PIN}>
-                  {g.Nama} · {g.Akses}
-                </option>
-              ))}
-          </select>
-        }
-      >
-        {render?.error ? (
-          <p className="text-sm text-critical-ink">{render.error}</p>
-        ) : r ? (
-          <div className="flex flex-col gap-3">
-            <WhatsAppBubble text={r.text} />
-            {r.empty.length > 0 && (
-              <p className="text-xs text-warning-ink">
-                ⚠ Kosong untuk tamu ini: {r.empty.map((t) => `{{${t}}}`).join(', ')}
-              </p>
-            )}
-            <p className="text-xs text-ink-3">{r.text.length} karakter</p>
-          </div>
-        ) : (
-          <div className="h-64 animate-pulse rounded-xl bg-surface-2" />
-        )}
+      <Card className="self-start xl:sticky xl:top-20">
+        <CardHeader>
+          <CardTitle>Preview</CardTitle>
+          <CardAction>
+            <NativeSelect aria-label="Tamu contoh" size="sm" className="w-44" value={pin} onChange={(e) => setPin(e.target.value)}>
+              <NativeSelectOption value="">Tamu contoh (dummy)</NativeSelectOption>
+              {guests
+                .filter((g) => g.PIN && g.Nama)
+                .map((g) => (
+                  <NativeSelectOption key={`${g.No}-${g.PIN}`} value={g.PIN}>
+                    {g.Nama} {/* HIDDEN(sementara): · {g.Akses} */}
+                  </NativeSelectOption>
+                ))}
+            </NativeSelect>
+          </CardAction>
+        </CardHeader>
+        <CardContent>
+          {render?.error ? (
+            <p className="text-critical-ink">{render.error}</p>
+          ) : r ? (
+            <div className="flex flex-col gap-3">
+              <WhatsAppBubble text={r.text} />
+              {r.empty.length > 0 && (
+                <p className="text-warning-ink">⚠ Kosong untuk tamu ini: {r.empty.map((t) => `{{${t}}}`).join(', ')}</p>
+              )}
+              <p className="text-muted-foreground">{r.text.length} karakter</p>
+            </div>
+          ) : (
+            <Skeleton className="h-64 rounded-xl" />
+          )}
+        </CardContent>
       </Card>
+
+      <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+        <AlertDialogContent size="sm">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Hapus template {template.Kode}?</AlertDialogTitle>
+            <AlertDialogDescription>Tamu dengan akses ini akan memakai template SEMUA sebagai gantinya.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Batal</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={remove} disabled={!!busy}>
+              Ya, hapus
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
