@@ -1,7 +1,8 @@
 import type { Issue } from '@/core/domain/checks'
+import { withEventDefaults } from '@/core/domain/event'
 import type { ImportRow } from '@/core/domain/csv'
 import type { RenderResult } from '@/core/domain/template'
-import type { Guest, GuestInput, Meta, Template, TemplateTipe } from '@/core/domain/types'
+import type { EventInfo, Guest, GuestInput, Meta, Template, TemplateTipe } from '@/core/domain/types'
 import {
   ApiError,
   type GuestRef,
@@ -57,8 +58,13 @@ export class AppsScriptApi implements UndanganApi {
     return env.data as T
   }
 
-  getMeta() {
-    return this.call<Meta>('meta')
+  async getMeta() {
+    const meta = await this.call<Meta>('meta')
+    // A sheet set up before the event form may lack the newer 01_Event keys.
+    return { ...meta, event: withEventDefaults(meta.event) }
+  }
+  saveEvent(event: EventInfo) {
+    return this.call<Meta>('event.save', { event })
   }
   listGuests() {
     return this.call<Guest[]>('guests.list')

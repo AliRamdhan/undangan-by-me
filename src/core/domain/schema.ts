@@ -26,7 +26,7 @@ const c = (
 
 /** 02_Tamu, A–AB, in sheet order. */
 export const TAMU_COLUMNS: readonly Column[] = [
-  c('No', 'A', 'formula', 'identitas', 48, true),
+  // c('No', 'A', 'formula', 'identitas', 48, true),
   c('PIN', 'B', 'script', 'identitas', 80, true),
   c('Gelar', 'C', 'manual', 'identitas', 88, true),
   c('Nama', 'D', 'manual', 'identitas', 200, true),

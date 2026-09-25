@@ -11,7 +11,8 @@ import { useStore } from '@/core/store'
 import { PATHS } from '@/route.paths'
 
 const TABS = [
-  { to: PATHS.root, label: 'Events' },
+  // Not PATHS.root: a NavLink to '/' counts as active on every page.
+  { to: PATHS.event, label: 'Events' },
   { to: PATHS.tamu, label: 'Tamu' },
   { to: PATHS.template, label: 'Template' },
   // { to: PATHS.dashboard, label: 'Dashboard' },
@@ -25,7 +26,8 @@ export function AppLayout() {
   const { meta, api, loadError, reload, busy } = useStore()
   // Pengaturan is a sheet over the current page, so it stays reachable even when loading fails.
   const [settingsOpen, setSettingsOpen] = useState(false)
-  const live = meta?.mode === 'LIVE'
+  // Only used by the commented-out mode badge below — restore together.
+  // const live = meta?.mode === 'LIVE'
 
   return (
     <div className="flex min-h-dvh flex-col">

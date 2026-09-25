@@ -2,7 +2,8 @@ import { RefreshIcon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
+import { Link } from 'react-router'
+import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Field,
   FieldContent,
@@ -21,6 +22,7 @@ import type { ApiSettings } from '@/core/api'
 import { MockApi } from '@/core/api/mock'
 import { formatTanggal } from '@/core/domain/template'
 import { useStore } from '@/core/store'
+import { PATHS } from '@/route.paths'
 
 const SOURCES = [
   { value: 'mock', label: 'Data contoh', sub: 'Tersimpan di browser ini saja' },
@@ -122,38 +124,17 @@ function SettingsForm({ onDone }: { onDone: () => void }) {
           {ev && (
             <>
               <Separator />
-              <section className="flex flex-col gap-3">
-                <h3 className="font-medium">Event (01_Event, baca saja)</h3>
-                <dl className="grid grid-cols-[110px_1fr] gap-x-3 gap-y-1.5 text-sm">
-                  <dt className="text-muted-foreground">Nama</dt>
-                  <dd>{ev.nama_event}</dd>
-                  <dt className="text-muted-foreground">Tanggal</dt>
-                  <dd>{formatTanggal(ev.tanggal_utama)}</dd>
-                  <dt className="text-muted-foreground">Batas RSVP</dt>
-                  <dd>{formatTanggal(ev.batas_rsvp)}</dd>
-                  <dt className="text-muted-foreground">Link</dt>
-                  <dd className="font-mono text-xs break-all">
-                    {ev.domain.replace(/\/+$/, '')}/{ev.slug}/{'{PIN}'}
-                  </dd>
-                  <dt className="text-muted-foreground">Kontak</dt>
-                  <dd>
-                    {ev.cs.nama} · <span className="font-mono">{ev.cs.hp}</span>
-                  </dd>
-                </dl>
-                <ul className="flex flex-col gap-2">
-                  {ev.sesi.map((s) => (
-                    <li key={s.kode} className="rounded-lg border p-3 text-sm">
-                      <p className="font-medium">
-                        {s.kode} · {s.label}
-                      </p>
-                      <p className="text-muted-foreground">
-                        {formatTanggal(s.tanggal)}, {s.mulai}–{s.selesai} {ev.timezone}
-                      </p>
-                      <p className="text-ink-3">{s.tempat}</p>
-                    </li>
-                  ))}
-                </ul>
-                <p className="text-xs text-ink-3">Ubah data event di spreadsheet (01_Event), lalu Validasi Data Event.</p>
+              <section className="flex flex-col gap-2">
+                <h3 className="font-medium">Event</h3>
+                <p className="text-muted-foreground">
+                  {ev.nama_event || '(belum diisi)'} · {ev.tanggal_utama ? formatTanggal(ev.tanggal_utama) : 'tanggal belum diisi'}
+                </p>
+                <p className="font-mono text-xs break-all text-ink-3">
+                  {ev.domain.replace(/\/+$/, '')}/{ev.slug}/{'{PIN}'}
+                </p>
+                <Link to={PATHS.event} onClick={onDone} className={buttonVariants({ variant: 'outline', className: 'self-start' })}>
+                  Ubah data event
+                </Link>
               </section>
             </>
           )}

@@ -116,7 +116,39 @@ export interface Session {
   live_stream: string
 }
 
-/** The export payload from URL-CONTRACT.md § 2, minus fields this UI never reads. */
+export const EVENT_TIPE = [
+  { value: 'PERNIKAHAN', label: 'Pernikahan' },
+  { value: 'LAMARAN', label: 'Lamaran / Tunangan' },
+  { value: 'KHITANAN', label: 'Khitanan' },
+  { value: 'ULANG_TAHUN', label: 'Ulang Tahun' },
+  { value: 'LAINNYA', label: 'Lainnya' },
+] as const
+
+/** Display labels only — times are wall-clock and never converted (STRUCTURE.md). */
+export const TIMEZONES = ['WIB', 'WITA', 'WIT'] as const
+
+export const BAHASA = [
+  { value: 'id', label: 'Bahasa Indonesia' },
+  { value: 'en', label: 'English' },
+] as const
+
+/** Placeholder until the invitation site publishes its real design list. */
+export const WEB_TEMPLATES = [
+  { value: 'klasik', label: 'Klasik' },
+  { value: 'floral', label: 'Floral' },
+  { value: 'minimalis', label: 'Minimalis' },
+] as const
+
+export interface Person {
+  /** Nickname used in messages (`{{event.pria}}`). */
+  panggilan: string
+  lengkap: string
+  ortu: string
+  hp: string
+  email: string
+}
+
+/** The export payload from URL-CONTRACT.md § 2, plus the fields the event form edits. */
 export interface EventInfo {
   slug: string
   domain: string
@@ -124,14 +156,19 @@ export interface EventInfo {
   tipe: string
   bahasa: string
   timezone: string
+  web_template: string
   couple: {
-    pria: { panggilan: string; lengkap: string; ortu: string }
-    wanita: { panggilan: string; lengkap: string; ortu: string }
+    pria: Person
+    wanita: Person
     hashtag: string
   }
   tanggal_utama: string
+  /** `YYYY-MM-DDTHH:mm`, wall-clock. */
+  tanggal_pengingat: string
   batas_rsvp: string
   sesi: Session[]
+  gift: { bank: string; atas_nama: string; norek: string; qris: string }
+  media: { musik: string; cover: string }
   cs: { nama: string; hp: string }
   kapasitas: { s1: number; s2: number }
 }

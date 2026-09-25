@@ -68,4 +68,20 @@ describe('MockApi — one column, one writer', () => {
       skipped: expect.arrayContaining([expect.objectContaining({ reason: expect.stringMatching(/tamu\.namaa/) })]),
     })
   })
+
+  it('saves a valid event, renumbers sessions and relinks every guest', async () => {
+    const meta = await api.getMeta()
+    const event = { ...meta.event, slug: 'dimas-rara-2026', sesi: meta.event.sesi.map((s) => ({ ...s, kode: 'X' })) }
+    const saved = await api.saveEvent(event)
+    expect(saved.event.slug).toBe('dimas-rara-2026')
+    expect(saved.event.sesi.map((s) => s.kode)).toEqual(['S1', 'S2'])
+    const [g] = await api.listGuests()
+    expect(g.Link_Undangan).toBe(`https://undangan.by.me/dimas-rara-2026/${g.PIN}`)
+  })
+
+  it('refuses an event that fails Validasi Data Event', async () => {
+    const meta = await api.getMeta()
+    await expect(api.saveEvent({ ...meta.event, slug: '1bad' })).rejects.toMatchObject({ code: 'VALIDATION' })
+    expect((await api.getMeta()).event.slug).toBe('dimas-rara')
+  })
 })

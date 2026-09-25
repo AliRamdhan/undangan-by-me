@@ -53,8 +53,8 @@ function cellTint(g: Guest, key: GuestKey): string {
 function renderCell(g: Guest, col: Column, onOpen: (g: Guest) => void): ReactNode {
   const v = g[col.key]
   switch (col.key) {
-    case 'No':
-      return <span className="text-ink-3 tabular-nums">{g.No}</span>
+    // case 'No':
+    //   return <span className="text-ink-3 tabular-nums">{g.No}</span>
     case 'PIN':
       return g.PIN ? <span className="font-mono">{g.PIN}</span> : <span className="text-ink-3 italic">kosong</span>
     case 'HP':

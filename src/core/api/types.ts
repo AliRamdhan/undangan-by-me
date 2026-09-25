@@ -1,7 +1,7 @@
 import type { Issue } from '@/core/domain/checks'
 import type { ImportRow } from '@/core/domain/csv'
 import type { RenderResult } from '@/core/domain/template'
-import type { Guest, GuestInput, Meta, Template, TemplateTipe } from '@/core/domain/types'
+import type { EventInfo, Guest, GuestInput, Meta, Template, TemplateTipe } from '@/core/domain/types'
 
 /**
  * Identifies a 02_Tamu row. PIN is the key (BLAST-FLOW.md: never the row
@@ -68,6 +68,8 @@ export class ApiError extends Error {
 export interface UndanganApi {
   readonly kind: 'mock' | 'appsscript'
   getMeta(): Promise<Meta>
+  /** Setup → 01_Event: writes the key/value block and the session table. Rejects an event that fails Validasi Data Event. */
+  saveEvent(event: EventInfo): Promise<Meta>
   listGuests(): Promise<Guest[]>
   /** `ref: null` appends a new guest; the backend assigns its PIN. */
   saveGuest(ref: GuestRef | null, fields: Partial<GuestInput>): Promise<Guest>

@@ -1,11 +1,12 @@
 import { cekDuplikat } from '@/core/domain/checks'
+import { validateEvent, withEventDefaults } from '@/core/domain/event'
 import type { ImportRow } from '@/core/domain/csv'
 import { applyFormulas } from '@/core/domain/derive'
 import { waLink } from '@/core/domain/link'
 import { normalizePhone } from '@/core/domain/phone'
 import { generatePins } from '@/core/domain/pin'
 import { buildContext, inspectTemplate, pickTemplate, TemplateError, renderTemplate } from '@/core/domain/template'
-import { MANUAL_KEYS, type Guest, type GuestInput, type Meta, type Template, type TemplateTipe } from '@/core/domain/types'
+import { MANUAL_KEYS, type EventInfo, type Guest, type GuestInput, type Meta, type Template, type TemplateTipe } from '@/core/domain/types'
 import { blankGuest, SEED_GUESTS, SEED_META, SEED_TEMPLATES } from '@/core/api/seed'
 import { ApiError, type GuestRef, type LinkResult, type TemplateReport, type UndanganApi } from '@/core/api/types'
 
@@ -25,7 +26,12 @@ function seed(): Db {
 function load(): Db {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (raw) return JSON.parse(raw) as Db
+    if (raw) {
+      const db = JSON.parse(raw) as Db
+      // Stored before the event form existed? Fill the new fields instead of breaking the form.
+      db.meta.event = withEventDefaults(db.meta.event)
+      return db
+    }
   } catch {
     // Private window / blocked storage: fall through to an in-memory seed.
   }
@@ -81,6 +87,21 @@ export class MockApi implements UndanganApi {
 
   async getMeta() {
     await delay()
+    return structuredClone(this.db.meta)
+  }
+
+  async saveEvent(event: EventInfo) {
+    await delay()
+    const next = withEventDefaults(structuredClone(event))
+    const errs = Object.entries(validateEvent(next))
+    if (errs.length) {
+      throw new ApiError('VALIDATION', `Data event belum lengkap: ${errs.map(([k, m]) => `${k} (${m})`).join(', ')}`)
+    }
+    // Session codes follow row order, like the 01_Event session table.
+    next.sesi = next.sesi.map((s, i) => ({ ...s, kode: `S${i + 1}` }))
+    for (const p of [next.couple.pria, next.couple.wanita]) p.hp = normalizePhone(p.hp)
+    this.db.meta.event = next
+    this.persist()
     return structuredClone(this.db.meta)
   }
 
