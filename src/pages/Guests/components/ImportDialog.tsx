@@ -50,11 +50,17 @@ export function ImportDialog({ open, onClose }: { open: boolean; onClose: () => 
   const submit = async () => {
     if (!result?.rows.length) return
     const n = await run('Import', (api) => api.importGuests(result.rows))
-    if (n) {
-      toast.success(`${n} tamu diimpor. Lanjut: Generate PIN → Normalisasi HP → Cek Duplikat.`)
-      reset()
-      onClose()
-    }
+    if (!n) return
+    // A separate run: if only this step fails the import still stands, and the
+    // Generate PIN button fills the gap — retrying the import would duplicate rows.
+    const pins = await run('Generate PIN', (api) => api.generatePins())
+    toast.success(
+      pins === undefined
+        ? `${n} tamu diimpor. PIN gagal dibuat — jalankan Generate PIN.`
+        : `${n} tamu diimpor, PIN dibuat otomatis. Lanjut: Normalisasi HP → Cek Duplikat.`,
+    )
+    reset()
+    onClose()
   }
 
   return (
@@ -64,7 +70,8 @@ export function ImportDialog({ open, onClose }: { open: boolean; onClose: () => 
           <DialogTitle>Import Tamu dari CSV / Excel</DialogTitle>
           <DialogDescription>
             Header harus persis dan berurutan: <span className="font-mono text-foreground">{IMPORT_COLUMNS.join(', ')}</span>.
-            Kosongkan <b>PIN</b> — dibuat lewat Generate PIN. Akses: VIP / KELUARGA / REGULAR / PUBLIC.
+            <b>PIN</b> dibuat otomatis untuk setiap tamu.
+            {/* HIDDEN(sementara): Akses: VIP / KELUARGA / REGULAR / PUBLIC. */}
           </DialogDescription>
         </DialogHeader>
         <div className="flex max-h-[60vh] flex-col gap-3 overflow-y-auto">
@@ -87,7 +94,7 @@ export function ImportDialog({ open, onClose }: { open: boolean; onClose: () => 
             aria-label="Isi CSV"
             rows={5}
             className="font-mono"
-            placeholder={`${IMPORT_COLUMNS.join(',')}\n,Bapak,Budi Santoso,0812 3456 789,,REGULAR,Teman Kantor,PRIA,0,2`}
+            placeholder={`${IMPORT_COLUMNS.join(',')}\nBapak,Budi Santoso,0812 3456 789,`}
             value={text}
             onChange={(e) => {
               setFileName('')
@@ -116,7 +123,7 @@ export function ImportDialog({ open, onClose }: { open: boolean; onClose: () => 
                   {result.rows.slice(0, 8).map((r, i) => (
                     <TableRow key={i}>
                       {IMPORT_COLUMNS.map((c) => (
-                        <TableCell key={c} className={c === 'PIN' || c === 'HP' ? 'font-mono' : ''}>
+                        <TableCell key={c} className={c === 'HP' ? 'font-mono' : ''}>
                           {String(r[c])}
                         </TableCell>
                       ))}

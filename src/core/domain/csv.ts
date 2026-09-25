@@ -77,11 +77,12 @@ export interface ImportResult {
   errors: string[]
 }
 
-function wholeNumber(raw: string): number | null {
-  const v = raw.trim()
-  if (v === '') return 0
-  return /^\d+$/.test(v) ? Number(v) : null
-}
+// HIDDEN(sementara): Q_S1/Q_S2 are not imported
+// function wholeNumber(raw: string): number | null {
+//   const v = raw.trim()
+//   if (v === '') return 0
+//   return /^\d+$/.test(v) ? Number(v) : null
+// }
 
 /** Parses a 02_Tamu_import.csv (or pasted CSV text). */
 export function parseImport(text: string): ImportResult {
@@ -90,7 +91,7 @@ export function parseImport(text: string): ImportResult {
 
 /**
  * Validates an import table, from CSV or the first sheet of an .xlsx. The
- * header must be exactly PIN…Q_S2 (B–K) in order — unlike connectied's
+ * header must be exactly IMPORT_COLUMNS in order — unlike connectied's
  * importer, which reads by column index and silently shifts data when a
  * column is added.
  */
@@ -107,26 +108,35 @@ export function parseImportTable(table: readonly (readonly string[])[]): ImportR
 
   const rows: ImportRow[] = []
   const errors: string[] = []
-  table.slice(1).forEach((cells, i) => {
-    const line = i + 2
+  table.slice(1).forEach((cells) => {
+    // HIDDEN(sementara): const line = i + 2 — only used by the quota check
     const get = (k: (typeof IMPORT_COLUMNS)[number]) => (cells[expected.indexOf(k)] ?? '').trim()
-    const q1 = wholeNumber(get('Q_S1'))
-    const q2 = wholeNumber(get('Q_S2'))
-    if (q1 === null || q2 === null) {
-      errors.push(`Baris ${line}: Q_S1/Q_S2 harus bilangan bulat ≥ 0`)
-      return
-    }
+    // HIDDEN(sementara): quota columns are hidden
+    // const q1 = wholeNumber(get('Q_S1'))
+    // const q2 = wholeNumber(get('Q_S2'))
+    // if (q1 === null || q2 === null) {
+    //   errors.push(`Baris ${line}: Q_S1/Q_S2 harus bilangan bulat ≥ 0`)
+    //   return
+    // }
     rows.push({
-      PIN: get('PIN'),
+      // Not in the import file: filled right after import by generatePins.
+      PIN: '',
       Gelar: get('Gelar'),
       Nama: get('Nama'),
       HP: get('HP'),
       Email: get('Email'),
-      Akses: get('Akses').toUpperCase(),
-      Grup: get('Grup'),
-      Sisi: get('Sisi').toUpperCase(),
-      Q_S1: q1,
-      Q_S2: q2,
+      // HIDDEN(sementara): Akses/Grup/Sisi/Q_S1/Q_S2 are not imported; same defaults
+      // as a new guest in GuestDrawer.
+      // Akses: get('Akses').toUpperCase(),
+      // Grup: get('Grup'),
+      // Sisi: get('Sisi').toUpperCase(),
+      // Q_S1: q1,
+      // Q_S2: q2,
+      Akses: 'REGULAR',
+      Grup: '',
+      Sisi: '',
+      Q_S1: 0,
+      Q_S2: 1,
       Meja: '',
       Note_Unik: '',
       Catatan: '',

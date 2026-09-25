@@ -63,28 +63,36 @@ export const FORMULA_KEYS = TAMU_COLUMNS.filter((x) => x.owner === 'formula').ma
 export const FROZEN_COUNT = 4
 
 /**
- * Every 02_Tamu column A–AB, in sheet order — fixed, for Export CSV. Independent
- * of TAMU_COLUMNS, which only controls what the table shows.
+ * 02_Tamu columns for Export CSV / Excel, in sheet order. Independent of
+ * TAMU_COLUMNS, which only controls what the table shows.
+ * HIDDEN(sementara): the columns hidden in the table are left out of the
+ * export too; restore them here for the full A–AB export.
  */
 export const SHEET_COLUMNS = [
-  'No', 'PIN', 'Gelar', 'Nama', 'HP', 'Email', 'Akses', 'Grup', 'Sisi', 'Q_S1', 'Q_S2',
-  'Status_RSVP', 'RSVP_S1', 'RSVP_S2', 'RSVP_Waktu', 'Nama_Pax', 'Pesan_Tamu',
-  'Status_Kirim', 'Kirim_Terakhir', 'Kirim_Count', 'Kirim_Error',
-  'Meja', 'Note_Unik', 'Catatan', 'HP_Valid', 'Link_Undangan', 'Preview_Pesan', 'Link_WA',
+  // HIDDEN(sementara): 'No',
+  'PIN', 'Gelar', 'Nama', 'HP', 'Email',
+  // HIDDEN(sementara): 'Akses', 'Grup', 'Sisi', 'Q_S1', 'Q_S2',
+  // HIDDEN(sementara): 'Status_RSVP', 'RSVP_S1', 'RSVP_S2', 'RSVP_Waktu', 'Nama_Pax', 'Pesan_Tamu',
+  // HIDDEN(sementara): 'Status_Kirim', 'Kirim_Terakhir', 'Kirim_Count', 'Kirim_Error',
+  // HIDDEN(sementara): 'Meja',
+  'Note_Unik', 'Catatan',
+  // HIDDEN(sementara): 'HP_Valid',
+  'Link_Undangan', 'Preview_Pesan', 'Link_WA',
 ] as const satisfies readonly GuestKey[]
 
 /** 02_Tamu_import.csv — columns B–K, header text and order are meaningful. */
 export const IMPORT_COLUMNS = [
-  'PIN',
+  // 'PIN', — generated automatically after import (ImportDialog → generatePins)
   'Gelar',
   'Nama',
   'HP',
   'Email',
-  'Akses',
-  'Grup',
-  'Sisi',
-  'Q_S1',
-  'Q_S2',
+  // HIDDEN(sementara): segmentasi and quota — see parseImportTable for their defaults
+  // 'Akses',
+  // 'Grup',
+  // 'Sisi',
+  // 'Q_S1',
+  // 'Q_S2',
 ] as const satisfies readonly GuestKey[]
 
 export const ZONE_LABEL: Record<Zone, string> = {

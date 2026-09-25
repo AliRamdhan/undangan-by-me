@@ -349,7 +349,7 @@ export function Guests() {
             <EmptyHeader>
               <EmptyTitle>Belum ada tamu</EmptyTitle>
               <EmptyDescription>
-                Tambah satu per satu, atau <b>Import</b> CSV/Excel dengan kolom PIN…Q_S2 lalu jalankan Generate PIN.
+                Tambah satu per satu, atau <b>Import</b> CSV/Excel dengan kolom Gelar…Email. PIN dibuat otomatis.
               </EmptyDescription>
             </EmptyHeader>
           </Empty>

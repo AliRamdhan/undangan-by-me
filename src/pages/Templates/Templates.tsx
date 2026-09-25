@@ -59,7 +59,9 @@ export function Templates() {
           <HugeiconsIcon icon={Link04Icon} strokeWidth={2} data-icon="inline-start" />
           Generate Link Manual
         </Button>
+        {/* HIDDEN(sementara): Akses is hidden
         <p className="text-xs text-muted-foreground sm:ml-auto">Lookup: (Tipe, Akses) → fallback (Tipe, SEMUA)</p>
+        */}
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[260px_minmax(0,1fr)]">
@@ -85,9 +87,8 @@ export function Templates() {
                   <span className="font-mono text-[13px] font-medium">{t.Kode}</span>
                   {!t.Aktif && <Badge variant="muted">nonaktif</Badge>}
                 </span>
-                <span className="text-muted-foreground">
-                  {t.Tipe} · {t.Akses}
-                </span>
+                {/* HIDDEN(sementara): {t.Tipe} · {t.Akses} */}
+                <span className="text-muted-foreground">{t.Tipe}</span>
               </button>
             )
           })}

@@ -24,7 +24,8 @@ import { refOf } from '@/core/api/types'
 import { HP_PATTERN, normalizePhone } from '@/core/domain/phone'
 import { /* HIDDEN(sementara): AKSES, SISI, */ GELAR, MANUAL_KEYS, type Guest, type GuestInput } from '@/core/domain/types'
 import { useStore } from '@/core/store'
-import { /* HIDDEN(sementara): KirimBadge, */ RsvpBadge } from '@/components/StatusBadge'
+// HIDDEN(sementara): Status_RSVP and Status_Kirim are hidden
+// import { KirimBadge, RsvpBadge } from '@/components/StatusBadge'
 
 type Form = Record<keyof GuestInput, string>
 
@@ -148,7 +149,7 @@ export function GuestDrawer({
                 <span>
                   PIN <span className="font-mono">{guest.PIN || 'belum ada'}</span>
                 </span>
-                <RsvpBadge status={guest.Status_RSVP} />
+                {/* HIDDEN(sementara): <RsvpBadge status={guest.Status_RSVP} /> */}
                 {/* HIDDEN(sementara): <KirimBadge status={guest.Status_Kirim} /> */}
               </>
             ) : (
@@ -307,9 +308,11 @@ export function GuestDrawer({
                     <Badge variant={guest.HP_Valid === '✅' ? 'good' : 'serious'}>{guest.HP_Valid}</Badge>
                   </ReadOnly>
                   */}
+                  {/* HIDDEN(sementara): Status RSVP
                   <ReadOnly label="Status RSVP">
                     <RsvpBadge status={guest.Status_RSVP} />
                   </ReadOnly>
+                  */}
                   {/* HIDDEN(sementara):
                   <ReadOnly label="RSVP S1 / S2">
                     <span className={guest.RSVP_S1 > guest.Q_S1 || guest.RSVP_S2 > guest.Q_S2 ? 'font-semibold text-critical-ink' : ''}>
@@ -317,8 +320,10 @@ export function GuestDrawer({
                     </span>
                   </ReadOnly>
                   */}
+                  {/* HIDDEN(sementara): RSVP details
                   <ReadOnly label="Waktu RSVP">{guest.RSVP_Waktu}</ReadOnly>
                   <ReadOnly label="Nama pax">{guest.Nama_Pax}</ReadOnly>
+                  */}
                   {/* HIDDEN(sementara):
                   <ReadOnly label="Status kirim">
                     <KirimBadge status={guest.Status_Kirim} />
@@ -332,11 +337,13 @@ export function GuestDrawer({
                     </div>
                   )}
                   */}
+                  {/* HIDDEN(sementara): Pesan_Tamu comes from the RSVP form
                   {guest.Pesan_Tamu && (
                     <div className="col-span-2">
                       <ReadOnly label="Ucapan tamu">“{guest.Pesan_Tamu}”</ReadOnly>
                     </div>
                   )}
+                  */}
                   <div className="col-span-2">
                     <ReadOnly label="Link undangan">
                       {guest.Link_Undangan && (

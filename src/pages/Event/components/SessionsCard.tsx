@@ -49,11 +49,13 @@ export function SessionsCard({ draft, update, err, touch }: SectionProps) {
         {draft.sesi.length === 0 && (
           <p className="text-muted-foreground">Belum ada sesi. Tambahkan minimal satu (mis. Akad Nikah).</p>
         )}
+        {/* HIDDEN(sementara): quota & RSVP columns are hidden
         {draft.sesi.length > 2 && (
           <p className="rounded-lg tint-warning p-3 text-warning-ink">
             ⚠ 02_Tamu hanya punya kolom kuota & RSVP untuk S1 dan S2. Sesi ketiga dst. butuh kolom tambahan di sheet.
           </p>
         )}
+        */}
         {draft.sesi.map((s, i) => {
           const set = (key: keyof Session, value: string) =>
             update((d) => {

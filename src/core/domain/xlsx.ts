@@ -1,6 +1,6 @@
-import type { Cell, CellValue, Workbook, Worksheet } from 'exceljs'
+import type { /* HIDDEN(sementara): Cell, */ CellValue, Workbook, Worksheet } from 'exceljs'
 import { IMPORT_COLUMNS, SHEET_COLUMNS } from '@/core/domain/schema'
-import { AKSES, SISI, type Guest } from '@/core/domain/types'
+import { /* HIDDEN(sementara): AKSES, SISI, */ type Guest } from '@/core/domain/types'
 
 export const XLSX_MIME = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
@@ -13,8 +13,9 @@ async function loadExcel(): Promise<typeof import('exceljs')> {
   return ('default' in m ? m.default : m) as typeof import('exceljs')
 }
 
-/** Rows the template pre-formats and validates. */
-const TEMPLATE_ROWS = 1000
+// HIDDEN(sementara): only used by the hidden Akses/Sisi/quota validations
+// /** Rows the template pre-formats and validates. */
+// const TEMPLATE_ROWS = 1000
 
 /** Columns kept as text so Excel doesn't strip leading zeros (`0812…`, PIN `012345`). */
 const TEXT_KEYS = new Set<string>(['PIN', 'Gelar', 'Nama', 'HP', 'Email', 'Grup'])
@@ -85,30 +86,31 @@ export async function exportGuestsXlsx(guests: readonly Guest[]): Promise<Blob> 
   return toBlob(wb)
 }
 
-const listValidation = (values: readonly string[]) => ({
-  type: 'list' as const,
-  allowBlank: true,
-  formulae: [`"${values.join(',')}"`],
-  showErrorMessage: true,
-  errorTitle: 'Nilai tidak dikenal',
-  error: `Pilih salah satu: ${values.join(', ')}`,
-})
+// HIDDEN(sementara): Akses/Sisi/quota validations — those columns are hidden
+// const listValidation = (values: readonly string[]) => ({
+//   type: 'list' as const,
+//   allowBlank: true,
+//   formulae: [`"${values.join(',')}"`],
+//   showErrorMessage: true,
+//   errorTitle: 'Nilai tidak dikenal',
+//   error: `Pilih salah satu: ${values.join(', ')}`,
+// })
 
-const QUOTA_VALIDATION = {
-  type: 'whole' as const,
-  operator: 'greaterThanOrEqual' as const,
-  allowBlank: true,
-  formulae: [0],
-  showErrorMessage: true,
-  errorTitle: 'Kuota tidak valid',
-  error: 'Isi bilangan bulat ≥ 0',
-}
+// const QUOTA_VALIDATION = {
+//   type: 'whole' as const,
+//   operator: 'greaterThanOrEqual' as const,
+//   allowBlank: true,
+//   formulae: [0],
+//   showErrorMessage: true,
+//   errorTitle: 'Kuota tidak valid',
+//   error: 'Isi bilangan bulat ≥ 0',
+// }
 
 const TEMPLATE_WIDTH: Partial<Record<(typeof IMPORT_COLUMNS)[number], number>> = {
   Nama: 28,
   HP: 18,
   Email: 26,
-  Grup: 18,
+  // HIDDEN(sementara): Grup: 18,
 }
 
 /** An empty 02_Tamu_import.xlsx: same header as the CSV template, pre-formatted and validated. */
@@ -124,17 +126,18 @@ export async function importTemplateXlsx(): Promise<Blob> {
   }))
   styleHeader(ws)
 
-  const validations: Partial<Record<(typeof IMPORT_COLUMNS)[number], Cell['dataValidation']>> = {
-    Akses: listValidation(AKSES),
-    Sisi: listValidation(SISI),
-    Q_S1: QUOTA_VALIDATION,
-    Q_S2: QUOTA_VALIDATION,
-  }
-  IMPORT_COLUMNS.forEach((k, i) => {
-    const rule = validations[k]
-    if (!rule) return
-    for (let r = 2; r <= TEMPLATE_ROWS; r++) ws.getCell(r, i + 1).dataValidation = rule
-  })
+  // HIDDEN(sementara): Akses/Sisi/quota columns are hidden
+  // const validations: Partial<Record<(typeof IMPORT_COLUMNS)[number], Cell['dataValidation']>> = {
+  //   Akses: listValidation(AKSES),
+  //   Sisi: listValidation(SISI),
+  //   Q_S1: QUOTA_VALIDATION,
+  //   Q_S2: QUOTA_VALIDATION,
+  // }
+  // IMPORT_COLUMNS.forEach((k, i) => {
+  //   const rule = validations[k]
+  //   if (!rule) return
+  //   for (let r = 2; r <= TEMPLATE_ROWS; r++) ws.getCell(r, i + 1).dataValidation = rule
+  // })
 
   const help = wb.addWorksheet('Petunjuk')
   help.getColumn(1).width = 100
@@ -142,10 +145,11 @@ export async function importTemplateXlsx(): Promise<Blob> {
     'Petunjuk import tamu',
     '',
     `• Isi sheet "02_Tamu_import" mulai baris 2. Jangan ubah, hapus atau urutkan ulang header (${IMPORT_COLUMNS.join(', ')}).`,
-    '• Kosongkan PIN — dibuat lewat Generate PIN setelah import.',
+    '• PIN tidak perlu diisi — dibuat otomatis saat import.',
     '• HP boleh 08xx, 628xx atau +628xx; jalankan Normalisasi HP setelah import.',
-    `• Akses: ${AKSES.join(' / ')}. Sisi: ${SISI.join(' / ')}.`,
-    '• Q_S1 / Q_S2: jumlah kursi per sesi, bilangan bulat ≥ 0 (kosong = 0).',
+    // HIDDEN(sementara): Akses/Sisi/quota columns are hidden
+    // `• Akses: ${AKSES.join(' / ')}. Sisi: ${SISI.join(' / ')}.`,
+    // '• Q_S1 / Q_S2: jumlah kursi per sesi, bilangan bulat ≥ 0 (kosong = 0).',
   ]) {
     help.addRow([line])
   }

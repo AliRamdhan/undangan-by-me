@@ -6,7 +6,7 @@ import { applyFormulas } from '@/core/domain/derive'
 import { linkUndangan, waLink } from '@/core/domain/link'
 import { hpValid, normalizePhone, phoneCounts } from '@/core/domain/phone'
 import { generatePins } from '@/core/domain/pin'
-import { IMPORT_COLUMNS } from '@/core/domain/schema'
+import { IMPORT_COLUMNS, SHEET_COLUMNS } from '@/core/domain/schema'
 import { computeStats } from '@/core/domain/stats'
 import {
   buildContext,
@@ -131,11 +131,16 @@ describe('csv', () => {
     const csv = serializeCsv([['=HYPERLINK("x")', '+628123456789', '+cmd', '@SUM(1)']])
     expect(parseCsv(csv)[0]).toEqual([`'=HYPERLINK("x")`, '+628123456789', `'+cmd`, `'@SUM(1)`])
   })
-  it('imports B–K, keeping PIN and HP as strings', () => {
-    const text = `\uFEFF${IMPORT_COLUMNS.join(',')}\r\n012345,Bapak,Budi,0812 3456 789,,vip,Kantor,pria,1,2\n`
+  it('imports Gelar…Email, keeping HP as a string and leaving PIN for generatePins', () => {
+    const text = `\uFEFF${IMPORT_COLUMNS.join(',')}\r\nBapak,Budi,0812 3456 789,\n`
     const { rows, errors } = parseImport(text)
     expect(errors).toEqual([])
-    expect(rows[0]).toMatchObject({ PIN: '012345', HP: '0812 3456 789', Akses: 'VIP', Sisi: 'PRIA', Q_S1: 1, Q_S2: 2 })
+    expect(rows[0]).toMatchObject({ PIN: '', Gelar: 'Bapak', HP: '0812 3456 789', Nama: 'Budi' })
+  })
+  it('gives hidden columns the new-guest defaults', () => {
+    // HIDDEN(sementara): Akses/Grup/Sisi/Q_S1/Q_S2 are not imported
+    const { rows } = parseImport(`${IMPORT_COLUMNS.join(',')}\n,Budi,,`)
+    expect(rows[0]).toMatchObject({ Akses: 'REGULAR', Grup: '', Sisi: '', Q_S1: 0, Q_S2: 1 })
   })
   it('rejects a reordered header', () => {
     const header = [...IMPORT_COLUMNS]
@@ -144,12 +149,14 @@ describe('csv', () => {
     expect(rows).toEqual([])
     expect(errors[0]).toMatch(/Header harus persis/)
   })
-  it('rejects non-whole quotas with the line number', () => {
-    const { errors } = parseImport(`${IMPORT_COLUMNS.join(',')}\n,,Budi,,,,,,1.5,2`)
-    expect(errors[0]).toMatch(/Baris 2/)
-  })
-  it('exports all 28 columns', () => {
-    expect(parseCsv(exportGuestsCsv([blankGuest()]))[0]).toHaveLength(28)
+  // HIDDEN(sementara): quota columns are not imported
+  // it('rejects non-whole quotas with the line number', () => {
+  //   const { errors } = parseImport(`${IMPORT_COLUMNS.join(',')}\n,,Budi,,,,,,1.5,2`)
+  //   expect(errors[0]).toMatch(/Baris 2/)
+  // })
+  it('exports every SHEET_COLUMNS column', () => {
+    // HIDDEN(sementara): 28 (A–AB) while columns are hidden from the export
+    expect(parseCsv(exportGuestsCsv([blankGuest()]))[0]).toEqual([...SHEET_COLUMNS])
   })
 })
 

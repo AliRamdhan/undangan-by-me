@@ -22,8 +22,8 @@ import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
 import { refOf } from '@/core/api/types'
-import { TOKENS, type RenderResult } from '@/core/domain/template'
-import { TEMPLATE_AKSES, TEMPLATE_TIPE, type Template } from '@/core/domain/types'
+import { HIDDEN_TOKENS, TOKENS, type RenderResult } from '@/core/domain/template'
+import { /* HIDDEN(sementara): TEMPLATE_AKSES, */ TEMPLATE_TIPE, type Template } from '@/core/domain/types'
 import { errorText, useStore } from '@/core/store'
 
 type DraftRender = { key: string; result?: RenderResult; error?: string }
@@ -99,7 +99,8 @@ export function TemplateEditor({ template, isNew, onDone }: { template: Template
       <Card>
         <CardContent>
           <FieldGroup>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {/* HIDDEN(sementara): sm:grid-cols-4 while Akses is hidden */}
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               <Field>
                 <FieldLabel htmlFor="tpl-kode">Kode *</FieldLabel>
                 <Input id="tpl-kode" className="font-mono" value={draft.Kode} onChange={(e) => set('Kode', e.target.value)} />
@@ -119,6 +120,7 @@ export function TemplateEditor({ template, isNew, onDone }: { template: Template
                   ))}
                 </NativeSelect>
               </Field>
+              {/* HIDDEN(sementara): Akses — new templates stay SEMUA
               <Field>
                 <FieldLabel htmlFor="tpl-akses">Akses</FieldLabel>
                 <NativeSelect
@@ -134,6 +136,7 @@ export function TemplateEditor({ template, isNew, onDone }: { template: Template
                   ))}
                 </NativeSelect>
               </Field>
+              */}
               <Field orientation="horizontal" className="self-end pb-1.5">
                 <Checkbox id="tpl-aktif" checked={draft.Aktif} onCheckedChange={(on) => set('Aktif', on)} />
                 <FieldLabel htmlFor="tpl-aktif">Aktif</FieldLabel>
@@ -146,7 +149,8 @@ export function TemplateEditor({ template, isNew, onDone }: { template: Template
                 {TOKENS.map((g) => (
                   <div key={g.group} className="flex flex-wrap items-center gap-1">
                     <span className="w-14 shrink-0 text-muted-foreground">{g.group}</span>
-                    {g.tokens.map((t) => (
+                    {/* HIDDEN(sementara): HIDDEN_TOKENS filter */}
+                    {g.tokens.filter((t) => !HIDDEN_TOKENS.has(t)).map((t) => (
                       <Button key={t} variant="outline" size="xs" className="font-mono" onClick={() => insert(t)}>
                         {t.includes('.') ? t.split('.')[1] : t}
                       </Button>

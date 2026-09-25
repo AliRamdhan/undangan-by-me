@@ -42,7 +42,8 @@ export function IssuesPanel({
               <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2} className="text-good-ink" />
             </EmptyMedia>
             <EmptyTitle>Tidak ada masalah</EmptyTitle>
-            <EmptyDescription>Semua nama, PIN, HP, akses, dan kuota lolos pemeriksaan.</EmptyDescription>
+            {/* HIDDEN(sementara): Semua nama, PIN, HP, akses, dan kuota lolos pemeriksaan. */}
+            <EmptyDescription>Semua nama, PIN, dan HP lolos pemeriksaan.</EmptyDescription>
           </EmptyHeader>
         </Empty>
       ) : (

@@ -4,18 +4,20 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { StatTile } from '@/components/StatTile'
 import { computeStats /* HIDDEN(sementara): , type SessionPax */ } from '@/core/domain/stats'
 import { useStore } from '@/core/store'
-import { /* HIDDEN(sementara): KIRIM_META, */ RSVP_META } from '@/components/StatusBadge'
-import { nf, pct } from '@/utils/format'
+// HIDDEN(sementara): Status_RSVP and Status_Kirim are hidden
+// import { KIRIM_META, RSVP_META } from '@/components/StatusBadge'
+import { nf /* HIDDEN(sementara): , pct */ } from '@/utils/format'
 // HIDDEN(sementara): import { BreakdownBars } from './components/BreakdownBars'
-import { StackedBar, type Segment } from './components/StackedBar'
+// HIDDEN(sementara): import { StackedBar, type Segment } from './components/StackedBar'
 
-// Status colours are fixed and always shown next to their label + count.
-const RSVP_FILL: Record<string, string> = {
-  HADIR: 'var(--good)',
-  RAGU: 'var(--warning)',
-  TIDAK_HADIR: 'var(--neutral)',
-  BELUM: 'color-mix(in oklab, var(--neutral) 35%, var(--surface))',
-}
+// HIDDEN(sementara): Status_RSVP is hidden
+// // Status colours are fixed and always shown next to their label + count.
+// const RSVP_FILL: Record<string, string> = {
+//   HADIR: 'var(--good)',
+//   RAGU: 'var(--warning)',
+//   TIDAK_HADIR: 'var(--neutral)',
+//   BELUM: 'color-mix(in oklab, var(--neutral) 35%, var(--surface))',
+// }
 // HIDDEN(sementara): Status_Kirim is hidden
 // const KIRIM_FILL: Record<string, string> = {
 //   DIBACA: 'var(--good)',
@@ -83,20 +85,21 @@ export function Dashboard() {
     )
 
   const s = computeStats(guests, meta.event)
-  const answered = s.total - (s.rsvp.BELUM ?? 0)
+  // HIDDEN(sementara): const answered = s.total - (s.rsvp.BELUM ?? 0)
   // HIDDEN(sementara): send status, HP_Valid and quota no longer count toward "Perlu perhatian".
   // const delivered = (s.kirim.TERKIRIM ?? 0) + (s.kirim.DIBACA ?? 0)
   // const gagal = s.kirim.GAGAL ?? 0
   // const attention = s.pinKosong + s.hpBermasalah + s.pinDuplikat + s.lebihKuota.length + gagal
   const attention = s.pinKosong + s.pinDuplikat
 
-  const rsvpSegments: Segment[] = (['HADIR', 'RAGU', 'TIDAK_HADIR', 'BELUM'] as const).map((k) => ({
-    key: k,
-    label: RSVP_META[k].label,
-    icon: RSVP_META[k].icon,
-    count: s.rsvp[k] ?? 0,
-    fill: RSVP_FILL[k],
-  }))
+  // HIDDEN(sementara): Status_RSVP is hidden
+  // const rsvpSegments: Segment[] = (['HADIR', 'RAGU', 'TIDAK_HADIR', 'BELUM'] as const).map((k) => ({
+  //   key: k,
+  //   label: RSVP_META[k].label,
+  //   icon: RSVP_META[k].icon,
+  //   count: s.rsvp[k] ?? 0,
+  //   fill: RSVP_FILL[k],
+  // }))
   // HIDDEN(sementara): Status_Kirim is hidden
   // const kirimSegments: Segment[] = (['DIBACA', 'TERKIRIM', 'ANTRI', 'GAGAL', 'BELUM'] as const).map((k) => ({
   //   key: k,
@@ -109,19 +112,23 @@ export function Dashboard() {
   const warnings: { label: string; count: number; detail: string }[] = [
     // HIDDEN(sementara): { label: 'HP bermasalah', count: s.hpBermasalah, detail: 'kosong, format salah, atau duplikat — jalankan Normalisasi HP' },
     { label: 'PIN kosong', count: s.pinKosong, detail: 'belum punya link undangan — jalankan Generate PIN' },
-    { label: 'PIN duplikat', count: s.pinDuplikat, detail: 'RSVP untuk PIN ini ditolak (DUPLICATE_PIN)' },
+    // HIDDEN(sementara): { label: 'PIN duplikat', count: s.pinDuplikat, detail: 'RSVP untuk PIN ini ditolak (DUPLICATE_PIN)' },
+    { label: 'PIN duplikat', count: s.pinDuplikat, detail: 'dua tamu memakai link undangan yang sama — jalankan Generate PIN' },
     // HIDDEN(sementara): { label: 'Gagal kirim', count: gagal, detail: 'kirim manual lewat Link WA' },
     // HIDDEN(sementara): { label: 'RSVP melebihi kuota', count: s.lebihKuota.length, detail: s.lebihKuota.map((g) => g.Nama).join(', ') },
   ].filter((w) => w.count > 0)
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
+      {/* HIDDEN(sementara): lg:grid-cols-3 while "Sudah RSVP" is hidden */}
+      <div className="grid grid-cols-2 gap-3">
         {/* HIDDEN(sementara): VIP count comes from Akses
         <StatTile label="Total tamu" value={nf.format(s.total)} sub={`${s.akses.find((a) => a.key === 'VIP')?.total ?? 0} VIP`} />
         */}
         <StatTile label="Total tamu" value={nf.format(s.total)} />
+        {/* HIDDEN(sementara):
         <StatTile label="Sudah RSVP" value={`${pct(answered, s.total)}%`} sub={`${answered} dari ${s.total} tamu menjawab`} />
+        */}
         {/* HIDDEN(sementara):
         <StatTile label="Undangan tersampaikan" value={`${pct(delivered, s.total)}%`} sub={`${delivered} terkirim/dibaca`} />
         */}
@@ -133,6 +140,7 @@ export function Dashboard() {
         />
       </div>
 
+      {/* HIDDEN(sementara): Status RSVP
       <Card>
         <CardHeader>
           <CardTitle>Status RSVP</CardTitle>
@@ -141,6 +149,7 @@ export function Dashboard() {
           <StackedBar segments={rsvpSegments} total={s.total} />
         </CardContent>
       </Card>
+      */}
       {/* HIDDEN(sementara): Status kirim — restore by putting both cards back in <div className="grid gap-4 lg:grid-cols-2">
       <Card>
         <CardHeader>

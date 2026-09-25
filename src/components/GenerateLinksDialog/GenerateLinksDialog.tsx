@@ -43,8 +43,9 @@ export function GenerateLinksDialog({
         <DialogHeader>
           <DialogTitle>Generate Link Manual</DialogTitle>
           <DialogDescription>
-            Pesan dirender per tamu memakai template aktif (Tipe, Akses) → fallback (Tipe, SEMUA). Operator lalu klik{' '}
-            <b>Buka WA</b> dan menekan kirim sendiri — jalur tanpa risiko untuk tamu VIP.
+            {/* HIDDEN(sementara): Pesan dirender per tamu memakai template aktif (Tipe, Akses) → fallback (Tipe, SEMUA). Operator lalu klik <b>Buka WA</b> dan menekan kirim sendiri — jalur tanpa risiko untuk tamu VIP. */}
+            Pesan dirender per tamu memakai template aktif sesuai Tipe. Operator lalu klik <b>Buka WA</b> dan menekan kirim
+            sendiri.
           </DialogDescription>
         </DialogHeader>
         {result ? (

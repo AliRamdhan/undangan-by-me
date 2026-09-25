@@ -48,6 +48,20 @@ export const TOKENS: readonly { group: string; tokens: readonly string[] }[] = [
 
 export const KNOWN_TOKENS: ReadonlySet<string> = new Set(TOKENS.flatMap((g) => g.tokens))
 
+/**
+ * HIDDEN(sementara): tokens for hidden columns (quota, RSVP, Meja) are not
+ * offered in the editor. They stay in KNOWN_TOKENS so existing templates that
+ * use them still validate and render.
+ */
+export const HIDDEN_TOKENS: ReadonlySet<string> = new Set([
+  'tamu.q_s1',
+  'tamu.q_s2',
+  'tamu.rsvp_s1',
+  'tamu.rsvp_s2',
+  'tamu.meja',
+  'event.batas_rsvp',
+])
+
 const TOKEN_RE = /\{\{([^{}]*)\}\}/g
 
 export type RenderContext = Record<string, string>
