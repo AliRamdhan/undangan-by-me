@@ -1,4 +1,5 @@
 export { StoreProvider } from './StoreProvider'
-export { useStore } from './useStore'
+export { useStore, useOptionalStore } from './useStore'
+export { useEventList } from './useEventList'
 export { errorText } from './errors'
 export type { Store } from './context'

@@ -15,7 +15,7 @@ function urlPrefix(domain: string): string {
 }
 
 /** #A.2 Data Event, with #A.2.1 Pengaturan Event nested inside (as in the design). */
-export function EventDataCard({ draft, update, err, touch }: SectionProps) {
+export function EventDataCard({ draft, update, err, touch, lockLink }: SectionProps) {
   // HIDDEN(sementara): Pengingat acara is hidden
   // const [remDate = '', remTime = ''] = draft.tanggal_pengingat.split('T')
   // const setReminder = (date: string, time: string) =>
@@ -64,7 +64,7 @@ export function EventDataCard({ draft, update, err, touch }: SectionProps) {
               </>
             }
             error={err('slug')}
-            hint="Huruf kecil, angka dan tanda hubung. Link tamu: …/slug/PIN"
+            hint={lockLink ? 'Hanya SUPER_ADMIN yang bisa mengubah slug' : 'Huruf kecil, angka dan tanda hubung. Link tamu: …/slug/PIN'}
           >
             <InputGroup>
               <InputGroupAddon>
@@ -75,6 +75,7 @@ export function EventDataCard({ draft, update, err, touch }: SectionProps) {
                 className="font-mono"
                 placeholder="dimas-rara"
                 aria-invalid={!!err('slug')}
+                disabled={lockLink}
                 value={draft.slug}
                 onChange={(e) => update((d) => void (d.slug = e.target.value.toLowerCase().replace(/\s+/g, '-')))}
                 onBlur={touch('slug')}

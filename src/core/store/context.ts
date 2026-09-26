@@ -1,12 +1,11 @@
 import { createContext } from 'react'
 import type { UndanganApi } from '@/core/api/types'
-import type { ApiSettings } from '@/core/api'
 import type { Guest, Meta, Template } from '@/core/domain/types'
 
+/** Data of the event in the URL (`/events/:slug/…`); one provider per slug. */
 export interface Store {
+  slug: string
   api: UndanganApi
-  settings: ApiSettings
-  applySettings: (s: ApiSettings) => void
   meta: Meta | null
   guests: Guest[]
   templates: Template[]

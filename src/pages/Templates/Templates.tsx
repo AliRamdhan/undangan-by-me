@@ -14,7 +14,7 @@ import { GenerateLinksDialog } from '@/components/GenerateLinksDialog'
 import { useStore } from '@/core/store'
 import { TemplateEditor } from './components/TemplateEditor'
 import { ValidateReport } from './components/ValidateReport'
-import { PATHS, templatePath } from '@/route.paths'
+import { eventPaths, templatePath } from '@/route.paths'
 
 const NEW: Template = {
   Kode: '',
@@ -27,12 +27,12 @@ const NEW: Template = {
 }
 
 export function Templates() {
-  const { templates, run, busy, loading } = useStore()
+  const { slug, templates, run, busy, loading } = useStore()
   // The selected template lives in the URL (/template/:kode), so it is linkable and survives refresh.
   const selected = useParams().kode ?? null
   const navigate = useNavigate()
   const setSelected = (kode: string | null, replace = false) =>
-    navigate(kode ? templatePath(kode) : PATHS.template, { replace })
+    navigate(kode ? templatePath(slug, kode) : eventPaths(slug).template, { replace })
   const [creating, setCreating] = useState(false)
   const [report, setReport] = useState<TemplateReport[] | null>(null)
   const [linksOpen, setLinksOpen] = useState(false)

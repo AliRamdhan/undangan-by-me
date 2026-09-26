@@ -3,109 +3,152 @@ import { withEventDefaults } from '@/core/domain/event'
 import type { ImportRow } from '@/core/domain/csv'
 import type { RenderResult } from '@/core/domain/template'
 import type { EventInfo, Guest, GuestInput, Meta, Template, TemplateTipe } from '@/core/domain/types'
+import { RestClient } from '@/core/api/http'
 import {
-  ApiError,
+  guestId,
+  type AppApi,
+  type AuthUser,
+  type DeletedEvent,
+  type EventSummary,
   type GuestRef,
   type LinkResult,
+  type ManagedUser,
+  type NewUser,
   type Preview,
+  type Session,
   type TemplateReport,
   type UndanganApi,
+  type UserPatch,
 } from '@/core/api/types'
 
-interface Envelope<T> {
-  v: number
-  ok: boolean
-  code: string
-  message?: string
-  data?: T
+/** Auth and the event list against the Apps Script Web App (docs/ADMIN-API.md). */
+export class AppsScriptApp implements AppApi {
+  readonly kind = 'appsscript' as const
+  private readonly rest: RestClient
+
+  constructor(url: string, token: string | null, onUnauthorized?: () => void) {
+    this.rest = new RestClient(url, token, onUnauthorized)
+  }
+
+  login(email: string, password: string) {
+    return this.rest.request<Session>('POST', 'auth/login', { body: { email, password } })
+  }
+  async logout() {
+    await this.rest.request('POST', 'auth/logout')
+  }
+  me() {
+    return this.rest.request<AuthUser>('GET', 'auth/me')
+  }
+  async changePassword(oldPassword: string, newPassword: string) {
+    await this.rest.request('POST', 'auth/change-password', { body: { oldPassword, newPassword } })
+  }
+  listEvents() {
+    return this.rest.request<EventSummary[]>('GET', 'event')
+  }
+  createEvent(event: EventInfo) {
+    return this.rest.request<Meta>('POST', 'event', { body: { event } })
+  }
+  deleteEvent(slug: string) {
+    return this.rest.request<DeletedEvent>('DELETE', `event/${encodeURIComponent(slug)}`)
+  }
+  forEvent(slug: string): UndanganApi {
+    return new AppsScriptEventApi(this.rest, slug)
+  }
+  listUsers() {
+    return this.rest.request<ManagedUser[]>('GET', 'users')
+  }
+  createUser(user: NewUser) {
+    return this.rest.request<ManagedUser>('POST', 'users', { body: { ...user } })
+  }
+  updateUser(email: string, patch: UserPatch) {
+    return this.rest.request<ManagedUser>('PATCH', `users/${encodeURIComponent(email)}`, { body: { ...patch } })
+  }
+  async resetPassword(email: string, password: string) {
+    await this.rest.request('POST', `users/${encodeURIComponent(email)}/reset-password`, { body: { password } })
+  }
+  async deleteUser(email: string) {
+    await this.rest.request('DELETE', `users/${encodeURIComponent(email)}`)
+  }
 }
 
 /**
- * Talks to the Apps Script Web App (docs/ADMIN-API.md). Every render call
- * goes to the server so renderTemplate_() stays the only renderer.
+ * Everything under `/event/:code`. Every render call goes to the server so
+ * renderTemplate_() stays the only renderer.
  */
-export class AppsScriptApi implements UndanganApi {
+export class AppsScriptEventApi implements UndanganApi {
   readonly kind = 'appsscript' as const
-  private readonly url: string
-  private readonly key: string
+  readonly slug: string
+  private readonly rest: RestClient
+  private readonly base: string
 
-  constructor(url: string, key: string) {
-    this.url = url
-    this.key = key
+  constructor(rest: RestClient, slug: string) {
+    this.rest = rest
+    this.slug = slug
+    this.base = `event/${encodeURIComponent(slug)}`
   }
 
-  private async call<T>(action: string, params: Record<string, unknown> = {}): Promise<T> {
-    let res: Response
-    try {
-      res = await fetch(this.url, {
-        method: 'POST',
-        // text/plain keeps this a "simple" request: Apps Script cannot answer
-        // a CORS preflight, so application/json would never arrive.
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ v: 1, action, key: this.key, ...params }),
-        redirect: 'follow',
-      })
-    } catch {
-      throw new ApiError('NETWORK', 'Tidak bisa menghubungi Apps Script. Cek URL /exec dan koneksi.')
-    }
-    let env: Envelope<T>
-    try {
-      env = (await res.json()) as Envelope<T>
-    } catch {
-      throw new ApiError('BAD_RESPONSE', 'Respons bukan JSON — deployment salah atau belum di-redeploy?')
-    }
-    if (!env.ok) throw new ApiError(env.code, env.message || env.code)
-    return env.data as T
+  private guest(ref: GuestRef, suffix = '') {
+    return `${this.base}/guests/${guestId(ref)}${suffix}`
   }
 
   async getMeta() {
-    const meta = await this.call<Meta>('meta')
-    // A sheet set up before the event form may lack the newer 01_Event keys.
+    const meta = await this.rest.request<Meta>('GET', this.base)
+    // A row written before the event form existed may lack the newer keys.
     return { ...meta, event: withEventDefaults(meta.event) }
   }
   saveEvent(event: EventInfo) {
-    return this.call<Meta>('event.save', { event })
+    return this.rest.request<Meta>('PUT', this.base, { body: { event } })
   }
   listGuests() {
-    return this.call<Guest[]>('guests.list')
+    return this.rest.request<Guest[]>('GET', `${this.base}/guests`)
   }
   saveGuest(ref: GuestRef | null, fields: Partial<GuestInput>) {
-    return this.call<Guest>('guests.save', { ref, fields })
+    if (!ref) return this.rest.request<Guest>('POST', `${this.base}/guests`, { body: { fields } })
+    return this.rest.request<Guest>('PATCH', this.guest(ref), { body: { fields, rowHint: ref.rowHint, nama: ref.nama } })
   }
-  deleteGuests(refs: GuestRef[]) {
-    return this.call<number>('guests.delete', { refs })
+  async deleteGuests(refs: GuestRef[]) {
+    if (refs.length === 1) {
+      const [ref] = refs
+      await this.rest.request('DELETE', this.guest(ref), { body: { rowHint: ref.rowHint, nama: ref.nama } })
+      return 1
+    }
+    return this.rest.request<number>('POST', `${this.base}/guests/bulk-delete`, { body: { refs } })
   }
   importGuests(rows: ImportRow[]) {
-    return this.call<number>('guests.import', { rows })
+    return this.rest.request<number>('POST', `${this.base}/guests/import`, { body: { rows } })
   }
   generatePins() {
-    return this.call<number>('guests.generatePins')
+    return this.rest.request<number>('POST', `${this.base}/guests/generate-pins`)
   }
   normalizePhones() {
-    return this.call<number>('guests.normalizePhones')
+    return this.rest.request<number>('POST', `${this.base}/guests/normalize-phones`)
   }
   checkGuests() {
-    return this.call<Issue[]>('guests.check')
+    return this.rest.request<Issue[]>('GET', `${this.base}/guests/check`)
   }
   listTemplates() {
-    return this.call<Template[]>('templates.list')
+    return this.rest.request<Template[]>('GET', `${this.base}/templates`)
   }
   async saveTemplate(template: Template, originalKode?: string) {
-    await this.call('templates.save', { template, originalKode })
+    if (originalKode === undefined) {
+      await this.rest.request('POST', `${this.base}/templates`, { body: { template } })
+    } else {
+      await this.rest.request('PUT', `${this.base}/templates/${encodeURIComponent(originalKode)}`, { body: { template } })
+    }
   }
   async deleteTemplate(kode: string) {
-    await this.call('templates.delete', { kode })
+    await this.rest.request('DELETE', `${this.base}/templates/${encodeURIComponent(kode)}`)
   }
   validateTemplates() {
-    return this.call<TemplateReport[]>('templates.validate')
+    return this.rest.request<TemplateReport[]>('GET', `${this.base}/templates/validate`)
   }
   previewMessage(ref: GuestRef, tipe: TemplateTipe) {
-    return this.call<Preview>('render.preview', { ref, tipe })
+    return this.rest.request<Preview>('GET', this.guest(ref, '/preview'), { query: { tipe, rowHint: ref.rowHint, nama: ref.nama } })
   }
   renderDraft(body: string, ref: GuestRef | null) {
-    return this.call<RenderResult>('render.draft', { body, ref })
+    return this.rest.request<RenderResult>('POST', `${this.base}/render/draft`, { body: { body, ref } })
   }
   generateLinks(refs: GuestRef[] | null, tipe: TemplateTipe) {
-    return this.call<LinkResult>('render.links', { refs, tipe })
+    return this.rest.request<LinkResult>('POST', `${this.base}/guests/links`, { body: { refs, tipe } })
   }
 }

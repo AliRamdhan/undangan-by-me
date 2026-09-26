@@ -1,9 +1,12 @@
+import type { Role } from '@/core/api/types'
 import type { Guest, Meta, Template } from '@/core/domain/types'
+
+const GREETINGS = ['Halo', 'Hai', 'Salam hangat', 'Dengan hormat']
 
 // Sample event from docs/URL-CONTRACT.md § 2.
 export const SEED_META: Meta = {
   mode: 'DRY-RUN',
-  greetings: ['Halo', 'Hai', 'Salam hangat', 'Dengan hormat'],
+  greetings: GREETINGS,
   event: {
     slug: 'dimas-rara',
     domain: 'https://undangan.by.me',
@@ -146,7 +149,8 @@ const ROWS: Row[] = [
   { PIN: '729104', Gelar: 'Sdr.', Nama: 'Dian Santoso', HP: '+6281211110034', Grup: 'Teman Kantor', Sisi: 'WANITA', Catatan: 'PIN bentrok — impor manual' },
 ]
 
-export const SEED_GUESTS: Guest[] = ROWS.map((r) => ({ ...blank, ...r }))
+// @__PURE__ marks the top-level calls side-effect free, so a production build drops this whole seed.
+export const SEED_GUESTS: Guest[] = /* @__PURE__ */ ROWS.map((r) => ({ ...blank, ...r }))
 
 export const SEED_TEMPLATES: Template[] = [
   {
@@ -259,4 +263,64 @@ Salam hangat,
 
 Tidak bisa hadir? Saksikan live: {{sesi2.stream}}`,
   },
+]
+
+// Second event, matching the static page in public/events/fidaeno/.
+const FIDAENO_ALAMAT = 'Jl. Masjid Raya RT 03 RW 06 No. 38, Larangan Selatan, Tangerang'
+const FIDAENO_MAPS = 'https://maps.app.goo.gl/6JcDw9zS62NNYCoY7'
+
+export const SEED_FIDAENO_META: Meta = {
+  mode: 'DRY-RUN',
+  greetings: GREETINGS,
+  event: {
+    slug: 'fidaeno',
+    domain: 'https://undangan.by.me',
+    nama_event: 'Pernikahan Fida & Eno',
+    tipe: 'PERNIKAHAN',
+    bahasa: 'id',
+    timezone: 'WIB',
+    web_template: 'klasik',
+    couple: {
+      pria: { panggilan: 'Eno', lengkap: 'Hendro Tri Suseno, S.S.', ortu: 'Bapak Mintro S. Miharjo & Ibu Metih', hp: '+6281277770011', email: '' },
+      wanita: { panggilan: 'Fida', lengkap: 'Firda Aulia, S.S.', ortu: 'Bapak Ahmad Rizki & Ibu Rahmawati', hp: '+6281277770012', email: '' },
+      hashtag: '',
+    },
+    tanggal_utama: '2026-11-01',
+    tanggal_pengingat: '',
+    batas_rsvp: '2026-10-25',
+    sesi: [
+      { kode: 'S1', label: 'Akad Nikah', tanggal: '2026-11-01', mulai: '09:00', selesai: '', tempat: '', alamat: FIDAENO_ALAMAT, maps: FIDAENO_MAPS, dress_code: '', live_stream: '' },
+      { kode: 'S2', label: 'Resepsi', tanggal: '2026-11-01', mulai: '11:00', selesai: '18:00', tempat: '', alamat: FIDAENO_ALAMAT, maps: FIDAENO_MAPS, dress_code: '', live_stream: '' },
+    ],
+    gift: { bank: 'SeaBank', atas_nama: 'Firda Aulia', norek: '901198500332', qris: '' },
+    media: { musik: '', cover: '' },
+    cs: { nama: 'Eno', hp: '+6281277770011' },
+    kapasitas: { s1: 50, s2: 300 },
+  },
+}
+
+export const SEED_FIDAENO_GUESTS: Guest[] = /* @__PURE__ */ [
+  { PIN: '104729', Gelar: 'Bapak/Ibu', Nama: 'Mintro Miharjo', HP: '+6281311110001', Akses: 'KELUARGA', Sisi: 'PRIA' },
+  { PIN: '593018', Gelar: 'Ibu', Nama: 'Rahmawati', HP: '+6281311110002', Akses: 'KELUARGA', Sisi: 'WANITA' },
+  { PIN: '287465', Gelar: 'Sdr.', Nama: 'Galih Pratama', HP: '081311110003', Grup: 'Teman Kuliah', Sisi: 'BERSAMA' },
+  { PIN: '', Gelar: 'Sdri.', Nama: 'Nurul Hidayah', HP: '+6281311110004', Grup: 'Teman Kuliah', Sisi: 'BERSAMA' },
+].map((r) => ({ ...blank, ...r }) as Guest)
+
+/**
+ * Every seeded event (mock + sample xlsx); templates are copied per event.
+ * dimas-rara is kept above only as a test fixture (mock.test.ts, gasParity.test.ts).
+ */
+export const SEED_EVENTS: { meta: Meta; guests: Guest[]; templates: Template[] }[] = [
+  // { meta: SEED_META, guests: SEED_GUESTS, templates: SEED_TEMPLATES },
+  { meta: SEED_FIDAENO_META, guests: SEED_FIDAENO_GUESTS, templates: SEED_TEMPLATES },
+]
+
+/**
+ * Demo logins — the same accounts ship hashed in sheet-templates/undangan-db-sample.xlsx.
+ * The mock compares the plain password; the Apps Script compares hashes.
+ */
+export const SEED_USERS: { email: string; nama: string; role: Role; event: string; password: string }[] = [
+  { email: 'admin@example.com', nama: 'Super Admin', role: 'SUPER_ADMIN', event: '', password: 'Admin#123' },
+  // { email: 'klien.dimasrara@example.com', nama: 'Dimas & Rara', role: 'CLIENT', event: 'dimas-rara', password: 'Klien#123' },
+  { email: 'klien.fidaeno@example.com', nama: 'Fida & Eno', role: 'CLIENT', event: 'fidaeno', password: 'Klien#123' },
 ]

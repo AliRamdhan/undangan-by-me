@@ -1,21 +1,20 @@
 import { toast } from 'sonner'
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { createApi, loadSettings, saveSettings, type ApiSettings } from '@/core/api'
 import type { UndanganApi } from '@/core/api/types'
+import { useAuth } from '@/core/auth'
 import { errorText } from './errors'
 import type { Guest, Meta, Template } from '@/core/domain/types'
 import { StoreContext, type Store } from './context'
 
-export function StoreProvider({ children }: { children: ReactNode }) {
-  const [settings, setSettings] = useState(loadSettings)
-  const api = useMemo(() => createApi(settings), [settings])
+export function StoreProvider({ slug, children }: { slug: string; children: ReactNode }) {
+  const { app } = useAuth()
+  const api = useMemo(() => app.forEvent(slug), [app, slug])
   const [meta, setMeta] = useState<Meta | null>(null)
   const [guests, setGuests] = useState<Guest[]>([])
   const [templates, setTemplates] = useState<Template[]>([])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [busy, setBusy] = useState<string | null>(null)
-
 
   const reload = useCallback(async () => {
     try {
@@ -53,16 +52,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     [api, reload],
   )
 
-  const applySettings = useCallback((s: ApiSettings) => {
-    saveSettings(s)
-    setLoading(true)
-    setSettings(s)
-  }, [])
-
   const value: Store = {
+    slug,
     api,
-    settings,
-    applySettings,
     meta,
     guests,
     templates,

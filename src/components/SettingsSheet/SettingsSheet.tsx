@@ -18,11 +18,12 @@ import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet'
-import type { ApiSettings } from '@/core/api'
-import { MockApi } from '@/core/api/mock'
+import { MOCK_ENABLED, type ApiSettings } from '@/core/api'
+import { MockApp } from '@/core/api/mock'
+import { useAuth } from '@/core/auth'
 import { formatTanggal } from '@/core/domain/template'
-import { useStore } from '@/core/store'
-import { PATHS } from '@/route.paths'
+import { useOptionalStore } from '@/core/store'
+import { eventPaths } from '@/route.paths'
 
 const SOURCES = [
   { value: 'mock', label: 'Data contoh', sub: 'Tersimpan di browser ini saja' },
@@ -46,9 +47,12 @@ export function SettingsSheet({ open, onOpenChange }: { open: boolean; onOpenCha
 }
 
 function SettingsForm({ onDone }: { onDone: () => void }) {
-  const { settings, applySettings, meta, api, reload } = useStore()
+  const { settings, applySettings, app } = useAuth()
+  // Inside an event page this also shows that event's summary.
+  const store = useOptionalStore()
   const [form, setForm] = useState<ApiSettings>(settings)
-  const ev = meta?.event
+  const ev = store?.meta?.event
+  const backendChanged = form.mode !== settings.mode || form.url.trim() !== settings.url
 
   const apply = () => {
     if (form.mode === 'appsscript' && !/^https:\/\/script\.google\.com\/.+\/exec$/.test(form.url.trim())) {
@@ -56,14 +60,15 @@ function SettingsForm({ onDone }: { onDone: () => void }) {
       return
     }
     applySettings({ ...form, url: form.url.trim() })
-    toast.success(form.mode === 'mock' ? 'Memakai data contoh lokal' : 'Terhubung ke Apps Script')
+    if (backendChanged) toast.success(form.mode === 'mock' ? 'Memakai data contoh lokal — silakan login' : 'Sumber data diganti — silakan login')
     onDone()
   }
 
   const resetMock = async () => {
-    MockApi.reset()
-    applySettings({ ...settings })
-    await reload()
+    // Events go back to the seed; logins survive so nobody is thrown out.
+    if (!MOCK_ENABLED) return
+    MockApp.reset()
+    await store?.reload()
     toast.success('Data contoh dikembalikan ke awal')
   }
 
@@ -73,6 +78,8 @@ function SettingsForm({ onDone }: { onDone: () => void }) {
         <FieldGroup>
           <FieldSet>
             <FieldLegend variant="label">Sumber data</FieldLegend>
+            {/* Data contoh exists only in development; a production build always uses the Google Sheet. */}
+            {MOCK_ENABLED && (
             <RadioGroup
               aria-label="Sumber data"
               value={form.mode}
@@ -91,6 +98,7 @@ function SettingsForm({ onDone }: { onDone: () => void }) {
                 </FieldLabel>
               ))}
             </RadioGroup>
+            )}
             {form.mode === 'appsscript' && (
               <>
                 <Field>
@@ -104,24 +112,14 @@ function SettingsForm({ onDone }: { onDone: () => void }) {
                   />
                   <FieldDescription>Deploy → Web app → Execute as: Me · Who has access: Anyone</FieldDescription>
                 </Field>
-                <Field>
-                  <FieldLabel htmlFor="set-key">Admin key</FieldLabel>
-                  <Input
-                    id="set-key"
-                    type="password"
-                    autoComplete="off"
-                    value={form.key}
-                    onChange={(e) => setForm((f) => ({ ...f, key: e.target.value }))}
-                  />
-                  <FieldDescription>
-                    Nilai ADMIN_API_KEY di Script Properties. Hanya disimpan di tab ini (sessionStorage).
-                  </FieldDescription>
-                </Field>
+                {backendChanged && (
+                  <FieldDescription>Mengganti sumber data akan mengeluarkan sesi login saat ini.</FieldDescription>
+                )}
               </>
             )}
           </FieldSet>
 
-          {ev && (
+          {ev && store && (
             <>
               <Separator />
               <section className="flex flex-col gap-2">
@@ -132,7 +130,7 @@ function SettingsForm({ onDone }: { onDone: () => void }) {
                 <p className="font-mono text-xs break-all text-ink-3">
                   {ev.domain.replace(/\/+$/, '')}/{ev.slug}/{'{PIN}'}
                 </p>
-                <Link to={PATHS.event} onClick={onDone} className={buttonVariants({ variant: 'outline', className: 'self-start' })}>
+                <Link to={eventPaths(store.slug).event} onClick={onDone} className={buttonVariants({ variant: 'outline', className: 'self-start' })}>
                   Ubah data event
                 </Link>
               </section>
@@ -142,7 +140,7 @@ function SettingsForm({ onDone }: { onDone: () => void }) {
       </div>
 
       <SheetFooter className="flex-row flex-wrap justify-end border-t">
-        {api.kind === 'mock' && form.mode === 'mock' && (
+        {MOCK_ENABLED && app.kind === 'mock' && form.mode === 'mock' && (
           <Button variant="ghost" className="mr-auto" onClick={resetMock}>
             <HugeiconsIcon icon={RefreshIcon} strokeWidth={2} data-icon="inline-start" />
             Reset data contoh

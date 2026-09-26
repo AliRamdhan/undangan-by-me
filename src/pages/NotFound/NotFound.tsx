@@ -11,8 +11,8 @@ export function NotFound() {
         <EmptyDescription>Alamat ini tidak ada di aplikasi.</EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Link to={PATHS.tamu} className={buttonVariants({ variant: 'outline' })}>
-          Kembali ke daftar tamu
+        <Link to={PATHS.events} className={buttonVariants({ variant: 'outline' })}>
+          Kembali ke daftar event
         </Link>
       </EmptyContent>
     </Empty>

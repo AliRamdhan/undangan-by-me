@@ -6,3 +6,8 @@ export function useStore(): Store {
   if (!s) throw new Error('useStore outside StoreProvider')
   return s
 }
+
+/** The event store when inside `/events/:slug/…`, else null (global header, settings). */
+export function useOptionalStore(): Store | null {
+  return useContext(StoreContext)
+}

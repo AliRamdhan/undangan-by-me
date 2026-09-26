@@ -13,6 +13,8 @@ export interface SectionProps {
   /** Error for a field path, shown only once it's been touched or a save was tried. */
   err: (path: string) => string | undefined
   touch: (path: string) => () => void
+  /** Slug/domain are the invitation URL — only SUPER_ADMIN may change them (a CLIENT gets FORBIDDEN). */
+  lockLink?: boolean
 }
 
 export function SectionHeader({ title, code, className }: { title: string; code: string; className?: string }) {

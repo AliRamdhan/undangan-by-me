@@ -1,14 +1,17 @@
 import { Alert02Icon, FloppyDiskIcon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Spinner } from '@/components/ui/spinner'
-import { validateEvent, withEventDefaults } from '@/core/domain/event'
+import { useAuth } from '@/core/auth'
+import { blankSession, validateEvent, withEventDefaults } from '@/core/domain/event'
 import type { EventInfo } from '@/core/domain/types'
-import { useStore } from '@/core/store'
+import { errorText, useStore } from '@/core/store'
+import { eventPaths } from '@/route.paths'
 import { CoupleCard } from './components/CoupleCard'
 import { EventDataCard } from './components/EventDataCard'
 import { GiftMediaCard } from './components/GiftMediaCard'
@@ -16,7 +19,10 @@ import { SessionsCard } from './components/SessionsCard'
 import type { SectionProps } from './components/form'
 
 export function EventPage() {
-  const { meta, loading } = useStore()
+  const { meta, loading, run, busy, api } = useStore()
+  const { isSuperAdmin } = useAuth()
+  const navigate = useNavigate()
+  const [renaming, setRenaming] = useState(false)
   if (loading || !meta) {
     return (
       <div className="grid gap-4 lg:grid-cols-2">
@@ -26,12 +32,65 @@ export function EventPage() {
     )
   }
   const saved = withEventDefaults(meta.event)
+
+  const save = async (draft: EventInfo) => {
+    if (draft.slug === saved.slug) {
+      const ok = await run('Simpan event', (a) => a.saveEvent(draft))
+      if (ok) toast.success('Data event disimpan')
+      return
+    }
+    // A new slug moves the event to a new URL: reloading under the old one would 404.
+    setRenaming(true)
+    try {
+      await api.saveEvent(draft)
+      toast.success('Data event disimpan — slug berubah')
+      navigate(eventPaths(draft.slug).event, { replace: true })
+    } catch (e) {
+      toast.error(`Simpan event: ${errorText(e)}`)
+    } finally {
+      setRenaming(false)
+    }
+  }
+
   // Remount on every saved version so the draft always starts from what the sheet holds.
-  return <EventForm key={JSON.stringify(saved)} saved={saved} />
+  return <EventForm key={JSON.stringify(saved)} saved={saved} onSave={save} busy={!!busy || renaming} lockLink={!isSuperAdmin} />
 }
 
-function EventForm({ saved }: { saved: EventInfo }) {
-  const { run, busy } = useStore()
+/** POST /event — a blank form; ADMIN only. */
+export function EventCreatePage() {
+  const { app } = useAuth()
+  const navigate = useNavigate()
+  const [pending, setPending] = useState(false)
+  const [blank] = useState(() =>
+    withEventDefaults({ domain: import.meta.env.VITE_INVITATION_DOMAIN ?? '', sesi: [blankSession('S1')] }),
+  )
+
+  const create = async (draft: EventInfo) => {
+    setPending(true)
+    try {
+      await app.createEvent(draft)
+      toast.success('Event dibuat')
+      navigate(eventPaths(draft.slug).event, { replace: true })
+    } catch (e) {
+      toast.error(`Buat event: ${errorText(e)}`)
+    } finally {
+      setPending(false)
+    }
+  }
+
+  return <EventForm saved={blank} onSave={create} busy={pending} lockLink={false} isNew />
+}
+
+interface EventFormProps {
+  saved: EventInfo
+  onSave: (draft: EventInfo) => Promise<void>
+  busy: boolean
+  /** A CLIENT edits its event but not the slug (the server refuses with FORBIDDEN). */
+  lockLink: boolean
+  isNew?: boolean
+}
+
+function EventForm({ saved, onSave, busy, lockLink, isNew = false }: EventFormProps) {
   const [draft, setDraft] = useState<EventInfo>(saved)
   const [touched, setTouched] = useState<ReadonlySet<string>>(new Set())
   const [submitted, setSubmitted] = useState(false)
@@ -39,7 +98,7 @@ function EventForm({ saved }: { saved: EventInfo }) {
   const errors = validateEvent(draft)
   const errorCount = Object.keys(errors).length
   const dirty = JSON.stringify(draft) !== JSON.stringify(saved)
-  const linkChanged = draft.slug !== saved.slug || draft.domain !== saved.domain
+  const linkChanged = !isNew && (draft.slug !== saved.slug || draft.domain !== saved.domain)
 
   const section: SectionProps = {
     draft,
@@ -51,6 +110,7 @@ function EventForm({ saved }: { saved: EventInfo }) {
       }),
     err: (path) => (submitted || touched.has(path) ? errors[path] : undefined),
     touch: (path) => () => setTouched((t) => (t.has(path) ? t : new Set(t).add(path))),
+    lockLink,
   }
 
   const save = async () => {
@@ -60,14 +120,13 @@ function EventForm({ saved }: { saved: EventInfo }) {
       requestAnimationFrame(() => document.querySelector('[aria-invalid="true"]')?.scrollIntoView({ block: 'center', behavior: 'smooth' }))
       return
     }
-    const ok = await run('Simpan event', (api) => api.saveEvent(draft))
-    if (ok) toast.success('Data event disimpan')
+    await onSave(draft)
   }
 
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h1 className="text-lg font-semibold tracking-wide text-primary uppercase">Data Event</h1>
+        <h1 className="text-lg font-semibold tracking-wide text-primary uppercase">{isNew ? 'Event Baru' : 'Data Event'}</h1>
         <p className="text-muted-foreground">
           Isi dulu sebelum tamu dan template — setara 01_Event + Validasi Data Event di spreadsheet.
         </p>
@@ -103,9 +162,9 @@ function EventForm({ saved }: { saved: EventInfo }) {
             Buang perubahan
           </Button>
         )}
-        <Button size="lg" onClick={save} disabled={!dirty || !!busy}>
+        <Button size="lg" onClick={save} disabled={(!dirty && !isNew) || busy}>
           {busy ? <Spinner data-icon="inline-start" /> : <HugeiconsIcon icon={FloppyDiskIcon} strokeWidth={2} data-icon="inline-start" />}
-          Simpan
+          {isNew ? 'Buat event' : 'Simpan'}
         </Button>
       </div>
     </div>
