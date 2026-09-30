@@ -34,7 +34,7 @@ export function UserDialog({ user, events, defaultEvent, onClose, onSaved }: Pro
     email: user?.email ?? '',
     nama: user?.nama ?? '',
     role: user?.role ?? ('CLIENT' as Role),
-    event: user?.event || defaultEvent || events[0]?.slug || '',
+    event: user?.event || defaultEvent || events[0]?.id || '',
     password: '',
     aktif: user?.aktif ?? true,
   })
@@ -52,7 +52,7 @@ export function UserDialog({ user, events, defaultEvent, onClose, onSaved }: Pro
         await app.createUser({ email: form.email.trim(), nama: form.nama.trim(), role: form.role, event, password: form.password })
         toast.success(`Akun ${form.email.trim()} dibuat`)
       } else {
-        await app.updateUser(user.email, { nama: form.nama.trim(), role: form.role, event, aktif: form.aktif })
+        await app.updateUser(user.id, { nama: form.nama.trim(), role: form.role, event, aktif: form.aktif })
         toast.success(`Akun ${user.email} disimpan`)
       }
       onSaved()
@@ -102,7 +102,7 @@ export function UserDialog({ user, events, defaultEvent, onClose, onSaved }: Pro
                 <NativeSelect id="usr-event" className="w-full" required value={form.event} onChange={(e) => set('event', e.target.value)}>
                   <NativeSelectOption value="">— pilih event —</NativeSelectOption>
                   {events.map((ev) => (
-                    <NativeSelectOption key={ev.slug} value={ev.slug}>
+                    <NativeSelectOption key={ev.id} value={ev.id}>
                       {ev.nama_event || ev.slug} (/{ev.slug})
                     </NativeSelectOption>
                   ))}

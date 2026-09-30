@@ -3,23 +3,6 @@ import type { ImportRow } from '@/core/domain/csv'
 import type { RenderResult } from '@/core/domain/template'
 import type { EventInfo, GatewayMode, Guest, GuestInput, Meta, Template, TemplateTipe } from '@/core/domain/types'
 
-/**
- * Identifies a 02_Tamu row. PIN is the key (BLAST-FLOW.md: never the row
- * index). `rowHint` + `nama` only disambiguate rows that have no PIN yet, or
- * share one — the server revalidates them and refuses with STALE_ROW if the
- * sheet was sorted or edited underneath.
- */
-export interface GuestRef {
-  PIN: string
-  rowHint: number
-  nama: string
-}
-
-export const refOf = (g: Guest): GuestRef => ({ PIN: g.PIN, rowHint: g.No, nama: g.Nama })
-
-/** The `:id` path segment for a guest: its PIN, or `row-{No}` while it has none. */
-export const guestId = (ref: GuestRef): string => (ref.PIN ? encodeURIComponent(ref.PIN) : `row-${ref.rowHint}`)
-
 export interface Preview {
   kode: string
   text: string
@@ -54,8 +37,6 @@ export type ApiErrorCode =
   | 'NETWORK'
   | 'BAD_RESPONSE'
   | 'NOT_FOUND'
-  | 'DUPLICATE_PIN'
-  | 'STALE_ROW'
   | 'VALIDATION'
   | 'TEMPLATE'
   | 'NO_TEMPLATE'
@@ -80,10 +61,12 @@ export const ROLES = ['SUPER_ADMIN', 'CLIENT'] as const
 export type Role = (typeof ROLES)[number]
 
 export interface AuthUser {
+  /** _Users.ID (UUID) — `/users/:id`. */
+  id: string
   email: string
   nama: string
   role: Role
-  /** The CLIENT's event slug; '' for SUPER_ADMIN. */
+  /** The CLIENT's event ID (01_Event.ID); '' for SUPER_ADMIN. */
   event: string
 }
 
@@ -112,6 +95,7 @@ export interface Session {
 }
 
 export interface EventSummary {
+  id: string
   slug: string
   nama_event: string
   tipe: string
@@ -140,20 +124,20 @@ export interface AppApi {
   changePassword(oldPassword: string, newPassword: string): Promise<void>
   /** Every event for SUPER_ADMIN; only its own event for a CLIENT. */
   listEvents(): Promise<EventSummary[]>
-  /** SUPER_ADMIN only. Rejects a taken slug with DUPLICATE_SLUG. */
+  /** SUPER_ADMIN only. Rejects a taken slug with DUPLICATE_SLUG; the server assigns `event.id`. */
   createEvent(event: EventInfo): Promise<Meta>
   /** SUPER_ADMIN only. Also removes the event's sessions, guests, templates and CLIENT accounts. */
-  deleteEvent(slug: string): Promise<DeletedEvent>
-  /** A CLIENT asking for another event gets NOT_FOUND on every call. */
-  forEvent(slug: string): UndanganApi
+  deleteEvent(id: string): Promise<DeletedEvent>
+  /** By event ID. A CLIENT asking for another event gets NOT_FOUND on every call. */
+  forEvent(id: string): UndanganApi
   // SUPER_ADMIN only — /users.
   listUsers(): Promise<ManagedUser[]>
   createUser(user: NewUser): Promise<ManagedUser>
-  /** A change of role, event or aktif ends that user's sessions. */
-  updateUser(email: string, patch: UserPatch): Promise<ManagedUser>
+  /** By user ID. A change of role, event or aktif ends that user's sessions. */
+  updateUser(id: string, patch: UserPatch): Promise<ManagedUser>
   /** Ends that user's sessions. */
-  resetPassword(email: string, password: string): Promise<void>
-  deleteUser(email: string): Promise<void>
+  resetPassword(id: string, password: string): Promise<void>
+  deleteUser(id: string): Promise<void>
 }
 
 /**
@@ -161,18 +145,18 @@ export interface AppApi {
  * manual columns; script/formula columns come back computed by the backend.
  */
 export interface UndanganApi {
-  /** The event every call is scoped to (`/event/:code`). */
-  readonly slug: string
+  /** The ID of the event every call is scoped to (`/event/:code`). */
+  readonly eventId: string
   getMeta(): Promise<Meta>
   /**
-   * Writes the 01_Event row and its 01_Sesi rows; a new slug renames the event everywhere.
+   * Writes the 01_Event row and its 01_Sesi rows; the ID stays, so a new slug only changes the invitation links.
    * Rejects an event that fails Validasi Data Event; a CLIENT changing slug/domain gets FORBIDDEN.
    */
   saveEvent(event: EventInfo): Promise<Meta>
   listGuests(): Promise<Guest[]>
-  /** `ref: null` appends a new guest; the backend assigns its PIN. */
-  saveGuest(ref: GuestRef | null, fields: Partial<GuestInput>): Promise<Guest>
-  deleteGuests(refs: GuestRef[]): Promise<number>
+  /** `id: null` appends a new guest; the backend assigns its ID and PIN. */
+  saveGuest(id: string | null, fields: Partial<GuestInput>): Promise<Guest>
+  deleteGuests(ids: string[]): Promise<number>
   importGuests(rows: ImportRow[]): Promise<number>
   /** Tamu → Generate PIN (yang kosong). Returns how many were filled. */
   generatePins(): Promise<number>
@@ -181,15 +165,15 @@ export interface UndanganApi {
   /** Tamu → Cek Duplikat & Error. */
   checkGuests(): Promise<Issue[]>
   listTemplates(): Promise<Template[]>
-  /** `originalKode` renames; omit it to create. */
-  saveTemplate(t: Template, originalKode?: string): Promise<void>
-  deleteTemplate(kode: string): Promise<void>
+  /** Creates when `t.ID` is empty (the backend assigns it); otherwise updates that template, Kode included. */
+  saveTemplate(t: Template): Promise<Template>
+  deleteTemplate(id: string): Promise<void>
   /** Template → Validasi Template. */
   validateTemplates(): Promise<TemplateReport[]>
   /** Blast → Preview Pesan: what THIS guest will receive. */
-  previewMessage(ref: GuestRef, tipe: TemplateTipe): Promise<Preview>
-  /** Unsaved editor content rendered against one guest. Never throws on bad tokens. */
-  renderDraft(body: string, ref: GuestRef | null): Promise<RenderResult>
-  /** Template → Generate Link Manual. `refs: null` means every guest. */
-  generateLinks(refs: GuestRef[] | null, tipe: TemplateTipe): Promise<LinkResult>
+  previewMessage(guestId: string, tipe: TemplateTipe): Promise<Preview>
+  /** Unsaved editor content rendered against one guest (by ID). Never throws on bad tokens. */
+  renderDraft(body: string, guestId: string | null): Promise<RenderResult>
+  /** Template → Generate Link Manual. `ids: null` means every guest. */
+  generateLinks(ids: string[] | null, tipe: TemplateTipe): Promise<LinkResult>
 }

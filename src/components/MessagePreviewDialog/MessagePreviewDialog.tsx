@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Field, FieldLabel } from '@/components/ui/field'
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 import { Skeleton } from '@/components/ui/skeleton'
-import { refOf, type Preview } from '@/core/api/types'
+import type { Preview } from '@/core/api/types'
 import { TEMPLATE_TIPE, type Guest, type TemplateTipe } from '@/core/domain/types'
 import { errorText, useStore } from '@/core/store'
 
@@ -19,13 +19,13 @@ export function MessagePreviewDialog({ guest, onClose }: { guest: Guest | null; 
   const { api } = useStore()
   const [tipe, setTipe] = useState<TemplateTipe>('UNDANGAN')
   const [loaded, setLoaded] = useState<Loaded | null>(null)
-  const key = guest ? `${guest.No}|${guest.PIN}|${tipe}` : ''
+  const key = guest ? `${guest.ID}|${tipe}` : ''
 
   useEffect(() => {
     if (!guest) return
     let alive = true
     api
-      .previewMessage(refOf(guest), tipe)
+      .previewMessage(guest.ID, tipe)
       .then((preview) => alive && setLoaded({ key, preview }))
       .catch((e: unknown) => alive && setLoaded({ key, error: errorText(e) }))
     return () => {

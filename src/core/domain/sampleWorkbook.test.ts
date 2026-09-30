@@ -45,14 +45,20 @@ describe('sample database workbook', () => {
     for (const [name, cols] of expected) expect(header(wb.getWorksheet(name)!), name).toEqual([...cols])
   })
 
-  it('scopes every row to an existing event, numbering guests per event', async () => {
+  it('gives every row an ID and scopes it to an existing event ID, numbering guests per event', async () => {
     const wb = await roundTrip()
-    const slugs = rows(wb.getWorksheet(schema.SHEETS.event)!).map((r) => r.Slug)
-    expect(slugs).toEqual(['fidaeno'])
+    const events = rows(wb.getWorksheet(schema.SHEETS.event)!)
+    expect(events.map((r) => r.Slug)).toEqual(['fidaeno'])
+    const ids = events.map((r) => r.ID)
     for (const tab of [schema.SHEETS.sesi, schema.SHEETS.tamu, schema.SHEETS.template]) {
-      expect(new Set(rows(wb.getWorksheet(tab)!).map((r) => r.Event))).toEqual(new Set(slugs))
+      expect(new Set(rows(wb.getWorksheet(tab)!).map((r) => r.Event))).toEqual(new Set(ids))
     }
-    const fida = rows(wb.getWorksheet(schema.SHEETS.tamu)!).filter((r) => r.Event === 'fidaeno')
+    for (const tab of [schema.SHEETS.event, schema.SHEETS.sesi, schema.SHEETS.tamu, schema.SHEETS.template, schema.SHEETS.users]) {
+      const tabIds = rows(wb.getWorksheet(tab)!).map((r) => r.ID)
+      expect(tabIds.every((id) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(String(id))), tab).toBe(true)
+      expect(new Set(tabIds).size, tab).toBe(tabIds.length)
+    }
+    const fida = rows(wb.getWorksheet(schema.SHEETS.tamu)!).filter((r) => r.Event === ids[0])
     expect(fida.map((r) => r.No)).toEqual(['1', '2', '3', '4'])
     expect(fida[0].Link_Undangan).toBe('https://undangan.by.me/fidaeno/104729')
     // PINs are text cells, so a leading zero would survive.
@@ -62,10 +68,10 @@ describe('sample database workbook', () => {
 
   it('binds every CLIENT account to an existing event', async () => {
     const wb = await roundTrip()
-    const slugs = rows(wb.getWorksheet(schema.SHEETS.event)!).map((r) => r.Slug)
+    const ids = rows(wb.getWorksheet(schema.SHEETS.event)!).map((r) => r.ID)
     const users = rows(wb.getWorksheet(schema.SHEETS.users)!)
     expect(users.map((u) => [u.Role, u.Event])).toEqual(SEED_USERS.map((u) => [u.role, u.event]))
-    for (const u of users.filter((x) => x.Role === 'CLIENT')) expect(slugs).toContain(u.Event)
+    for (const u of users.filter((x) => x.Role === 'CLIENT')) expect(ids).toContain(u.Event)
   })
 
   it('stores demo passwords only as salted hashes', async () => {

@@ -4,21 +4,19 @@ import type { ImportRow } from '@/core/domain/csv'
 import type { RenderResult } from '@/core/domain/template'
 import type { EventInfo, Guest, GuestInput, Meta, Template, TemplateTipe } from '@/core/domain/types'
 import { RestClient } from '@/core/api/http'
-import {
-  guestId,
-  type AppApi,
-  type AuthUser,
-  type DeletedEvent,
-  type EventSummary,
-  type GuestRef,
-  type LinkResult,
-  type ManagedUser,
-  type NewUser,
-  type Preview,
-  type Session,
-  type TemplateReport,
-  type UndanganApi,
-  type UserPatch,
+import type {
+  AppApi,
+  AuthUser,
+  DeletedEvent,
+  EventSummary,
+  LinkResult,
+  ManagedUser,
+  NewUser,
+  Preview,
+  Session,
+  TemplateReport,
+  UndanganApi,
+  UserPatch,
 } from '@/core/api/types'
 
 /** Auth and the event list against the Apps Script Web App (docs/ADMIN-API.md). */
@@ -47,11 +45,11 @@ export class AppsScriptApp implements AppApi {
   createEvent(event: EventInfo) {
     return this.rest.request<Meta>('POST', 'event', { body: { event } })
   }
-  deleteEvent(slug: string) {
-    return this.rest.request<DeletedEvent>('DELETE', `event/${encodeURIComponent(slug)}`)
+  deleteEvent(id: string) {
+    return this.rest.request<DeletedEvent>('DELETE', `event/${encodeURIComponent(id)}`)
   }
-  forEvent(slug: string): UndanganApi {
-    return new AppsScriptEventApi(this.rest, slug)
+  forEvent(id: string): UndanganApi {
+    return new AppsScriptEventApi(this.rest, id)
   }
   listUsers() {
     return this.rest.request<ManagedUser[]>('GET', 'users')
@@ -59,34 +57,34 @@ export class AppsScriptApp implements AppApi {
   createUser(user: NewUser) {
     return this.rest.request<ManagedUser>('POST', 'users', { body: { ...user } })
   }
-  updateUser(email: string, patch: UserPatch) {
-    return this.rest.request<ManagedUser>('PATCH', `users/${encodeURIComponent(email)}`, { body: { ...patch } })
+  updateUser(id: string, patch: UserPatch) {
+    return this.rest.request<ManagedUser>('PATCH', `users/${encodeURIComponent(id)}`, { body: { ...patch } })
   }
-  async resetPassword(email: string, password: string) {
-    await this.rest.request('POST', `users/${encodeURIComponent(email)}/reset-password`, { body: { password } })
+  async resetPassword(id: string, password: string) {
+    await this.rest.request('POST', `users/${encodeURIComponent(id)}/reset-password`, { body: { password } })
   }
-  async deleteUser(email: string) {
-    await this.rest.request('DELETE', `users/${encodeURIComponent(email)}`)
+  async deleteUser(id: string) {
+    await this.rest.request('DELETE', `users/${encodeURIComponent(id)}`)
   }
 }
 
 /**
- * Everything under `/event/:code`. Every render call goes to the server so
- * renderTemplate_() stays the only renderer.
+ * Everything under `/event/:code` (the event ID). Every render call goes to
+ * the server so renderTemplate_() stays the only renderer.
  */
 export class AppsScriptEventApi implements UndanganApi {
-  readonly slug: string
+  readonly eventId: string
   private readonly rest: RestClient
   private readonly base: string
 
-  constructor(rest: RestClient, slug: string) {
+  constructor(rest: RestClient, eventId: string) {
     this.rest = rest
-    this.slug = slug
-    this.base = `event/${encodeURIComponent(slug)}`
+    this.eventId = eventId
+    this.base = `event/${encodeURIComponent(eventId)}`
   }
 
-  private guest(ref: GuestRef, suffix = '') {
-    return `${this.base}/guests/${guestId(ref)}${suffix}`
+  private guest(id: string, suffix = '') {
+    return `${this.base}/guests/${encodeURIComponent(id)}${suffix}`
   }
 
   async getMeta() {
@@ -100,17 +98,16 @@ export class AppsScriptEventApi implements UndanganApi {
   listGuests() {
     return this.rest.request<Guest[]>('GET', `${this.base}/guests`)
   }
-  saveGuest(ref: GuestRef | null, fields: Partial<GuestInput>) {
-    if (!ref) return this.rest.request<Guest>('POST', `${this.base}/guests`, { body: { fields } })
-    return this.rest.request<Guest>('PATCH', this.guest(ref), { body: { fields, rowHint: ref.rowHint, nama: ref.nama } })
+  saveGuest(id: string | null, fields: Partial<GuestInput>) {
+    if (!id) return this.rest.request<Guest>('POST', `${this.base}/guests`, { body: { fields } })
+    return this.rest.request<Guest>('PATCH', this.guest(id), { body: { fields } })
   }
-  async deleteGuests(refs: GuestRef[]) {
-    if (refs.length === 1) {
-      const [ref] = refs
-      await this.rest.request('DELETE', this.guest(ref), { body: { rowHint: ref.rowHint, nama: ref.nama } })
+  async deleteGuests(ids: string[]) {
+    if (ids.length === 1) {
+      await this.rest.request('DELETE', this.guest(ids[0]))
       return 1
     }
-    return this.rest.request<number>('POST', `${this.base}/guests/bulk-delete`, { body: { refs } })
+    return this.rest.request<number>('POST', `${this.base}/guests/bulk-delete`, { body: { ids } })
   }
   importGuests(rows: ImportRow[]) {
     return this.rest.request<number>('POST', `${this.base}/guests/import`, { body: { rows } })
@@ -127,26 +124,23 @@ export class AppsScriptEventApi implements UndanganApi {
   listTemplates() {
     return this.rest.request<Template[]>('GET', `${this.base}/templates`)
   }
-  async saveTemplate(template: Template, originalKode?: string) {
-    if (originalKode === undefined) {
-      await this.rest.request('POST', `${this.base}/templates`, { body: { template } })
-    } else {
-      await this.rest.request('PUT', `${this.base}/templates/${encodeURIComponent(originalKode)}`, { body: { template } })
-    }
+  saveTemplate(template: Template) {
+    if (!template.ID) return this.rest.request<Template>('POST', `${this.base}/templates`, { body: { template } })
+    return this.rest.request<Template>('PUT', `${this.base}/templates/${encodeURIComponent(template.ID)}`, { body: { template } })
   }
-  async deleteTemplate(kode: string) {
-    await this.rest.request('DELETE', `${this.base}/templates/${encodeURIComponent(kode)}`)
+  async deleteTemplate(id: string) {
+    await this.rest.request('DELETE', `${this.base}/templates/${encodeURIComponent(id)}`)
   }
   validateTemplates() {
     return this.rest.request<TemplateReport[]>('GET', `${this.base}/templates/validate`)
   }
-  previewMessage(ref: GuestRef, tipe: TemplateTipe) {
-    return this.rest.request<Preview>('GET', this.guest(ref, '/preview'), { query: { tipe, rowHint: ref.rowHint, nama: ref.nama } })
+  previewMessage(guestId: string, tipe: TemplateTipe) {
+    return this.rest.request<Preview>('GET', this.guest(guestId, '/preview'), { query: { tipe } })
   }
-  renderDraft(body: string, ref: GuestRef | null) {
-    return this.rest.request<RenderResult>('POST', `${this.base}/render/draft`, { body: { body, ref } })
+  renderDraft(body: string, guestId: string | null) {
+    return this.rest.request<RenderResult>('POST', `${this.base}/render/draft`, { body: { body, id: guestId } })
   }
-  generateLinks(refs: GuestRef[] | null, tipe: TemplateTipe) {
-    return this.rest.request<LinkResult>('POST', `${this.base}/guests/links`, { body: { refs, tipe } })
+  generateLinks(ids: string[] | null, tipe: TemplateTipe) {
+    return this.rest.request<LinkResult>('POST', `${this.base}/guests/links`, { body: { ids, tipe } })
   }
 }

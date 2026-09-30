@@ -92,15 +92,20 @@ const PANDUAN = [
   '  CLIENT — hanya satu event (kolom Event di _Users): data event, tamu dan template; slug/domain tidak bisa diubah.',
   '',
   'Akun demo (WAJIB diganti lewat menu akun → Ganti password, atau setupAdmin() di editor):',
-  ...SEED_USERS.map((u) => `  • ${u.email} / ${u.password} (${u.role}${u.event ? ` · ${u.event}` : ''})`),
+  ...SEED_USERS.map((u) => {
+    const ev = SEED_EVENTS.find((e) => e.meta.event.id === u.event)?.meta.event.slug
+    return `  • ${u.email} / ${u.password} (${u.role}${ev ? ` · ${ev}` : ''})`
+  }),
   '',
   'Tab:',
-  '  01_Event — satu baris per event; Slug adalah kuncinya (dipakai di URL /event/:code dan link undangan).',
-  '  01_Sesi — sesi per event (S1, S2…), kolom Event = Slug.',
+  '  Setiap tab data diawali kolom ID (UUID) — dibuat script, jangan diubah. Kolom Event di tab lain berisi ID event (01_Event.ID), bukan slug.',
+  '  01_Event — satu baris per event; ID adalah kuncinya (URL admin /event/:code). Slug hanya untuk link undangan dan boleh diganti.',
+  '  01_Sesi — sesi per event (S1, S2…), kolom Event = ID event.',
   '  02_Tamu — tamu per event. No, HP_Valid, Link_Undangan, Preview_Pesan, Link_WA ditulis script — jangan diketik manual.',
   '  03_Template — template WhatsApp per event.',
   '  _Config, _Enum, _Users, _Sessions — tab sistem. Password disimpan sebagai hash; token sesi juga di-hash.',
-  '  _Users.Event — slug event untuk akun CLIENT; kosong untuk SUPER_ADMIN.',
+  '  _Users.Event — ID event untuk akun CLIENT; kosong untuk SUPER_ADMIN.',
+  '  Baris yang diketik manual tanpa ID mendapat ID otomatis saat dibaca aplikasi atau saat setup() dijalankan.',
 ]
 
 /** The sample database workbook: every tab and column the Apps Script expects, with two seeded events. */
@@ -126,7 +131,7 @@ export function buildSampleWorkbook({ ExcelJS, sha256Hex, randomSalt, now }: Sam
     wb,
     SHEETS.sesi,
     SESI_COLUMNS,
-    SEED_EVENTS.flatMap(({ meta }) => meta.event.sesi.map((s) => sessionToRow(meta.event.slug, s))),
+    SEED_EVENTS.flatMap(({ meta }) => meta.event.sesi.map((s) => sessionToRow(meta.event.id, s))),
   )
 
   const tamu = table(
@@ -134,7 +139,7 @@ export function buildSampleWorkbook({ ExcelJS, sha256Hex, randomSalt, now }: Sam
     SHEETS.tamu,
     TAMU_SHEET_COLUMNS,
     // No / HP_Valid / Link_Undangan are script-written per event; ship them already computed.
-    SEED_EVENTS.flatMap(({ meta, guests }) => applyFormulas(guests, meta.event).map((g) => ({ ...g, Event: meta.event.slug }))),
+    SEED_EVENTS.flatMap(({ meta, guests }) => applyFormulas(guests, meta.event).map((g) => ({ ...g, Event: meta.event.id }))),
   )
   dropdown(tamu, 'Akses', AKSES)
   dropdown(tamu, 'Sisi', SISI)
@@ -144,7 +149,7 @@ export function buildSampleWorkbook({ ExcelJS, sha256Hex, randomSalt, now }: Sam
     wb,
     SHEETS.template,
     TEMPLATE_SHEET_COLUMNS,
-    SEED_EVENTS.flatMap(({ meta, templates }) => templates.map((t) => ({ ...t, Event: meta.event.slug }))),
+    SEED_EVENTS.flatMap(({ meta, templates }) => templates.map((t) => ({ ...t, Event: meta.event.id }))),
   )
   dropdown(tpl, 'Tipe', TEMPLATE_TIPE)
   dropdown(tpl, 'Akses', TEMPLATE_AKSES)
@@ -181,6 +186,7 @@ export function buildSampleWorkbook({ ExcelJS, sha256Hex, randomSalt, now }: Sam
     SEED_USERS.map((u) => {
       const salt = randomSalt()
       return {
+        ID: u.id,
         Email: u.email,
         Nama: u.nama,
         Role: u.role,

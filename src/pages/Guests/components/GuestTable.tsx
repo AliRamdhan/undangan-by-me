@@ -224,7 +224,7 @@ export function GuestTable({
           const crit = rowCritical(g)
           return (
             <TableRow
-              key={`${g.No}-${g.PIN}`}
+              key={g.ID}
               id={`row-${g.No}`}
               className={`group ${flashNo === g.No ? 'row-flash' : ''}`}
             >

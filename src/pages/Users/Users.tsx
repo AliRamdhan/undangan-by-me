@@ -56,12 +56,15 @@ export function Users() {
     void reload()
   }, [reload])
 
-  const eventName = (slug: string) => events?.find((e) => e.slug === slug)?.nama_event || slug
+  const eventName = (id: string) => {
+    const ev = events?.find((e) => e.id === id)
+    return ev ? ev.nama_event || ev.slug : id
+  }
   const shown = (users ?? []).filter((u) => !filter || u.event === filter)
 
   const remove = async (u: ManagedUser) => {
     try {
-      await app.deleteUser(u.email)
+      await app.deleteUser(u.id)
       toast.success(`Akun ${u.email} dihapus`)
       setEditing(null)
       await reload()
@@ -84,7 +87,7 @@ export function Users() {
         >
           <NativeSelectOption value="">Semua akun</NativeSelectOption>
           {(events ?? []).map((ev) => (
-            <NativeSelectOption key={ev.slug} value={ev.slug}>
+            <NativeSelectOption key={ev.id} value={ev.id}>
               {ev.nama_event || ev.slug}
             </NativeSelectOption>
           ))}

@@ -19,7 +19,7 @@ export function ResetPasswordDialog({ user, onClose }: { user: ManagedUser; onCl
     if (password.length < 8) return toast.error('Password minimal 8 karakter')
     setPending(true)
     try {
-      await app.resetPassword(user.email, password)
+      await app.resetPassword(user.id, password)
       toast.success(`Password ${user.email} direset`)
       onClose()
     } catch (err) {

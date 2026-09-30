@@ -6,9 +6,9 @@ import { errorText } from './errors'
 import type { Guest, Meta, Template } from '@/core/domain/types'
 import { StoreContext, type Store } from './context'
 
-export function StoreProvider({ slug, children }: { slug: string; children: ReactNode }) {
+export function StoreProvider({ eventId, children }: { eventId: string; children: ReactNode }) {
   const { app } = useAuth()
-  const api = useMemo(() => app.forEvent(slug), [app, slug])
+  const api = useMemo(() => app.forEvent(eventId), [app, eventId])
   const [meta, setMeta] = useState<Meta | null>(null)
   const [guests, setGuests] = useState<Guest[]>([])
   const [templates, setTemplates] = useState<Template[]>([])
@@ -53,7 +53,7 @@ export function StoreProvider({ slug, children }: { slug: string; children: Reac
   )
 
   const value: Store = {
-    slug,
+    eventId,
     api,
     meta,
     guests,

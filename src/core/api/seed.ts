@@ -3,11 +3,18 @@ import type { Guest, Meta, Template } from '@/core/domain/types'
 
 const GREETINGS = ['Halo', 'Hai', 'Salam hangat', 'Dengan hormat']
 
+/**
+ * Fixed UUIDs, so the sample workbook and the tests are reproducible.
+ * `kind` keeps the tabs apart: 1 event, 2 sesi, 3 tamu, 4 template, 5 user.
+ */
+export const seedId = (kind: number, n: number) => `00000000-0000-4000-8${kind}00-${String(n).padStart(12, '0')}`
+
 // Sample event from docs/URL-CONTRACT.md § 2.
 export const SEED_META: Meta = {
   mode: 'DRY-RUN',
   greetings: GREETINGS,
   event: {
+    id: seedId(1, 1),
     slug: 'dimas-rara',
     domain: 'https://undangan.by.me',
     nama_event: 'Pernikahan Dimas & Rara',
@@ -25,7 +32,8 @@ export const SEED_META: Meta = {
     batas_rsvp: '2026-11-01',
     sesi: [
       {
-        kode: 'S1',
+        id: seedId(2, 1),
+      kode: 'S1',
         label: 'Akad Nikah',
         tanggal: '2026-11-14',
         mulai: '08:00',
@@ -37,7 +45,8 @@ export const SEED_META: Meta = {
         live_stream: '',
       },
       {
-        kode: 'S2',
+        id: seedId(2, 2),
+      kode: 'S2',
         label: 'Resepsi',
         tanggal: '2026-11-14',
         mulai: '11:00',
@@ -59,6 +68,7 @@ export const SEED_META: Meta = {
 type Row = Partial<Guest> & Pick<Guest, 'Nama'>
 
 const blank: Guest = {
+  ID: '',
   No: 0,
   PIN: '',
   Gelar: '',
@@ -149,10 +159,11 @@ const ROWS: Row[] = [
   { PIN: '729104', Gelar: 'Sdr.', Nama: 'Dian Santoso', HP: '+6281211110034', Grup: 'Teman Kantor', Sisi: 'WANITA', Catatan: 'PIN bentrok — impor manual' },
 ]
 
-export const SEED_GUESTS: Guest[] = ROWS.map((r) => ({ ...blank, ...r }))
+export const SEED_GUESTS: Guest[] = ROWS.map((r, i) => ({ ...blank, ID: seedId(3, i + 1), ...r }))
 
 export const SEED_TEMPLATES: Template[] = [
   {
+    ID: seedId(4, 1),
     Kode: 'UND-SEMUA',
     Tipe: 'UNDANGAN',
     Akses: 'SEMUA',
@@ -178,6 +189,7 @@ Mohon konfirmasi sebelum {{event.batas_rsvp}}.
 {{event.hashtag}}`,
   },
   {
+    ID: seedId(4, 2),
     Kode: 'UND-VIP',
     Tipe: 'UNDANGAN',
     Akses: 'VIP',
@@ -203,6 +215,7 @@ Hormat kami,
 {{event.pria_lengkap}} & {{event.wanita_lengkap}}`,
   },
   {
+    ID: seedId(4, 3),
     Kode: 'REM-SEMUA',
     Tipe: 'REMINDER',
     Akses: 'SEMUA',
@@ -218,6 +231,7 @@ Konfirmasi di sini: {{link}}
 Terima kasih 🙏`,
   },
   {
+    ID: seedId(4, 4),
     Kode: 'KONF-SEMUA',
     Tipe: 'KONFIRMASI_RSVP',
     Akses: 'SEMUA',
@@ -232,6 +246,7 @@ Terima kasih 🙏`,
 Pertanyaan? Hubungi {{event.cs_nama}} ({{event.cs_hp}}).`,
   },
   {
+    ID: seedId(4, 5),
     Kode: 'TK-SEMUA',
     Tipe: 'TERIMA_KASIH',
     Akses: 'SEMUA',
@@ -247,6 +262,7 @@ Salam hangat,
 {{event.hashtag}}`,
   },
   {
+    ID: seedId(4, 6),
     Kode: 'H-SEMUA',
     Tipe: 'INFO_HARI_H',
     Akses: 'SEMUA',
@@ -272,6 +288,7 @@ export const SEED_FIDAENO_META: Meta = {
   mode: 'DRY-RUN',
   greetings: GREETINGS,
   event: {
+    id: seedId(1, 2),
     slug: 'fidaeno',
     domain: 'https://undangan.by.me',
     nama_event: 'Pernikahan Fida & Eno',
@@ -288,8 +305,8 @@ export const SEED_FIDAENO_META: Meta = {
     tanggal_pengingat: '',
     batas_rsvp: '2026-10-25',
     sesi: [
-      { kode: 'S1', label: 'Akad Nikah', tanggal: '2026-11-01', mulai: '09:00', selesai: '', tempat: '', alamat: FIDAENO_ALAMAT, maps: FIDAENO_MAPS, dress_code: '', live_stream: '' },
-      { kode: 'S2', label: 'Resepsi', tanggal: '2026-11-01', mulai: '11:00', selesai: '18:00', tempat: '', alamat: FIDAENO_ALAMAT, maps: FIDAENO_MAPS, dress_code: '', live_stream: '' },
+      { id: seedId(2, 3), kode: 'S1', label: 'Akad Nikah', tanggal: '2026-11-01', mulai: '09:00', selesai: '', tempat: '', alamat: FIDAENO_ALAMAT, maps: FIDAENO_MAPS, dress_code: '', live_stream: '' },
+      { id: seedId(2, 4), kode: 'S2', label: 'Resepsi', tanggal: '2026-11-01', mulai: '11:00', selesai: '18:00', tempat: '', alamat: FIDAENO_ALAMAT, maps: FIDAENO_MAPS, dress_code: '', live_stream: '' },
     ],
     gift: { bank: 'SeaBank', atas_nama: 'Firda Aulia', norek: '901198500332', qris: '' },
     media: { musik: '', cover: '' },
@@ -303,7 +320,7 @@ export const SEED_FIDAENO_GUESTS: Guest[] = [
   { PIN: '593018', Gelar: 'Ibu', Nama: 'Rahmawati', HP: '+6281311110002', Akses: 'KELUARGA', Sisi: 'WANITA' },
   { PIN: '287465', Gelar: 'Sdr.', Nama: 'Galih Pratama', HP: '081311110003', Grup: 'Teman Kuliah', Sisi: 'BERSAMA' },
   { PIN: '', Gelar: 'Sdri.', Nama: 'Nurul Hidayah', HP: '+6281311110004', Grup: 'Teman Kuliah', Sisi: 'BERSAMA' },
-].map((r) => ({ ...blank, ...r }) as Guest)
+].map((r, i) => ({ ...blank, ID: seedId(3, 101 + i), ...r }) as Guest)
 
 /**
  * Every event in the sample workbook (npm run sample:xlsx); templates are copied per event.
@@ -318,8 +335,8 @@ export const SEED_EVENTS: { meta: Meta; guests: Guest[]; templates: Template[] }
  * Demo logins — the same accounts ship hashed in sheet-templates/undangan-db-sample.xlsx.
  * Plain passwords live only here, for the generator and the tests; the app never ships them.
  */
-export const SEED_USERS: { email: string; nama: string; role: Role; event: string; password: string }[] = [
-  { email: 'admin@example.com', nama: 'Super Admin', role: 'SUPER_ADMIN', event: '', password: 'Admin#123' },
-  // { email: 'klien.dimasrara@example.com', nama: 'Dimas & Rara', role: 'CLIENT', event: 'dimas-rara', password: 'Klien#123' },
-  { email: 'klien.fidaeno@example.com', nama: 'Fida & Eno', role: 'CLIENT', event: 'fidaeno', password: 'Klien#123' },
+export const SEED_USERS: { id: string; email: string; nama: string; role: Role; event: string; password: string }[] = [
+  { id: seedId(5, 1), email: 'admin@example.com', nama: 'Super Admin', role: 'SUPER_ADMIN', event: '', password: 'Admin#123' },
+  // { id: seedId(5, 2), email: 'klien.dimasrara@example.com', nama: 'Dimas & Rara', role: 'CLIENT', event: SEED_META.event.id, password: 'Klien#123' },
+  { id: seedId(5, 3), email: 'klien.fidaeno@example.com', nama: 'Fida & Eno', role: 'CLIENT', event: SEED_FIDAENO_META.event.id, password: 'Klien#123' },
 ]

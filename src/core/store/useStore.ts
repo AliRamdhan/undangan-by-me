@@ -7,7 +7,7 @@ export function useStore(): Store {
   return s
 }
 
-/** The event store when inside `/events/:slug/…`, else null (global header, settings). */
+/** The event store when inside `/admin/events/:eventId/…`, else null (global header, settings). */
 export function useOptionalStore(): Store | null {
   return useContext(StoreContext)
 }

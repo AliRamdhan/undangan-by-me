@@ -36,6 +36,8 @@ export type HpValid = '✅' | '⚠️ format' | '⚠️ duplikat' | '⚠️ koso
  * system silently hiding them.
  */
 export interface Guest {
+  /** UUID, script-written; the API addresses a guest by it. */
+  ID: string
   // A — formula
   No: number
   // B–K — manual block (B is script-written PIN)
@@ -94,16 +96,9 @@ export type ManualKey = (typeof MANUAL_KEYS)[number]
 
 export type GuestInput = Pick<Guest, ManualKey>
 
-/**
- * A write to 02_Tamu. `PIN` identifies the row (never the row index —
- * BLAST-FLOW.md); an empty PIN means "append a new guest".
- */
-export interface GuestWrite {
-  PIN: string
-  fields: Partial<GuestInput>
-}
-
 export interface Session {
+  /** UUID of the 01_Sesi row; '' until the event is saved. */
+  id: string
   kode: string
   label: string
   tanggal: string
@@ -150,6 +145,9 @@ export interface Person {
 
 /** The export payload from URL-CONTRACT.md § 2, plus the fields the event form edits. */
 export interface EventInfo {
+  /** 01_Event.ID (UUID) — the admin URL and API key; '' for an unsaved event. */
+  id: string
+  /** The public invitation URL (`{domain}/{slug}/{PIN}`); may be renamed. */
   slug: string
   domain: string
   nama_event: string
@@ -184,6 +182,8 @@ export interface Meta {
 
 /** One row of 03_Template. */
 export interface Template {
+  /** UUID; '' for an unsaved template. */
+  ID: string
   Kode: string
   Tipe: TemplateTipe
   Akses: TemplateAkses

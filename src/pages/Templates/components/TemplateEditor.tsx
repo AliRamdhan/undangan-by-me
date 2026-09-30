@@ -21,31 +21,30 @@ import { Input } from '@/components/ui/input'
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
-import { refOf } from '@/core/api/types'
 import { HIDDEN_TOKENS, TOKENS, type RenderResult } from '@/core/domain/template'
 import { /* HIDDEN(sementara): TEMPLATE_AKSES, */ TEMPLATE_TIPE, type Template } from '@/core/domain/types'
 import { errorText, useStore } from '@/core/store'
 
 type DraftRender = { key: string; result?: RenderResult; error?: string }
 
-export function TemplateEditor({ template, isNew, onDone }: { template: Template; isNew: boolean; onDone: (kode?: string) => void }) {
+export function TemplateEditor({ template, isNew, onDone }: { template: Template; isNew: boolean; onDone: (id?: string) => void }) {
   const { api, run, busy, guests } = useStore()
   const [draft, setDraft] = useState<Template>(template)
-  const [pin, setPin] = useState<string>(() => guests.find((g) => g.PIN && g.Nama)?.PIN ?? '')
+  const [sampleId, setSampleId] = useState<string>(() => guests.find((g) => g.PIN && g.Nama)?.ID ?? '')
   const [render, setRender] = useState<DraftRender | null>(null)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const area = useRef<HTMLTextAreaElement>(null)
   const dirty = JSON.stringify(draft) !== JSON.stringify(template)
 
-  const sample = guests.find((g) => g.PIN === pin) ?? null
-  const key = `${draft.Isi_Pesan}\u0000${sample?.No}|${sample?.PIN}`
+  const sample = guests.find((g) => g.ID === sampleId) ?? null
+  const key = `${draft.Isi_Pesan}\u0000${sample?.ID}`
 
   // Debounced live render through the API — the backend renderer, not a local copy.
   useEffect(() => {
     let alive = true
     const t = setTimeout(() => {
       api
-        .renderDraft(draft.Isi_Pesan, sample ? refOf(sample) : null)
+        .renderDraft(draft.Isi_Pesan, sample?.ID ?? null)
         .then((result) => alive && setRender({ key, result }))
         .catch((e: unknown) => alive && setRender({ key, error: errorText(e) }))
     }, 250)
@@ -76,15 +75,15 @@ export function TemplateEditor({ template, isNew, onDone }: { template: Template
       toast.error('Kode template wajib diisi')
       return
     }
-    const ok = await run('Simpan template', (api) => api.saveTemplate(draft, isNew ? undefined : template.Kode).then(() => true))
-    if (ok) {
-      toast.success(`Template ${draft.Kode} disimpan`)
-      onDone(draft.Kode.trim())
+    const saved = await run('Simpan template', (api) => api.saveTemplate(draft))
+    if (saved) {
+      toast.success(`Template ${saved.Kode} disimpan`)
+      onDone(saved.ID)
     }
   }
 
   const remove = async () => {
-    const ok = await run('Hapus template', (api) => api.deleteTemplate(template.Kode).then(() => true))
+    const ok = await run('Hapus template', (api) => api.deleteTemplate(template.ID).then(() => true))
     setConfirmDelete(false)
     if (ok) {
       toast.success(`Template ${template.Kode} dihapus`)
@@ -225,12 +224,12 @@ export function TemplateEditor({ template, isNew, onDone }: { template: Template
         <CardHeader>
           <CardTitle>Preview</CardTitle>
           <CardAction>
-            <NativeSelect aria-label="Tamu contoh" size="sm" className="w-44" value={pin} onChange={(e) => setPin(e.target.value)}>
+            <NativeSelect aria-label="Tamu contoh" size="sm" className="w-44" value={sampleId} onChange={(e) => setSampleId(e.target.value)}>
               <NativeSelectOption value="">Tamu contoh (dummy)</NativeSelectOption>
               {guests
                 .filter((g) => g.PIN && g.Nama)
                 .map((g) => (
-                  <NativeSelectOption key={`${g.No}-${g.PIN}`} value={g.PIN}>
+                  <NativeSelectOption key={g.ID} value={g.ID}>
                     {g.Nama} {/* HIDDEN(sementara): · {g.Akses} */}
                   </NativeSelectOption>
                 ))}

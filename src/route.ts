@@ -32,16 +32,16 @@ export const router = createBrowserRouter([
             ],
           },
           {
-            // One event's pages; EventLayout mounts the store for :slug.
-            path: `${PATHS.events}/:slug`,
+            // One event's pages; EventLayout mounts the store for :eventId.
+            path: `${PATHS.events}/:eventId`,
             Component: EventLayout,
             children: [
               // Init flow: the event is filled in first, then guests and templates.
-              { index: true, loader: ({ params }) => redirect(eventPaths(params.slug!).event) },
+              { index: true, loader: ({ params }) => redirect(eventPaths(params.eventId!).event) },
               { path: 'event', Component: EventPage },
               { path: 'tamu', Component: Guests },
               { path: 'template', Component: Templates },
-              { path: 'template/:kode', Component: Templates },
+              { path: 'template/:templateId', Component: Templates },
               { path: 'dashboard', Component: Dashboard },
             ],
           },

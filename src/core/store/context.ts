@@ -2,9 +2,10 @@ import { createContext } from 'react'
 import type { UndanganApi } from '@/core/api/types'
 import type { Guest, Meta, Template } from '@/core/domain/types'
 
-/** Data of the event in the URL (`/events/:slug/…`); one provider per slug. */
+/** Data of the event in the URL (`/admin/events/:eventId/…`); one provider per event. */
 export interface Store {
-  slug: string
+  /** 01_Event.ID of the event in the URL. */
+  eventId: string
   api: UndanganApi
   meta: Meta | null
   guests: Guest[]

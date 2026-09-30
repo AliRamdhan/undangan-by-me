@@ -2,14 +2,14 @@
 export const PATHS = {
   root: '/',
   login: '/login',
-  events: '/events',
-  newEvent: '/events/new',
-  users: '/users',
+  events: '/admin/events',
+  newEvent: '/admin/events/new',
+  users: '/admin/users',
 } as const
 
-/** The pages of one event, all under `/events/:slug`. */
-export function eventPaths(slug: string) {
-  const root = `${PATHS.events}/${encodeURIComponent(slug)}`
+/** The pages of one event, all under `/admin/events/:eventId` (01_Event.ID, not the slug). */
+export function eventPaths(eventId: string) {
+  const root = `${PATHS.events}/${encodeURIComponent(eventId)}`
   return {
     root,
     event: `${root}/event`,
@@ -19,4 +19,4 @@ export function eventPaths(slug: string) {
   } as const
 }
 
-export const templatePath = (slug: string, kode: string) => `${eventPaths(slug).template}/${encodeURIComponent(kode)}`
+export const templatePath = (eventId: string, templateId: string) => `${eventPaths(eventId).template}/${encodeURIComponent(templateId)}`

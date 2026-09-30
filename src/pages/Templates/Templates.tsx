@@ -17,6 +17,7 @@ import { ValidateReport } from './components/ValidateReport'
 import { eventPaths, templatePath } from '@/route.paths'
 
 const NEW: Template = {
+  ID: '',
   Kode: '',
   Tipe: 'UNDANGAN',
   Akses: 'SEMUA',
@@ -27,17 +28,17 @@ const NEW: Template = {
 }
 
 export function Templates() {
-  const { slug, templates, run, busy, loading } = useStore()
-  // The selected template lives in the URL (/template/:kode), so it is linkable and survives refresh.
-  const selected = useParams().kode ?? null
+  const { eventId, templates, run, busy, loading } = useStore()
+  // The selected template lives in the URL (/template/:templateId), so it is linkable and survives refresh.
+  const selected = useParams().templateId ?? null
   const navigate = useNavigate()
-  const setSelected = (kode: string | null, replace = false) =>
-    navigate(kode ? templatePath(slug, kode) : eventPaths(slug).template, { replace })
+  const setSelected = (id: string | null, replace = false) =>
+    navigate(id ? templatePath(eventId, id) : eventPaths(eventId).template, { replace })
   const [creating, setCreating] = useState(false)
   const [report, setReport] = useState<TemplateReport[] | null>(null)
   const [linksOpen, setLinksOpen] = useState(false)
 
-  const current = creating ? null : (templates.find((t) => t.Kode === selected) ?? templates[0] ?? null)
+  const current = creating ? null : (templates.find((t) => t.ID === selected) ?? templates[0] ?? null)
 
   const validate = async () => {
     const r = await run('Validasi Template', (api) => api.validateTemplates())
@@ -71,15 +72,15 @@ export function Templates() {
           {loading && <Skeleton className="h-40" />}
           {!loading && templates.length === 0 && <p className="p-3 text-muted-foreground">Belum ada template.</p>}
           {templates.map((t) => {
-            const active = !creating && current?.Kode === t.Kode
+            const active = !creating && current?.ID === t.ID
             return (
               <button
-                key={t.Kode}
+                key={t.ID}
                 type="button"
                 aria-current={active ? 'true' : undefined}
                 onClick={() => {
                   setCreating(false)
-                  setSelected(t.Kode)
+                  setSelected(t.ID)
                 }}
                 className={cn('flex flex-col gap-1 rounded-md px-3 py-2 text-left', active ? 'bg-primary-soft' : 'hover:bg-muted')}
               >
@@ -101,17 +102,17 @@ export function Templates() {
             key="new"
             template={NEW}
             isNew
-            onDone={(kode) => {
+            onDone={(id) => {
               setCreating(false)
-              if (kode) setSelected(kode, true)
+              if (id) setSelected(id, true)
             }}
           />
         ) : current ? (
           <TemplateEditor
-            key={current.Kode}
+            key={current.ID}
             template={current}
             isNew={false}
-            onDone={(kode) => setSelected(kode ?? null, true)}
+            onDone={(id) => setSelected(id ?? null, true)}
           />
         ) : (
           !loading && (

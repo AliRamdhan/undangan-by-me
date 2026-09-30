@@ -17,8 +17,14 @@ export const SHEETS = {
   sessions: '_Sessions',
 } as const
 
-/** 01_Event: one row per event, `EventInfo` flattened. `Slug` is the key. */
+/**
+ * Every data tab starts with `ID`: a UUID per row, written by the script and
+ * never changed. Routes address rows by it; `Event` holds 01_Event.ID.
+ */
+
+/** 01_Event: one row per event, `EventInfo` flattened. `Slug` is only the public invitation URL. */
 export const EVENT_COLUMNS = [
+  'ID',
   'Slug',
   'Domain',
   'Nama_Event',
@@ -57,6 +63,7 @@ export const EVENT_COLUMNS = [
 
 /** 01_Sesi: one row per session; `Kode` is S1, S2… in row order within an event. */
 export const SESI_COLUMNS = [
+  'ID',
   'Event',
   'Kode',
   'Label',
@@ -70,8 +77,9 @@ export const SESI_COLUMNS = [
   'Live_Stream',
 ] as const
 
-/** 02_Tamu: `Event` then the 28 guest columns of STRUCTURE.md (A–AC). */
+/** 02_Tamu: `ID`, `Event`, then the 28 guest columns of STRUCTURE.md. */
 export const TAMU_SHEET_COLUMNS = [
+  'ID',
   'Event',
   'No',
   'PIN',
@@ -104,6 +112,7 @@ export const TAMU_SHEET_COLUMNS = [
 ] as const
 
 export const TEMPLATE_SHEET_COLUMNS = [
+  'ID',
   'Event',
   'Kode',
   'Tipe',
@@ -128,8 +137,9 @@ export const ENUM_COLUMNS = [
   'Role',
 ] as const
 
-/** `Event` is the one slug a CLIENT may access; blank for SUPER_ADMIN. */
+/** `Event` is the ID of the one event a CLIENT may access; blank for SUPER_ADMIN. */
 export const USER_COLUMNS = [
+  'ID',
   'Email',
   'Nama',
   'Role',
@@ -150,6 +160,7 @@ export type SesiRow = Record<(typeof SESI_COLUMNS)[number], string>
 export function eventToRow(e: EventInfo, mode: GatewayMode): EventRow {
   const { pria, wanita, hashtag } = e.couple
   return {
+    ID: e.id,
     Slug: e.slug,
     Domain: e.domain,
     Nama_Event: e.nama_event,
@@ -187,9 +198,10 @@ export function eventToRow(e: EventInfo, mode: GatewayMode): EventRow {
   }
 }
 
-export function sessionToRow(slug: string, s: Session): SesiRow {
+export function sessionToRow(eventId: string, s: Session): SesiRow {
   return {
-    Event: slug,
+    ID: s.id,
+    Event: eventId,
     Kode: s.kode,
     Label: s.label,
     Tanggal: s.tanggal,

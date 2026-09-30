@@ -1,6 +1,5 @@
 import { useState, type ReactNode } from 'react'
 import { toast } from 'sonner'
-import { refOf } from '@/core/api/types'
 import {
   Add01Icon,
   Delete02Icon,
@@ -213,7 +212,7 @@ export function Guests() {
   const exportCsv = () => downloadText(exportName('csv'), exportGuestsCsv(exportRows()))
   const exportXlsx = async () => downloadBlob(exportName('xlsx'), await exportGuestsXlsx(exportRows()))
   const deleteSelected = async () => {
-    const n = await run('Hapus tamu', (api) => api.deleteGuests(selectedGuests.map(refOf)))
+    const n = await run('Hapus tamu', (api) => api.deleteGuests(selectedGuests.map((g) => g.ID)))
     setConfirmDelete(false)
     if (n) toast.success(`${n} tamu dihapus`)
   }
@@ -381,7 +380,7 @@ export function Guests() {
 
       {drawer && (
         <GuestDrawer
-          key={drawer.isNew ? 'new' : `${drawer.guest?.No}-${drawer.guest?.PIN}`}
+          key={drawer.isNew ? 'new' : drawer.guest?.ID}
           open
           guest={drawer.guest}
           isNew={drawer.isNew}
@@ -396,7 +395,7 @@ export function Guests() {
       <GenerateLinksDialog
         open={linksOpen}
         onClose={() => setLinksOpen(false)}
-        selection={selectedGuests.length ? selectedGuests.map(refOf) : null}
+        selection={selectedGuests.length ? selectedGuests.map((g) => g.ID) : null}
       />
       <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
         <AlertDialogContent>

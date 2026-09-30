@@ -9,14 +9,14 @@ import { useAuth } from '@/core/auth'
 import { StoreProvider, useEventList, useStore } from '@/core/store'
 import { eventPaths, PATHS } from '@/route.paths'
 
-/** `/events/:slug/…`: one store per event — remounted on a slug change so no state leaks across events. */
+/** `/admin/events/:eventId/…`: one store per event — remounted on an event change so no state leaks across events. */
 export function EventLayout() {
-  const slug = useParams().slug!
+  const eventId = useParams().eventId!
   const { user, homePath } = useAuth()
-  // A CLIENT only has its own event — any other slug (or its old one after a rename) goes home.
-  if (user?.role === 'CLIENT' && user.event !== slug) return <Navigate to={homePath} replace />
+  // A CLIENT only has its own event — any other ID goes home.
+  if (user?.role === 'CLIENT' && user.event !== eventId) return <Navigate to={homePath} replace />
   return (
-    <StoreProvider key={slug} slug={slug}>
+    <StoreProvider key={eventId} eventId={eventId}>
       <EventShell />
     </StoreProvider>
   )
@@ -27,20 +27,20 @@ const tabCls = ({ isActive }: { isActive: boolean }) =>
 
 /** A CLIENT gets just its event's name; SUPER_ADMIN gets navigation across events. */
 function EventShell() {
-  const { slug, meta } = useStore()
+  const { meta } = useStore()
   const { isSuperAdmin } = useAuth()
-  return isSuperAdmin ? <AdminEventShell /> : <Shell switcher={<p className="font-medium">{meta?.event.nama_event ?? slug}</p>} />
+  return isSuperAdmin ? <AdminEventShell /> : <Shell switcher={<p className="font-medium">{meta?.event.nama_event}</p>} />
 }
 
 /** SUPER_ADMIN: back to the list, and a switcher across every event. */
 function AdminEventShell() {
-  const { slug, meta } = useStore()
+  const { eventId, meta } = useStore()
   const { events } = useEventList()
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const paths = eventPaths(slug)
+  const paths = eventPaths(eventId)
 
-  // Keep the same page (tamu/template/…) when switching to another event; a template :kode does not carry over.
+  // Keep the same page (tamu/template/…) when switching to another event; a template :templateId does not carry over.
   const switchTo = (next: string) => {
     const page = pathname.slice(paths.root.length).split('/')[1] || 'event'
     navigate(`${eventPaths(next).root}/${page}`)
@@ -54,15 +54,15 @@ function AdminEventShell() {
             <HugeiconsIcon icon={ArrowLeft01Icon} strokeWidth={2} />
           </Link>
           {events && events.length > 1 ? (
-            <NativeSelect aria-label="Pilih event" value={slug} onChange={(e) => switchTo(e.target.value)} className="min-w-48">
+            <NativeSelect aria-label="Pilih event" value={eventId} onChange={(e) => switchTo(e.target.value)} className="min-w-48">
               {events.map((ev) => (
-                <NativeSelectOption key={ev.slug} value={ev.slug}>
+                <NativeSelectOption key={ev.id} value={ev.id}>
                   {ev.nama_event || ev.slug}
                 </NativeSelectOption>
               ))}
             </NativeSelect>
           ) : (
-            <p className="font-medium">{meta?.event.nama_event ?? slug}</p>
+            <p className="font-medium">{meta?.event.nama_event}</p>
           )}
         </>
       }
@@ -71,9 +71,9 @@ function AdminEventShell() {
 }
 
 function Shell({ switcher }: { switcher: React.ReactNode }) {
-  const { slug, loadError, reload, busy } = useStore()
+  const { eventId, loadError, reload, busy } = useStore()
   const { homePath } = useAuth()
-  const paths = eventPaths(slug)
+  const paths = eventPaths(eventId)
   const tabs = [
     { to: paths.event, label: 'Data Event' },
     { to: paths.tamu, label: 'Tamu' },

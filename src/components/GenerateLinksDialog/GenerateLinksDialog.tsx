@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Field, FieldDescription, FieldLabel } from '@/components/ui/field'
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 import { Spinner } from '@/components/ui/spinner'
-import type { GuestRef, LinkResult } from '@/core/api/types'
+import type { LinkResult } from '@/core/api/types'
 import { TEMPLATE_TIPE, type TemplateTipe } from '@/core/domain/types'
 import { useStore } from '@/core/store'
 
@@ -19,8 +19,8 @@ export function GenerateLinksDialog({
 }: {
   open: boolean
   onClose: () => void
-  /** Selected guests, or null for "every guest". */
-  selection: GuestRef[] | null
+  /** IDs of the selected guests, or null for "every guest". */
+  selection: string[] | null
 }) {
   const { run, busy, guests } = useStore()
   const [tipe, setTipe] = useState<TemplateTipe>('UNDANGAN')

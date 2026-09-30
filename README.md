@@ -33,11 +33,11 @@ Apps Script cannot read headers). Any `AUTH` answer drops the session and
 
 Two roles:
 
-- **SUPER_ADMIN** — every event: `/events` (list, create, delete) and `/users`
+- **SUPER_ADMIN** — every event: `/admin/events` (list, create, delete) and `/admin/users`
   (accounts: create a client for an event, reset password, deactivate, delete).
 - **CLIENT** — exactly one event (`_Users.Event`). Login lands on
-  `/events/{its slug}/event`; it edits that event's data, guests and templates, but
-  not the slug/domain. `/events`, `/users` and any other slug redirect back home.
+  `/admin/events/{its event ID}/event`; it edits that event's data, guests and templates, but
+  not the slug/domain. `/admin/events`, `/admin/users` and any other event ID redirect back home.
 
 The server enforces all of it (another event answers `NOT_FOUND`, a slug/domain
 change `FORBIDDEN`); the UI only hides what a role cannot use.
@@ -50,20 +50,22 @@ src/
 │   ├── domain/        pure logic: types, schema, phone, PIN, checks, {{token}} renderer, CSV, stats
 │   ├── api/           AppApi (auth, events) + UndanganApi (one event) · REST client for Apps Script · seed (sample/test data)
 │   ├── auth/          AuthProvider (settings, session, login/logout), useAuth, RequireAuth
-│   └── store/         StoreProvider per event slug, useStore, useEventList — load, run(action) → refetch
+│   └── store/         StoreProvider per event ID, useStore, useEventList — load, run(action) → refetch
 ├── components/ui/   shadcn (base-mira, Base UI + hugeicons) — add more with `npx shadcn add <name>`
 ├── components/      app components built on ui/: SettingsSheet, StatusBadge, StatTile, ThemeToggle, WhatsAppBubble, dialogs
 ├── layouts/         AppLayout — header, settings, user menu · EventLayout — event switcher + tabs, mounts the store
 ├── pages/           route components (Login, Events, Users, Event, Guests, Templates, …); page-only parts live in pages/<Page>/components/
 ├── hooks/           useMediaQuery
 ├── utils/           download, format
-├── route.ts         /login · /events · /events/new · /events/:slug/{event,tamu,template/:kode,dashboard}
+├── route.ts         /login · /admin/events · /admin/events/new · /admin/users · /admin/events/:eventId/{event,tamu,template/:templateId,dashboard}
 ├── route.paths.ts   URL constants shared by routes and links
 └── App.tsx          ThemeProvider (next-themes) + AuthProvider + RouterProvider + sonner Toaster
 ```
 
 Imports use the `@/` alias (`@/core/store`, `@/components/Button`). A deployed build
-needs an SPA fallback to `index.html` so deep links such as `/events/fidaeno/template/UND-VIP` resolve.
+needs an SPA fallback to `index.html` so deep links such as `/admin/events/{event ID}/template/{template ID}` resolve.
+Admin URLs carry row IDs (UUIDs, the `ID` column of each tab), never slugs, so renaming a slug keeps every admin link.
+The public invitation is served from `public/events/{slug}/` at `/events/{slug}/` (a static page, outside the SPA).
 
 Every preview, draft render and link generation goes to `renderTemplate_()` on
 the server. The TS renderer in `domain/template.ts` is the reference that

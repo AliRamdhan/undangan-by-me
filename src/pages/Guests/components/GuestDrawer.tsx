@@ -20,7 +20,6 @@ import { Input } from '@/components/ui/input'
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Spinner } from '@/components/ui/spinner'
 import { Textarea } from '@/components/ui/textarea'
-import { refOf } from '@/core/api/types'
 import { HP_PATTERN, normalizePhone } from '@/core/domain/phone'
 import { /* HIDDEN(sementara): AKSES, SISI, */ GELAR, MANUAL_KEYS, type Guest, type GuestInput } from '@/core/domain/types'
 import { useStore } from '@/core/store'
@@ -115,7 +114,7 @@ export function GuestDrawer({
     setTouched(true)
     if (Object.keys(errors).length) return
     const saved = await run(isNew ? 'Tambah tamu' : 'Simpan tamu', (api) =>
-      api.saveGuest(isNew || !guest ? null : refOf(guest), changes),
+      api.saveGuest(isNew || !guest ? null : guest.ID, changes),
     )
     if (saved) {
       toast.success(isNew ? `${saved.Nama} ditambahkan · PIN ${saved.PIN}` : `${saved.Nama} disimpan`)
@@ -125,7 +124,7 @@ export function GuestDrawer({
 
   const remove = async () => {
     if (!guest) return
-    const n = await run('Hapus tamu', (api) => api.deleteGuests([refOf(guest)]))
+    const n = await run('Hapus tamu', (api) => api.deleteGuests([guest.ID]))
     setConfirmDelete(false)
     if (n) {
       toast.success(`${guest.Nama || 'Tamu'} dihapus`)

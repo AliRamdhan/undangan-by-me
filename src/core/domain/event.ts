@@ -9,6 +9,7 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const blankPerson = (): Person => ({ panggilan: '', lengkap: '', ortu: '', hp: '', email: '' })
 
 export const blankSession = (kode: string): Session => ({
+  id: '',
   kode,
   label: '',
   tanggal: '',
@@ -31,6 +32,7 @@ type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]>
 export function withEventDefaults(e: DeepPartial<EventInfo>): EventInfo {
   const c = e.couple ?? {}
   return {
+    id: e.id ?? '',
     slug: e.slug ?? '',
     domain: e.domain ?? '',
     nama_event: e.nama_event ?? '',

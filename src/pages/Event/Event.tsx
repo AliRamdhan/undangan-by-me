@@ -19,10 +19,8 @@ import { SessionsCard } from './components/SessionsCard'
 import type { SectionProps } from './components/form'
 
 export function EventPage() {
-  const { meta, loading, run, busy, api } = useStore()
+  const { meta, loading, run, busy } = useStore()
   const { isSuperAdmin } = useAuth()
-  const navigate = useNavigate()
-  const [renaming, setRenaming] = useState(false)
   if (loading || !meta) {
     return (
       <div className="grid gap-4 lg:grid-cols-2">
@@ -33,27 +31,14 @@ export function EventPage() {
   }
   const saved = withEventDefaults(meta.event)
 
+  // The admin URL carries the event ID, so a new slug keeps this page.
   const save = async (draft: EventInfo) => {
-    if (draft.slug === saved.slug) {
-      const ok = await run('Simpan event', (a) => a.saveEvent(draft))
-      if (ok) toast.success('Data event disimpan')
-      return
-    }
-    // A new slug moves the event to a new URL: reloading under the old one would 404.
-    setRenaming(true)
-    try {
-      await api.saveEvent(draft)
-      toast.success('Data event disimpan — slug berubah')
-      navigate(eventPaths(draft.slug).event, { replace: true })
-    } catch (e) {
-      toast.error(`Simpan event: ${errorText(e)}`)
-    } finally {
-      setRenaming(false)
-    }
+    const ok = await run('Simpan event', (a) => a.saveEvent(draft))
+    if (ok) toast.success(draft.slug === saved.slug ? 'Data event disimpan' : 'Data event disimpan — slug berubah')
   }
 
   // Remount on every saved version so the draft always starts from what the sheet holds.
-  return <EventForm key={JSON.stringify(saved)} saved={saved} onSave={save} busy={!!busy || renaming} lockLink={!isSuperAdmin} />
+  return <EventForm key={JSON.stringify(saved)} saved={saved} onSave={save} busy={!!busy} lockLink={!isSuperAdmin} />
 }
 
 /** POST /event — a blank form; ADMIN only. */
@@ -68,9 +53,9 @@ export function EventCreatePage() {
   const create = async (draft: EventInfo) => {
     setPending(true)
     try {
-      await app.createEvent(draft)
+      const meta = await app.createEvent(draft)
       toast.success('Event dibuat')
-      navigate(eventPaths(draft.slug).event, { replace: true })
+      navigate(eventPaths(meta.event.id).event, { replace: true })
     } catch (e) {
       toast.error(`Buat event: ${errorText(e)}`)
     } finally {

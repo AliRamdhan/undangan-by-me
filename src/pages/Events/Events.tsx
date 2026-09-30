@@ -38,7 +38,7 @@ export function Events() {
     if (!toDelete) return
     setDeleting(true)
     try {
-      const r = await app.deleteEvent(toDelete.slug)
+      const r = await app.deleteEvent(toDelete.id)
       toast.success(`Event dihapus — ${r.tamu} tamu, ${r.template} template, ${r.sesi} sesi, ${r.akun} akun klien ikut terhapus`)
       setToDelete(null)
       await reload()
@@ -90,10 +90,10 @@ export function Events() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {events.map((ev) => (
-            <Card key={ev.slug} className="transition-colors hover:border-primary/40">
+            <Card key={ev.id} className="transition-colors hover:border-primary/40">
               <CardHeader>
                 <CardTitle>
-                  <Link to={eventPaths(ev.slug).event} className="hover:underline">
+                  <Link to={eventPaths(ev.id).event} className="hover:underline">
                     {ev.nama_event || ev.slug}
                   </Link>
                 </CardTitle>
@@ -111,13 +111,13 @@ export function Events() {
                 </CardAction>
               </CardHeader>
               <CardFooter className="flex-wrap gap-2 text-xs text-muted-foreground">
-                <Link to={eventPaths(ev.slug).tamu} className={buttonVariants({ variant: 'outline', size: 'sm' })}>
+                <Link to={eventPaths(ev.id).tamu} className={buttonVariants({ variant: 'outline', size: 'sm' })}>
                   {ev.jumlah_tamu} tamu
                 </Link>
-                <Link to={eventPaths(ev.slug).template} className={buttonVariants({ variant: 'outline', size: 'sm' })}>
+                <Link to={eventPaths(ev.id).template} className={buttonVariants({ variant: 'outline', size: 'sm' })}>
                   {ev.jumlah_template} template
                 </Link>
-                <Link to={`${PATHS.users}?event=${encodeURIComponent(ev.slug)}`} className={buttonVariants({ variant: 'ghost', size: 'sm' })}>
+                <Link to={`${PATHS.users}?event=${encodeURIComponent(ev.id)}`} className={buttonVariants({ variant: 'ghost', size: 'sm' })}>
                   <HugeiconsIcon icon={UserMultipleIcon} strokeWidth={2} data-icon="inline-start" />
                   Akun klien
                 </Link>

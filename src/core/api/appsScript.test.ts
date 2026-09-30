@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { AppsScriptApp } from '@/core/api/appsScript'
-import type { GuestRef } from '@/core/api/types'
 
 const EXEC = 'https://script.google.com/macros/s/abc/exec'
 
@@ -30,8 +29,9 @@ const path = (c: Call) => {
   return `/${c.url.searchParams.get('path')}`
 }
 
-const pinned: GuestRef = { PIN: '012345', rowHint: 1, nama: 'Budi' }
-const pinless: GuestRef = { PIN: '', rowHint: 7, nama: 'Sri' }
+const EVENT = '00000000-0000-4000-8100-000000000001'
+const GUEST = '00000000-0000-4000-8300-000000000001'
+const OTHER = '00000000-0000-4000-8300-000000000002'
 
 describe('AppsScriptApp — REST transport', () => {
   it('sends GET with the token in the query string', async () => {
@@ -42,22 +42,31 @@ describe('AppsScriptApp — REST transport', () => {
   })
 
   it('tunnels PUT/PATCH/DELETE through POST with _method and the token in the body', async () => {
-    const ev = new AppsScriptApp(EXEC, 'tok').forEvent('dimas-rara')
-    await ev.saveGuest(pinned, { Meja: 'A' })
-    expect(last()).toMatchObject({ method: 'POST', body: { _method: 'PATCH', token: 'tok', fields: { Meja: 'A' }, rowHint: 1, nama: 'Budi' } })
-    expect(path(last())).toBe('/event/dimas-rara/guests/012345')
+    const ev = new AppsScriptApp(EXEC, 'tok').forEvent(EVENT)
+    await ev.saveGuest(GUEST, { Meja: 'A' })
+    expect(last().method).toBe('POST')
+    expect(last().body).toEqual({ v: 1, _method: 'PATCH', token: 'tok', fields: { Meja: 'A' } })
+    expect(path(last())).toBe(`/event/${EVENT}/guests/${GUEST}`)
 
-    await ev.deleteTemplate('UND 1')
-    expect(path(last())).toBe('/event/dimas-rara/templates/UND%201')
+    await ev.deleteTemplate('T 1')
+    expect(path(last())).toBe(`/event/${EVENT}/templates/T%201`)
     expect(last().body).toMatchObject({ _method: 'DELETE' })
   })
 
-  it('addresses a PIN-less guest as row-{No}', async () => {
-    const ev = new AppsScriptApp(EXEC, 'tok').forEvent('dimas-rara')
+  it('addresses guests, templates and users by ID', async () => {
+    const app = new AppsScriptApp(EXEC, 'tok')
+    const ev = app.forEvent(EVENT)
     reply = { v: 1, ok: true, code: 'OK', data: { kode: 'U', text: 'x', waLink: '' } }
-    await ev.previewMessage(pinless, 'UNDANGAN')
-    expect(path(last())).toBe('/event/dimas-rara/guests/row-7/preview')
-    expect(Object.fromEntries(last().url.searchParams)).toMatchObject({ tipe: 'UNDANGAN', rowHint: '7', nama: 'Sri' })
+    await ev.previewMessage(GUEST, 'UNDANGAN')
+    expect(path(last())).toBe(`/event/${EVENT}/guests/${GUEST}/preview`)
+    expect(Object.fromEntries(last().url.searchParams)).toEqual({ path: `event/${EVENT}/guests/${GUEST}/preview`, token: 'tok', tipe: 'UNDANGAN' })
+
+    await ev.deleteGuests([GUEST, OTHER])
+    expect(last().body).toMatchObject({ ids: [GUEST, OTHER] })
+    await ev.generateLinks([GUEST], 'UNDANGAN')
+    expect(last().body).toMatchObject({ ids: [GUEST], tipe: 'UNDANGAN' })
+    await ev.renderDraft('b', GUEST)
+    expect(last().body).toMatchObject({ body: 'b', id: GUEST })
   })
 
   it('maps every method to its route', async () => {
@@ -73,8 +82,8 @@ describe('AppsScriptApp — REST transport', () => {
       [() => ev.saveEvent({} as never), 'POST', '/event/x', 'PUT'],
       [() => ev.listGuests(), 'GET', '/event/x/guests'],
       [() => ev.saveGuest(null, { Nama: 'A' }), 'POST', '/event/x/guests'],
-      [() => ev.deleteGuests([pinned]), 'POST', '/event/x/guests/012345', 'DELETE'],
-      [() => ev.deleteGuests([pinned, pinless]), 'POST', '/event/x/guests/bulk-delete'],
+      [() => ev.deleteGuests(['g1']), 'POST', '/event/x/guests/g1', 'DELETE'],
+      [() => ev.deleteGuests(['g1', 'g2']), 'POST', '/event/x/guests/bulk-delete'],
       [() => ev.importGuests([]), 'POST', '/event/x/guests/import'],
       [() => ev.generatePins(), 'POST', '/event/x/guests/generate-pins'],
       [() => ev.normalizePhones(), 'POST', '/event/x/guests/normalize-phones'],
@@ -82,14 +91,14 @@ describe('AppsScriptApp — REST transport', () => {
       [() => ev.generateLinks(null, 'UNDANGAN'), 'POST', '/event/x/guests/links'],
       [() => ev.listTemplates(), 'GET', '/event/x/templates'],
       [() => ev.validateTemplates(), 'GET', '/event/x/templates/validate'],
-      [() => ev.saveTemplate({ Kode: 'N' } as never), 'POST', '/event/x/templates'],
-      [() => ev.saveTemplate({ Kode: 'N' } as never, 'OLD'), 'POST', '/event/x/templates/OLD', 'PUT'],
+      [() => ev.saveTemplate({ ID: '', Kode: 'N' } as never), 'POST', '/event/x/templates'],
+      [() => ev.saveTemplate({ ID: 't1', Kode: 'N' } as never), 'POST', '/event/x/templates/t1', 'PUT'],
       [() => ev.renderDraft('b', null), 'POST', '/event/x/render/draft'],
       [() => app.listUsers(), 'GET', '/users'],
       [() => app.createUser({ email: 'a@b.c', nama: 'A', role: 'CLIENT', event: 'x', password: 'p' }), 'POST', '/users'],
-      [() => app.updateUser('a+1@b.c', { aktif: false }), 'POST', '/users/a%2B1%40b.c', 'PATCH'],
-      [() => app.resetPassword('a+1@b.c', 'baru'), 'POST', '/users/a%2B1%40b.c/reset-password'],
-      [() => app.deleteUser('a+1@b.c'), 'POST', '/users/a%2B1%40b.c', 'DELETE'],
+      [() => app.updateUser('u1', { aktif: false }), 'POST', '/users/u1', 'PATCH'],
+      [() => app.resetPassword('u1', 'baru'), 'POST', '/users/u1/reset-password'],
+      [() => app.deleteUser('u1'), 'POST', '/users/u1', 'DELETE'],
     ]
     for (const [call, method, p, override] of cases) {
       await call()
