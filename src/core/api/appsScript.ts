@@ -23,7 +23,6 @@ import {
 
 /** Auth and the event list against the Apps Script Web App (docs/ADMIN-API.md). */
 export class AppsScriptApp implements AppApi {
-  readonly kind = 'appsscript' as const
   private readonly rest: RestClient
 
   constructor(url: string, token: string | null, onUnauthorized?: () => void) {
@@ -76,7 +75,6 @@ export class AppsScriptApp implements AppApi {
  * renderTemplate_() stays the only renderer.
  */
 export class AppsScriptEventApi implements UndanganApi {
-  readonly kind = 'appsscript' as const
   readonly slug: string
   private readonly rest: RestClient
   private readonly base: string

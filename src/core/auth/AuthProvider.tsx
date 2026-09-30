@@ -1,12 +1,11 @@
 import { toast } from 'sonner'
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { createApp, loadSession, loadSettings, saveSession, saveSettings, type ApiSettings } from '@/core/api'
+import { createApp, loadSession, saveSession } from '@/core/api'
 import type { Session } from '@/core/api/types'
 import { eventPaths, PATHS } from '@/route.paths'
 import { AuthContext, type Auth } from './context'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [settings, setSettings] = useState(loadSettings)
   const [session, setSession] = useState<Session | null>(loadSession)
 
   const end = useCallback((s: Session | null) => {
@@ -21,7 +20,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     toast.error('Sesi berakhir — silakan login lagi')
   }, [end])
 
-  const app = useMemo(() => createApp(settings, session, expire), [settings, session, expire])
+  const app = useMemo(() => createApp(session, expire), [session, expire])
 
   useEffect(() => {
     // A stored token may have been revoked server-side; /auth/me refreshes the user or expires it.
@@ -56,20 +55,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const changePassword = useCallback((o: string, n: string) => app.changePassword(o, n), [app])
 
-  const applySettings = useCallback(
-    (s: ApiSettings) => {
-      const backendChanged = s.mode !== settings.mode || s.url !== settings.url
-      saveSettings(s)
-      setSettings(s)
-      if (backendChanged) end(null)
-    },
-    [settings, end],
-  )
-
   const user = session?.user ?? null
   const value: Auth = {
-    settings,
-    applySettings,
     app,
     user,
     isSuperAdmin: user?.role === 'SUPER_ADMIN',

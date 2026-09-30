@@ -25,7 +25,7 @@ type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]>
 
 /**
  * Fills every field the form edits. Events saved before these fields existed
- * (e.g. data contoh already in localStorage) come back complete instead of
+ * (e.g. an older 01_Event row) come back complete instead of
  * leaving the form reading `undefined`.
  */
 export function withEventDefaults(e: DeepPartial<EventInfo>): EventInfo {

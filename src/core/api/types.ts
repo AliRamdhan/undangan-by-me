@@ -134,7 +134,6 @@ export interface DeletedEvent {
  * `forEvent` hands out the per-event API.
  */
 export interface AppApi {
-  readonly kind: 'mock' | 'appsscript'
   login(email: string, password: string): Promise<Session>
   logout(): Promise<void>
   me(): Promise<AuthUser>
@@ -162,7 +161,6 @@ export interface AppApi {
  * manual columns; script/formula columns come back computed by the backend.
  */
 export interface UndanganApi {
-  readonly kind: 'mock' | 'appsscript'
   /** The event every call is scoped to (`/event/:code`). */
   readonly slug: string
   getMeta(): Promise<Meta>

@@ -149,8 +149,7 @@ const ROWS: Row[] = [
   { PIN: '729104', Gelar: 'Sdr.', Nama: 'Dian Santoso', HP: '+6281211110034', Grup: 'Teman Kantor', Sisi: 'WANITA', Catatan: 'PIN bentrok — impor manual' },
 ]
 
-// @__PURE__ marks the top-level calls side-effect free, so a production build drops this whole seed.
-export const SEED_GUESTS: Guest[] = /* @__PURE__ */ ROWS.map((r) => ({ ...blank, ...r }))
+export const SEED_GUESTS: Guest[] = ROWS.map((r) => ({ ...blank, ...r }))
 
 export const SEED_TEMPLATES: Template[] = [
   {
@@ -299,7 +298,7 @@ export const SEED_FIDAENO_META: Meta = {
   },
 }
 
-export const SEED_FIDAENO_GUESTS: Guest[] = /* @__PURE__ */ [
+export const SEED_FIDAENO_GUESTS: Guest[] = [
   { PIN: '104729', Gelar: 'Bapak/Ibu', Nama: 'Mintro Miharjo', HP: '+6281311110001', Akses: 'KELUARGA', Sisi: 'PRIA' },
   { PIN: '593018', Gelar: 'Ibu', Nama: 'Rahmawati', HP: '+6281311110002', Akses: 'KELUARGA', Sisi: 'WANITA' },
   { PIN: '287465', Gelar: 'Sdr.', Nama: 'Galih Pratama', HP: '081311110003', Grup: 'Teman Kuliah', Sisi: 'BERSAMA' },
@@ -307,8 +306,8 @@ export const SEED_FIDAENO_GUESTS: Guest[] = /* @__PURE__ */ [
 ].map((r) => ({ ...blank, ...r }) as Guest)
 
 /**
- * Every seeded event (mock + sample xlsx); templates are copied per event.
- * dimas-rara is kept above only as a test fixture (mock.test.ts, gasParity.test.ts).
+ * Every event in the sample workbook (npm run sample:xlsx); templates are copied per event.
+ * dimas-rara is kept above only as a test fixture (gasParity.test.ts).
  */
 export const SEED_EVENTS: { meta: Meta; guests: Guest[]; templates: Template[] }[] = [
   // { meta: SEED_META, guests: SEED_GUESTS, templates: SEED_TEMPLATES },
@@ -317,7 +316,7 @@ export const SEED_EVENTS: { meta: Meta; guests: Guest[]; templates: Template[] }
 
 /**
  * Demo logins — the same accounts ship hashed in sheet-templates/undangan-db-sample.xlsx.
- * The mock compares the plain password; the Apps Script compares hashes.
+ * Plain passwords live only here, for the generator and the tests; the app never ships them.
  */
 export const SEED_USERS: { email: string; nama: string; role: Role; event: string; password: string }[] = [
   { email: 'admin@example.com', nama: 'Super Admin', role: 'SUPER_ADMIN', event: '', password: 'Admin#123' },

@@ -32,7 +32,7 @@ export class RestClient {
   }
 
   async request<T>(method: HttpMethod, path: string, opts: { query?: Query; body?: Record<string, unknown> } = {}): Promise<T> {
-    if (!this.base) throw new ApiError('NETWORK', 'URL Apps Script belum diatur — buka Pengaturan server.')
+    if (!this.base) throw new ApiError('NETWORK', 'URL Apps Script belum diatur — isi VITE_APPS_SCRIPT_URL di .env lalu build/jalankan ulang.')
     const url = new URL(this.base)
     url.searchParams.set('path', path.replace(/^\/+/, ''))
     let init: RequestInit

@@ -85,7 +85,7 @@ const PANDUAN = [
   '2. Extensions → Apps Script: salin semua file dari folder apps-script/ (atau `clasp push`).',
   '3. Jalankan fungsi setup() sekali dari editor — membuat tab/format yang kurang dan menyembunyikan tab _.',
   '4. Deploy → New deployment → Web app · Execute as: Me · Who has access: Anyone. Salin URL /exec.',
-  '5. Di aplikasi: Pengaturan server → Google Sheet → tempel URL /exec → login.',
+  '5. Di client/.env isi VITE_APPS_SCRIPT_URL dengan URL /exec, lalu jalankan/build aplikasi dan login.',
   '',
   'Role:',
   '  SUPER_ADMIN — melihat & mengelola semua event, membuat/menghapus event, mengelola akun (menu Pengguna).',

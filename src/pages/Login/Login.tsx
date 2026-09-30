@@ -1,24 +1,22 @@
-import { Login01Icon, Settings02Icon } from '@hugeicons/core-free-icons'
+import { Alert02Icon, Login01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useState } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router'
 import { toast } from 'sonner'
-import { SettingsSheet } from '@/components/SettingsSheet'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
-import { MOCK_ENABLED } from '@/core/api'
-import { SEED_USERS } from '@/core/api/seed'
+import { APPS_SCRIPT_URL } from '@/core/api'
 import { useAuth } from '@/core/auth'
 import { errorText } from '@/core/store'
 import { PATHS } from '@/route.paths'
 
-/** POST /auth/login. The backend (mock or /exec URL) is picked in Pengaturan first. */
+/** POST /auth/login against the Apps Script Web App (VITE_APPS_SCRIPT_URL). */
 export function Login() {
-  const { user, login, settings, app } = useAuth()
+  const { user, login } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
   // No `from`: `/` sends each role to its start page (event list or the client's own event).
@@ -26,7 +24,6 @@ export function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [pending, setPending] = useState(false)
-  const [settingsOpen, setSettingsOpen] = useState(false)
 
   if (user) return <Navigate to={from} replace />
 
@@ -56,6 +53,15 @@ export function Login() {
           <CardDescription>Masuk untuk mengelola event, tamu dan template.</CardDescription>
         </CardHeader>
         <CardContent>
+          {!APPS_SCRIPT_URL && (
+            <div role="alert" className="mb-4 flex gap-2 rounded-lg bg-destructive/10 p-3 text-xs text-destructive">
+              <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} className="mt-0.5 size-4 shrink-0" />
+              <p>
+                Server belum dikonfigurasi. Isi <code className="font-mono">VITE_APPS_SCRIPT_URL</code> (URL /exec Apps Script) di{' '}
+                <code className="font-mono">.env</code> lalu jalankan/build ulang aplikasi.
+              </p>
+            </div>
+          )}
           <form onSubmit={submit} className="flex flex-col gap-4">
             <FieldGroup>
               <Field>
@@ -74,38 +80,15 @@ export function Login() {
                 />
               </Field>
             </FieldGroup>
-            <Button type="submit" size="lg" disabled={pending}>
+            <Button type="submit" size="lg" disabled={pending || !APPS_SCRIPT_URL}>
               {pending ? <Spinner data-icon="inline-start" /> : <HugeiconsIcon icon={Login01Icon} strokeWidth={2} data-icon="inline-start" />}
               Masuk
             </Button>
           </form>
 
-          {MOCK_ENABLED && app.kind === 'mock' && (
-            <div className="mt-4 rounded-lg bg-muted p-3 text-xs text-muted-foreground">
-              <p className="mb-1 font-medium text-foreground">Data contoh — akun demo:</p>
-              {SEED_USERS.map((u) => (
-                <button
-                  key={u.email}
-                  type="button"
-                  className="block font-mono hover:underline"
-                  onClick={() => {
-                    setEmail(u.email)
-                    setPassword(u.password)
-                  }}
-                >
-                  {u.email} / {u.password} ({u.role})
-                </button>
-              ))}
-            </div>
-          )}
         </CardContent>
       </Card>
 
-      <Button variant="ghost" className="text-muted-foreground" onClick={() => setSettingsOpen(true)}>
-        <HugeiconsIcon icon={Settings02Icon} strokeWidth={2} data-icon="inline-start" />
-        Pengaturan server · {settings.mode === 'mock' ? 'data contoh' : settings.url ? 'Google Sheet' : 'URL belum diatur'}
-      </Button>
-      <SettingsSheet open={settingsOpen} onOpenChange={setSettingsOpen} />
     </div>
   )
 }
