@@ -1,10 +1,11 @@
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import babel from '@rolldown/plugin-babel'
 import tailwindcss from '@tailwindcss/vite'
-import { existsSync } from 'node:fs'
+import { createWriteStream, existsSync, mkdirSync, rmSync } from 'node:fs'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { fileURLToPath } from 'node:url'
-import { defineConfig, type Plugin } from 'vite'
+import { defineConfig, loadEnv, type Plugin } from 'vite'
+import { checkMedia, MEDIA_DIR, MEDIA_FIELDS, mediaFileName, type MediaField } from './src/core/domain/media.ts'
 
 const publicDir = fileURLToPath(new URL('./public', import.meta.url))
 
@@ -33,10 +34,99 @@ function publicInvitations(): Plugin {
   }
 }
 
+/**
+ * `/events/config.js` tells the static invitation pages where the Apps Script
+ * Web App is (`window.INVITATION_API`), from VITE_APPS_SCRIPT_URL — .env in dev,
+ * .env.production in a build. public/ files never see import.meta.env.
+ */
+function invitationConfig(mode: string): Plugin {
+  const url = loadEnv(mode, process.cwd(), 'VITE_').VITE_APPS_SCRIPT_URL || ''
+  const source = `window.INVITATION_API = ${JSON.stringify(url)}\n`
+  const middleware = (req: IncomingMessage, res: ServerResponse, next: () => void) => {
+    if (req.url?.split('?')[0] !== '/events/config.js') return next()
+    res.writeHead(200, { 'Content-Type': 'application/javascript; charset=utf-8', 'Cache-Control': 'no-cache' }).end(source)
+  }
+  return {
+    name: 'invitation-config',
+    configureServer: (server) => void server.middlewares.use(middleware),
+    configurePreviewServer: (server) => void server.middlewares.use(middleware),
+    generateBundle() {
+      this.emitFile({ type: 'asset', fileName: 'events/config.js', source })
+    },
+  }
+}
+
+/**
+ * Dev only: `POST /__media/upload?slug=&field=&name=` with the raw file as body
+ * saves it to `public/events/{slug}/assets/media/` and answers `{ path }`, the
+ * relative path the event field stores (Hadiah & Media, #A.4). A production
+ * build has no server to write to, so the form hides the upload button there.
+ */
+function mediaUpload(): Plugin {
+  const reply = (res: ServerResponse, status: number, body: object) =>
+    res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8' }).end(JSON.stringify(body))
+
+  const middleware = (req: IncomingMessage, res: ServerResponse, next: () => void) => {
+    const url = new URL(req.url ?? '', 'http://localhost')
+    if (url.pathname !== '/__media/upload') return next()
+    if (req.method !== 'POST') return reply(res, 405, { message: 'Gunakan POST' })
+
+    const q = (k: string) => url.searchParams.get(k) ?? ''
+    const slug = q('slug')
+    const field = q('field') as MediaField
+    const name = q('name')
+    const declared = Number(req.headers['content-length'])
+    const invalid = checkMedia(slug, field, name, Number.isFinite(declared) ? declared : undefined)
+    if (invalid) return reply(res, 400, { message: invalid })
+
+    const eventDir = `${publicDir}/events/${slug}`
+    if (!existsSync(`${eventDir}/index.html`)) {
+      return reply(res, 404, { message: `Folder template public/events/${slug}/ belum ada` })
+    }
+    const dir = `${eventDir}/${MEDIA_DIR}`
+    mkdirSync(dir, { recursive: true })
+    const file = mediaFileName(field, name)
+    const target = `${dir}/${file}`
+
+    // Stream to disk; past the limit (a missing or lying Content-Length) drop the partial file.
+    const max = MEDIA_FIELDS[field].maxBytes
+    let size = 0
+    let failed = false
+    const out = createWriteStream(target)
+    const fail = (status: number, message: string) => {
+      if (failed) return
+      failed = true
+      req.unpipe(out)
+      out.destroy()
+      rmSync(target, { force: true })
+      reply(res, status, { message })
+    }
+    req.on('data', (chunk: Buffer) => {
+      size += chunk.length
+      if (size > max) fail(413, `File maksimal ${max / 1024 / 1024} MB`)
+    })
+    req.on('error', () => fail(400, 'Unggahan terputus'))
+    out.on('error', (e) => fail(500, `Gagal menyimpan file: ${e.message}`))
+    out.on('finish', () => {
+      if (failed) return
+      if (!size) return fail(400, 'File kosong')
+      reply(res, 200, { path: `${MEDIA_DIR}/${file}` })
+    })
+    req.pipe(out)
+  }
+  return {
+    name: 'media-upload',
+    apply: 'serve',
+    configureServer: (server) => void server.middlewares.use(middleware),
+  }
+}
+
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
+    invitationConfig(mode),
     publicInvitations(),
+    mediaUpload(),
     react(),
     babel({ presets: [reactCompilerPreset()] }),
     tailwindcss(),
@@ -44,4 +134,4 @@ export default defineConfig({
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
-})
+}))

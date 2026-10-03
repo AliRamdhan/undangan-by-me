@@ -1,15 +1,17 @@
 /*
  * Invitation page template. For a new event, copy this folder and change
- * <body data-slug> in index.html. Content comes from the Apps Script Web App:
+ * <body data-event> (01_Event.ID) and data-slug in index.html. Event data comes
+ * from the Apps Script Web App, so edits on /admin/events/{ID}/event show here:
  * see docs/URL-CONTRACT.md § 7 (Public invitation read).
  *
  * Guest link: /events/{slug}/?to={nama}&pin={pin}
  */
 
 const CONFIG = {
-  // Apps Script /exec URL. Public by design — never put the admin key here.
-  // Empty → render SAMPLE (this event's own content), for design and local dev.
-  API_URL: '',
+  // Apps Script /exec URL, set by ../config.js (Vite, from VITE_APPS_SCRIPT_URL).
+  // Public by design — never put an admin token here.
+  // Empty → render LOCAL (this event's own content), for design and local dev.
+  API_URL: window.INVITATION_API || '',
 }
 
 const TZ_OFFSET = { WIB: 7, WITA: 8, WIT: 9 }
@@ -22,7 +24,9 @@ const BULAN = [
 const ALAMAT = 'Jl. Masjid Raya RT 03 RW 06 No. 38, Kecamatan Larangan, Kelurahan Larangan Selatan, Tangerang.'
 const MAPS = 'https://maps.app.goo.gl/6JcDw9zS62NNYCoY7?g_st=ic'
 
-const SAMPLE = {
+// This event's own content. The admin form does not manage photos, the story,
+// the gallery or the song title, so those always come from here (see merge()).
+const LOCAL = {
   event: {
     v: 1,
     slug: 'fidaeno',
@@ -171,15 +175,41 @@ function toast(text) {
 
 // ---------- data ----------
 
-async function load(slug, pin) {
-  if (!CONFIG.API_URL) return SAMPLE
+async function load(eventId, slug, pin) {
+  if (!CONFIG.API_URL) return LOCAL
   const url = new URL(CONFIG.API_URL)
-  url.search = new URLSearchParams({ action: 'invitation', slug, pin }).toString()
+  // By ID first: it survives a slug rename in the admin.
+  const by = eventId ? { id: eventId } : { slug }
+  url.search = new URLSearchParams({ path: 'invitation', ...by, pin }).toString()
   // GET keeps this a simple request: Apps Script cannot answer a CORS preflight.
   const res = await fetch(url, { redirect: 'follow' })
   const env = await res.json()
   if (!env.ok) throw new Error(env.code)
-  return env.data
+  return { event: merge(LOCAL.event, env.data.event), guest: env.data.guest }
+}
+
+const filled = (v) => (Array.isArray(v) ? v.length > 0 : v != null && String(v).trim() !== '')
+const pick = (remote, local) => (filled(remote) ? remote : local)
+
+// The server is the source of truth for everything it sends, blanks included
+// (a cleared gift hides the gift section). Template-only content — photos,
+// story, gallery, song title — and blank music/cover fall back to LOCAL.
+function merge(local, remote) {
+  const person = (k) => ({ ...remote.couple?.[k], foto: pick(remote.couple?.[k]?.foto, local.couple[k].foto) })
+  const lm = local.media
+  const rm = remote.media || {}
+  return {
+    ...remote,
+    couple: { ...remote.couple, pria: person('pria'), wanita: person('wanita') },
+    media: {
+      musik: pick(rm.musik, lm.musik),
+      judul_musik: pick(rm.judul_musik, lm.judul_musik),
+      cover: pick(rm.cover, lm.cover),
+      foto_header: pick(rm.foto_header, lm.foto_header),
+    },
+    story: filled(remote.story?.teks) ? remote.story : local.story,
+    gallery: pick(remote.gallery, local.gallery),
+  }
 }
 
 // ---------- render ----------
@@ -463,7 +493,8 @@ async function init() {
   const params = new URLSearchParams(location.search)
   const btn = $('#open-btn')
   try {
-    const data = await load(document.body.dataset.slug, params.get('pin') || '')
+    const { event: eventId, slug } = document.body.dataset
+    const data = await load(eventId, slug, params.get('pin') || '')
     render(data, params)
     $('[data-label]', btn).textContent = 'Buka detail undangan'
     btn.disabled = false

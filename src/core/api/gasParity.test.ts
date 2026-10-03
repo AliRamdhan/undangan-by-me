@@ -156,6 +156,7 @@ describe('01_Http.gs + 02_Router.gs', () => {
       opts: { role: 'SUPER_ADMIN', lock: true },
     })
     expect(match('GET', 'health')).toMatchObject({ handler: 'handleHealth_', opts: { auth: false } })
+    expect(match('GET', 'invitation')).toMatchObject({ handler: 'handleInvitation_', opts: { auth: false } })
     expect(match('POST', 'event/x/guests/bulk-delete')).toMatchObject({ handler: 'handleBulkDeleteGuests_' })
     expect(match('PATCH', 'event/x/guests/g2')).toMatchObject({ handler: 'handlePatchGuest_', params: { id: 'g2' } })
     expect(match('POST', 'event/x/render/draft')).toMatchObject({ handler: 'handleRenderDraft_' })
@@ -542,6 +543,28 @@ describe('handlers (in-memory sheet)', () => {
 
     expect(send('POST', 'auth/logout', { token: op }).ok).toBe(true)
     expect(send('GET', 'auth/me', { token: op }).code).toBe('AUTH')
+  })
+
+  it('serves the public invitation by event ID or slug, with the guest by PIN', () => {
+    const { send } = setup()
+    const [g0] = SEED_GUESTS
+    const res = send('GET', 'invitation', { id: EVENT_ID, pin: g0.PIN })
+    expect(res).toMatchObject({ ok: true, data: { guest: { gelar: g0.Gelar, nama: g0.Nama } } })
+    const ev = res.data.event
+    expect(ev).toMatchObject({ slug: SEED_META.event.slug, tanggal_utama: SEED_META.event.tanggal_utama })
+    expect(ev.sesi).toHaveLength(SEED_META.event.sesi.length)
+    // Render fields only: no IDs, contacts, capacities or RSVP endpoint.
+    for (const k of ['id', 'domain', 'cs', 'kapasitas', 'batas_rsvp', 'tanggal_pengingat']) expect(ev).not.toHaveProperty(k)
+    expect(ev.couple.pria).toEqual({ panggilan: expect.any(String), lengkap: expect.any(String), ortu: expect.any(String) })
+    expect(ev.sesi[0]).not.toHaveProperty('id')
+
+    expect(send('GET', 'invitation', { slug: SEED_META.event.slug }).data).toEqual({ event: ev, guest: null })
+    expect(send('GET', 'invitation', { id: EVENT_ID, pin: 'nope' }).data.guest).toBeNull()
+    // A PIN of another event's guest does not resolve here.
+    expect(send('GET', 'invitation', { id: EVENT_ID, pin: SEED_GUESTS[3].PIN }).data.guest).toBeNull()
+    expect(send('GET', 'invitation', { id: 'nope' }).code).toBe('NOT_FOUND')
+    expect(send('GET', 'invitation', { slug: 'nope' }).code).toBe('NOT_FOUND')
+    expect(send('GET', 'invitation').code).toBe('NOT_FOUND')
   })
 
   it('changes a password and revokes the other sessions', () => {

@@ -1,8 +1,8 @@
 import { HP_PATTERN, normalizePhone } from './phone'
+import { SLUG_PATTERN } from './slug'
 import type { EventInfo, Person, Session } from './types'
 
-/** `slug` must start with a letter — the same constraint the invitation site's route carries. */
-export const SLUG_PATTERN = /^[a-z][a-z0-9-]*$/
+export { SLUG_PATTERN }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
