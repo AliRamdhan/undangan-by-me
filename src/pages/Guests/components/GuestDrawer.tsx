@@ -275,10 +275,12 @@ export function GuestDrawer({
                   <Hint error={showErr('Q_S2')} />
                 </Field>
                 */}
+                {/* HIDDEN(sementara): Meja
                 <Field>
                   <FieldLabel htmlFor={fid('meja')}>Meja</FieldLabel>
                   <Input id={fid('meja')} value={form.Meja} onChange={set('Meja')} />
                 </Field>
+                */}
               </div>
             </FieldSet>
 
@@ -289,11 +291,13 @@ export function GuestDrawer({
                 <Textarea id={fid('note')} rows={2} value={form.Note_Unik} onChange={set('Note_Unik')} />
                 <FieldDescription>Masuk ke pesan lewat {'{{tamu.note_unik}}'}</FieldDescription>
               </Field>
+              {/* HIDDEN(sementara): Catatan internal
               <Field>
                 <FieldLabel htmlFor={fid('catatan')}>Catatan internal</FieldLabel>
                 <Textarea id={fid('catatan')} rows={2} value={form.Catatan} onChange={set('Catatan')} />
                 <FieldDescription>Tidak pernah dikirim ke tamu</FieldDescription>
               </Field>
+              */}
             </FieldSet>
 
             {!isNew && guest && (

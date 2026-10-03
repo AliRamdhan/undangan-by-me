@@ -131,20 +131,20 @@ describe('csv', () => {
     const csv = serializeCsv([['=HYPERLINK("x")', '+628123456789', '+cmd', '@SUM(1)']])
     expect(parseCsv(csv)[0]).toEqual([`'=HYPERLINK("x")`, '+628123456789', `'+cmd`, `'@SUM(1)`])
   })
-  it('imports Gelar…Email, keeping HP as a string and leaving PIN for generatePins', () => {
-    const text = `\uFEFF${IMPORT_COLUMNS.join(',')}\r\nBapak,Budi,0812 3456 789,\n`
+  it('imports Gelar, Nama, HP, keeping HP as a string and leaving PIN for generatePins', () => {
+    const text = `\uFEFF${IMPORT_COLUMNS.join(',')}\r\nBapak,Budi,0812 3456 789\n`
     const { rows, errors } = parseImport(text)
     expect(errors).toEqual([])
     expect(rows[0]).toMatchObject({ PIN: '', Gelar: 'Bapak', HP: '0812 3456 789', Nama: 'Budi' })
   })
   it('gives hidden columns the new-guest defaults', () => {
     // HIDDEN(sementara): Akses/Grup/Sisi/Q_S1/Q_S2 are not imported
-    const { rows } = parseImport(`${IMPORT_COLUMNS.join(',')}\n,Budi,,`)
+    const { rows } = parseImport(`${IMPORT_COLUMNS.join(',')}\n,Budi,`)
     expect(rows[0]).toMatchObject({ Akses: 'REGULAR', Grup: '', Sisi: '', Q_S1: 0, Q_S2: 1 })
   })
   it('rejects a reordered header', () => {
     const header = [...IMPORT_COLUMNS]
-    ;[header[2], header[3]] = [header[3], header[2]]
+    ;[header[1], header[2]] = [header[2], header[1]]
     const { rows, errors } = parseImport(`${header.join(',')}\nx`)
     expect(rows).toEqual([])
     expect(errors[0]).toMatch(/Header harus persis/)

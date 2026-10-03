@@ -587,7 +587,7 @@ describe('handlers (in-memory sheet)', () => {
     expect(row).toMatchObject({ ID: created.ID, Event: EVENT_ID, No: 6, PIN: created.PIN, Link_Undangan: created.Link_Undangan })
 
     // Import + generate-pins + normalize-phones + check.
-    expect(send('POST', `${E}/guests/import`, { token, rows: [{ PIN: '', Gelar: 'Ibu', Nama: 'Imp', HP: '0812 1111 2222', Email: '' }] }).data).toBe(1)
+    expect(send('POST', `${E}/guests/import`, { token, rows: [{ PIN: '', Gelar: 'Ibu', Nama: 'Imp', HP: '0812 1111 2222', Email: '' }] }).data).toEqual({ added: 1, updated: 0 })
     expect(send('POST', `${E}/guests/generate-pins`, { token }).data).toBe(3)
     expect(send('POST', `${E}/guests/normalize-phones`, { token }).data).toBeGreaterThan(0)
     const after = send('GET', `${E}/guests`, { token }).data as Guest[]
@@ -603,6 +603,32 @@ describe('handlers (in-memory sheet)', () => {
     const rest = send('GET', `${E}/guests`, { token }).data as Guest[]
     expect(rest.map((g) => g.No)).toEqual([1, 2, 3, 4])
     expect(map.get('02_Tamu')!.objects().filter((r) => r.Event === 'other')).toHaveLength(1)
+  })
+
+  it('imports by HP: a known number updates that guest, blank cells keep its data', () => {
+    const { send, login } = setup()
+    const token = login()
+    const before = send('GET', `${E}/guests`, { token }).data as Guest[]
+    const bambang = before[0]
+    expect(bambang.HP).toBe('+6281211110001')
+    const row = (f: Record<string, string>) => ({ PIN: '', Gelar: '', Nama: '', HP: '', Email: '', ...f })
+    const res = send('POST', `${E}/guests/import`, {
+      token,
+      rows: [
+        row({ Gelar: '', Nama: 'Bambang Baru', HP: '0812-1111-0001' }), // existing, other format; Gelar blank → kept
+        row({ Gelar: 'Sdr.', Nama: 'Anyar', HP: '081277778888' }), // new
+        row({ Gelar: 'Bapak', Nama: '', HP: '6281277778888' }), // same file, same HP → merges into the new row
+        row({ Nama: 'Tanpa HP' }), // no HP → always new
+        row({ Nama: 'Tanpa HP' }),
+        row({ Nama: before[1].Nama, HP: before[1].HP }), // identical → not counted as updated
+      ],
+    }).data
+    expect(res).toEqual({ added: 3, updated: 1 })
+    const after = send('GET', `${E}/guests`, { token }).data as Guest[]
+    expect(after).toHaveLength(before.length + 3)
+    expect(after[0]).toMatchObject({ ID: bambang.ID, PIN: bambang.PIN, Gelar: bambang.Gelar, Nama: 'Bambang Baru', HP: bambang.HP, Meja: bambang.Meja })
+    expect(after.filter((g) => g.Nama === 'Anyar')).toMatchObject([{ Gelar: 'Bapak', HP: '081277778888' }])
+    expect(after.filter((g) => g.Nama === 'Tanpa HP')).toHaveLength(2)
   })
 
   it('gives a row typed into the sheet without an ID a new one on read', () => {

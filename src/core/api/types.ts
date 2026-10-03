@@ -157,7 +157,11 @@ export interface UndanganApi {
   /** `id: null` appends a new guest; the backend assigns its ID and PIN. */
   saveGuest(id: string | null, fields: Partial<GuestInput>): Promise<Guest>
   deleteGuests(ids: string[]): Promise<number>
-  importGuests(rows: ImportRow[]): Promise<number>
+  /**
+   * Upserts by HP (normalised): a matching guest takes the row's non-blank
+   * Gelar/Nama/Email, other rows are appended. `updated` counts guests that changed.
+   */
+  importGuests(rows: ImportRow[]): Promise<{ added: number; updated: number }>
   /** Tamu → Generate PIN (yang kosong). Returns how many were filled. */
   generatePins(): Promise<number>
   /** Tamu → Normalisasi Nomor HP. Returns how many changed. */

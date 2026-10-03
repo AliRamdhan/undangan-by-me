@@ -232,7 +232,7 @@ function renderCalendar(date) {
     const el = document.createElement('div')
     el.className = `relative flex h-20 items-center justify-center border-t-2 border-olive/70 ${i < 2 ? 'border-r-2' : ''}`
     el.innerHTML = main
-      ? `<svg class="absolute h-20 w-20 text-pink-deep" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11z"/></svg>
+      ? `<svg class="heart-beat absolute h-20 w-20 text-pink-deep" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11z"/></svg>
          <b class="relative -mt-2 text-3xl font-bold italic text-white">${tgl}</b>`
       : `<b class="text-3xl font-bold italic text-pink-deep">${tgl}</b>`
     strip.append(el)
@@ -286,6 +286,7 @@ function renderStory(story) {
     .forEach((p) => {
       const el = document.createElement('p')
       put(el, p.trim())
+      el.dataset.aos = 'fade-up'
       box.append(el)
     })
 }
@@ -294,7 +295,11 @@ function renderVenue(sesi, tz) {
   if (!sesi.length) return ($('#location').hidden = true)
 
   const list = $('#session-list')
-  sesi.forEach((s) => list.append(fill(clone('tpl-session'), { ...s, $tanggal: fmtTanggal(s.tanggal), $jam: fmtJam(s, tz) })))
+  sesi.forEach((s, i) => {
+    const el = fill(clone('tpl-session'), { ...s, $tanggal: fmtTanggal(s.tanggal), $jam: fmtJam(s, tz) })
+    el.dataset.aos = i % 2 ? 'fade-left' : 'fade-right'
+    list.append(el)
+  })
 
   // Sessions at the same venue share one "Lokasi" block.
   const venues = []
@@ -308,7 +313,9 @@ function renderVenue(sesi, tz) {
   const vlist = $('#venue-list')
   venues.forEach((v) => {
     const $judul = venues.length > 1 ? `Lokasi ${v.labels.join(' & ')}` : 'Lokasi'
-    vlist.append(fill(clone('tpl-venue'), { ...v, $judul }))
+    const el = fill(clone('tpl-venue'), { ...v, $judul })
+    el.dataset.aos = 'fade-up'
+    vlist.append(el)
   })
 }
 
@@ -340,6 +347,9 @@ function renderGallery(photos) {
     btn.type = 'button'
     btn.className = 'aspect-[3/4] overflow-hidden rounded-md shadow-sm'
     btn.setAttribute('aria-label', `Buka foto ${i + 1}`)
+    // Tiles pop in left to right, one row at a time.
+    btn.dataset.aos = 'zoom-in'
+    btn.dataset.aosDelay = (i % 3) * 120
     const img = document.createElement('img')
     img.src = src
     img.alt = ''
@@ -418,6 +428,7 @@ function setupMusic(src) {
 // ---------- interactions ----------
 
 function openInvitation() {
+  startAnimations()
   const modal = $('#greeting')
   modal.classList.add('closing')
   document.body.classList.remove('locked')
@@ -430,17 +441,22 @@ function openInvitation() {
   }
 }
 
-function observeReveal() {
-  const io = new IntersectionObserver(
-    (entries) =>
-      entries.forEach((e) => {
-        if (!e.isIntersecting) return
-        e.target.classList.add('in')
-        io.unobserve(e.target)
-      }),
-    { threshold: 0.1 },
-  )
-  $$('.reveal').forEach((el) => io.observe(el))
+// Starts scroll animations when the cover opens, so the header animates as the cover fades.
+function startAnimations() {
+  if (!window.AOS) {
+    // CDN failed: aos.css may still hide [data-aos] elements, so show everything.
+    $$('[data-aos]').forEach((el) => el.removeAttribute('data-aos'))
+    return
+  }
+  AOS.init({
+    once: true,
+    duration: 900,
+    easing: 'ease-out-cubic',
+    offset: 60,
+    disable: () => matchMedia('(prefers-reduced-motion: reduce)').matches,
+  })
+  // Photos without a fixed aspect ratio shift the layout when they load.
+  $$('main img').forEach((img) => img.complete || img.addEventListener('load', () => AOS.refresh(), { once: true }))
 }
 
 async function init() {
@@ -449,7 +465,6 @@ async function init() {
   try {
     const data = await load(document.body.dataset.slug, params.get('pin') || '')
     render(data, params)
-    observeReveal()
     $('[data-label]', btn).textContent = 'Buka detail undangan'
     btn.disabled = false
     btn.addEventListener('click', openInvitation, { once: true })

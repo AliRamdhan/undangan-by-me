@@ -124,7 +124,9 @@ export function parseImportTable(table: readonly (readonly string[])[]): ImportR
       Gelar: get('Gelar'),
       Nama: get('Nama'),
       HP: get('HP'),
-      Email: get('Email'),
+      // HIDDEN(sementara): Email is not imported
+      // Email: get('Email'),
+      Email: '',
       // HIDDEN(sementara): Akses/Grup/Sisi/Q_S1/Q_S2 are not imported; same defaults
       // as a new guest in GuestDrawer.
       // Akses: get('Akses').toUpperCase(),

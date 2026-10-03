@@ -110,7 +110,7 @@ export class AppsScriptEventApi implements UndanganApi {
     return this.rest.request<number>('POST', `${this.base}/guests/bulk-delete`, { body: { ids } })
   }
   importGuests(rows: ImportRow[]) {
-    return this.rest.request<number>('POST', `${this.base}/guests/import`, { body: { rows } })
+    return this.rest.request<{ added: number; updated: number }>('POST', `${this.base}/guests/import`, { body: { rows } })
   }
   generatePins() {
     return this.rest.request<number>('POST', `${this.base}/guests/generate-pins`)

@@ -50,7 +50,7 @@ export const TAMU_COLUMNS: readonly Column[] = [
   // c('Kirim_Error', 'U', 'script', 'kirim', 180),
   // c('Meja', 'V', 'manual', 'operasional', 72),
   c('Note_Unik', 'W', 'manual', 'operasional', 180),
-  c('Catatan', 'X', 'manual', 'operasional', 180),
+  // HIDDEN(sementara): c('Catatan', 'X', 'manual', 'operasional', 180),
   // c('HP_Valid', 'Y', 'formula', 'otomatis', 110, true),
   c('Link_Undangan', 'Z', 'formula', 'otomatis', 240),
   c('Preview_Pesan', 'AA', 'script', 'otomatis', 260),
@@ -75,7 +75,8 @@ export const SHEET_COLUMNS = [
   // HIDDEN(sementara): 'Status_RSVP', 'RSVP_S1', 'RSVP_S2', 'RSVP_Waktu', 'Nama_Pax', 'Pesan_Tamu',
   // HIDDEN(sementara): 'Status_Kirim', 'Kirim_Terakhir', 'Kirim_Count', 'Kirim_Error',
   // HIDDEN(sementara): 'Meja',
-  'Note_Unik', 'Catatan',
+  'Note_Unik',
+  // HIDDEN(sementara): 'Catatan',
   // HIDDEN(sementara): 'HP_Valid',
   'Link_Undangan', 'Preview_Pesan', 'Link_WA',
 ] as const satisfies readonly GuestKey[]
@@ -86,7 +87,7 @@ export const IMPORT_COLUMNS = [
   'Gelar',
   'Nama',
   'HP',
-  'Email',
+  // HIDDEN(sementara): 'Email',
   // HIDDEN(sementara): segmentasi and quota — see parseImportTable for their defaults
   // 'Akses',
   // 'Grup',

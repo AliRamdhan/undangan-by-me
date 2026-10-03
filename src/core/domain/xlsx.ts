@@ -109,7 +109,7 @@ export async function exportGuestsXlsx(guests: readonly Guest[]): Promise<Blob> 
 const TEMPLATE_WIDTH: Partial<Record<(typeof IMPORT_COLUMNS)[number], number>> = {
   Nama: 28,
   HP: 18,
-  Email: 26,
+  // HIDDEN(sementara): Email: 26,
   // HIDDEN(sementara): Grup: 18,
 }
 
@@ -146,6 +146,7 @@ export async function importTemplateXlsx(): Promise<Blob> {
     '',
     `• Isi sheet "02_Tamu_import" mulai baris 2. Jangan ubah, hapus atau urutkan ulang header (${IMPORT_COLUMNS.join(', ')}).`,
     '• PIN tidak perlu diisi — dibuat otomatis saat import.',
+    '• Jika HP sudah terdaftar, tamu itu diperbarui (bukan ditambah). Sel kosong tidak menimpa data lama.',
     '• HP boleh 08xx, 628xx atau +628xx; jalankan Normalisasi HP setelah import.',
     // HIDDEN(sementara): Akses/Sisi/quota columns are hidden
     // `• Akses: ${AKSES.join(' / ')}. Sisi: ${SISI.join(' / ')}.`,

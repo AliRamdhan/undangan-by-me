@@ -49,16 +49,21 @@ export function ImportDialog({ open, onClose }: { open: boolean; onClose: () => 
 
   const submit = async () => {
     if (!result?.rows.length) return
-    const n = await run('Import', (api) => api.importGuests(result.rows))
-    if (!n) return
-    // A separate run: if only this step fails the import still stands, and the
-    // Generate PIN button fills the gap — retrying the import would duplicate rows.
-    const pins = await run('Generate PIN', (api) => api.generatePins())
-    toast.success(
-      pins === undefined
-        ? `${n} tamu diimpor. PIN gagal dibuat — jalankan Generate PIN.`
-        : `${n} tamu diimpor, PIN dibuat otomatis. Lanjut: Normalisasi HP → Cek Duplikat.`,
-    )
+    const res = await run('Import', (api) => api.importGuests(result.rows))
+    if (!res) return
+    const summary = `${res.added} tamu baru, ${res.updated} diperbarui`
+    if (!res.added) {
+      toast.success(`${summary}.`)
+    } else {
+      // A separate run: if only this step fails the import still stands, and the
+      // Generate PIN button fills the gap.
+      const pins = await run('Generate PIN', (api) => api.generatePins())
+      toast.success(
+        pins === undefined
+          ? `${summary}. PIN gagal dibuat — jalankan Generate PIN.`
+          : `${summary}, PIN dibuat otomatis. Lanjut: Normalisasi HP → Cek Duplikat.`,
+      )
+    }
     reset()
     onClose()
   }
@@ -70,7 +75,8 @@ export function ImportDialog({ open, onClose }: { open: boolean; onClose: () => 
           <DialogTitle>Import Tamu dari CSV / Excel</DialogTitle>
           <DialogDescription>
             Header harus persis dan berurutan: <span className="font-mono text-foreground">{IMPORT_COLUMNS.join(', ')}</span>.
-            <b>PIN</b> dibuat otomatis untuk setiap tamu.
+            <b>PIN</b> dibuat otomatis untuk setiap tamu. Tamu dengan <b>HP yang sudah ada</b> diperbarui — sel
+            kosong tidak menimpa data lama.
             {/* HIDDEN(sementara): Akses: VIP / KELUARGA / REGULAR / PUBLIC. */}
           </DialogDescription>
         </DialogHeader>
@@ -94,7 +100,7 @@ export function ImportDialog({ open, onClose }: { open: boolean; onClose: () => 
             aria-label="Isi CSV"
             rows={5}
             className="font-mono"
-            placeholder={`${IMPORT_COLUMNS.join(',')}\nBapak,Budi Santoso,0812 3456 789,`}
+            placeholder={`${IMPORT_COLUMNS.join(',')}\nBapak,Budi Santoso,0812 3456 789`}
             value={text}
             onChange={(e) => {
               setFileName('')

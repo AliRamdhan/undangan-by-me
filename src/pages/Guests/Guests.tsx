@@ -348,7 +348,7 @@ export function Guests() {
             <EmptyHeader>
               <EmptyTitle>Belum ada tamu</EmptyTitle>
               <EmptyDescription>
-                Tambah satu per satu, atau <b>Import</b> CSV/Excel dengan kolom Gelar…Email. PIN dibuat otomatis.
+                Tambah satu per satu, atau <b>Import</b> CSV/Excel dengan kolom Gelar, Nama, HP. PIN dibuat otomatis.
               </EmptyDescription>
             </EmptyHeader>
           </Empty>
