@@ -413,6 +413,9 @@ class FakeSheet {
   deleteRows(start: number, n: number) {
     this.data.splice(start - 1, n)
   }
+  insertColumnAfter(c: number) {
+    this.insertColumnBefore(c + 1)
+  }
   insertColumnBefore(c: number) {
     this.data.forEach((r) => r.splice(c - 1, 0, ''))
     this.textCols = new Set([...this.textCols].map((x) => (x >= c ? x + 1 : x)))
@@ -543,6 +546,23 @@ describe('handlers (in-memory sheet)', () => {
 
     expect(send('POST', 'auth/logout', { token: op }).ok).toBe(true)
     expect(send('GET', 'auth/me', { token: op }).code).toBe('AUTH')
+  })
+
+  it('adds Judul_Musik to a legacy 01_Event on save and serves the song title', () => {
+    const { map, send, login } = setup()
+    const sheet = map.get('01_Event')!
+    // A workbook made before the column existed.
+    const col = sheet.data[0].indexOf('Judul_Musik')
+    sheet.data.forEach((r) => r.splice(col, 1))
+    expect(send('GET', 'invitation', { id: EVENT_ID }).data.event.media.judul_musik).toBe('')
+
+    const token = login()
+    const event = { ...SEED_META.event, media: { ...SEED_META.event.media, judul_musik: 'Kita Usahakan Rumah Itu' } }
+    const saved = send('PUT', E, { token, event }).data
+    expect(saved.event.media.judul_musik).toBe('Kita Usahakan Rumah Itu')
+    expect(sheet.data[0]).toEqual([...schema.EVENT_COLUMNS])
+    expect(sheet.objects()[0]).toMatchObject({ Musik: SEED_META.event.media.musik, Judul_Musik: 'Kita Usahakan Rumah Itu', Cover: SEED_META.event.media.cover })
+    expect(send('GET', 'invitation', { id: EVENT_ID }).data.event.media.judul_musik).toBe('Kita Usahakan Rumah Itu')
   })
 
   it('serves the public invitation by event ID or slug, with the guest by PIN', () => {

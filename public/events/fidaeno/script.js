@@ -24,8 +24,8 @@ const BULAN = [
 const ALAMAT = 'Jl. Masjid Raya RT 03 RW 06 No. 38, Kecamatan Larangan, Kelurahan Larangan Selatan, Tangerang.'
 const MAPS = 'https://maps.app.goo.gl/6JcDw9zS62NNYCoY7?g_st=ic'
 
-// This event's own content. The admin form does not manage photos, the story,
-// the gallery or the song title, so those always come from here (see merge()).
+// This event's own content. The admin form does not manage photos, the story or
+// the gallery, so those come from here; the rest is the fallback (see merge()).
 const LOCAL = {
   event: {
     v: 1,
@@ -193,7 +193,7 @@ const pick = (remote, local) => (filled(remote) ? remote : local)
 
 // The server is the source of truth for everything it sends, blanks included
 // (a cleared gift hides the gift section). Template-only content — photos,
-// story, gallery, song title — and blank music/cover fall back to LOCAL.
+// story, gallery — and a blank music, song title or cover fall back to LOCAL.
 function merge(local, remote) {
   const person = (k) => ({ ...remote.couple?.[k], foto: pick(remote.couple?.[k]?.foto, local.couple[k].foto) })
   const lm = local.media

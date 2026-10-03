@@ -166,7 +166,7 @@ export interface EventInfo {
   batas_rsvp: string
   sesi: Session[]
   gift: { bank: string; atas_nama: string; norek: string; qris: string }
-  media: { musik: string; cover: string }
+  media: { musik: string; judul_musik: string; cover: string }
   cs: { nama: string; hp: string }
   kapasitas: { s1: number; s2: number }
 }

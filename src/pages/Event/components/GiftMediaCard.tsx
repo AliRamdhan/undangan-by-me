@@ -1,6 +1,6 @@
 import { Upload04Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { useRef, useState } from 'react'
+import { Fragment, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { Card, CardContent } from '@/components/ui/card'
 import { FieldLegend, FieldSet } from '@/components/ui/field'
@@ -13,7 +13,7 @@ import type { EventInfo } from '@/core/domain/types'
 import { FormField, SectionHeader, TextField, type SectionProps } from './form'
 
 type GiftKey = Exclude<keyof EventInfo['gift'], 'qris'>
-type MediaKey = keyof EventInfo['media']
+type MediaKey = Exclude<keyof EventInfo['media'], 'judul_musik'>
 
 const GIFT: { key: GiftKey; label: string; placeholder: string; mono?: boolean }[] = [
   { key: 'bank', label: 'Bank', placeholder: 'BCA' },
@@ -60,15 +60,26 @@ export function GiftMediaCard({ draft, update }: SectionProps) {
           <FieldLegend>Media</FieldLegend>
           <div className="grid grid-cols-1 gap-y-4">
             {MEDIA.map((f) => (
-              <MediaField
-                key={f.key}
-                field={f.key}
-                label={f.label}
-                placeholder={f.placeholder}
-                slug={draft.slug}
-                value={draft.media[f.key]}
-                onChange={(v) => update((d) => void (d.media[f.key] = v))}
-              />
+              <Fragment key={f.key}>
+                <MediaField
+                  field={f.key}
+                  label={f.label}
+                  placeholder={f.placeholder}
+                  slug={draft.slug}
+                  value={draft.media[f.key]}
+                  onChange={(v) => update((d) => void (d.media[f.key] = v))}
+                />
+                {f.key === 'musik' && (
+                  <TextField
+                    id="ev-media-judul_musik"
+                    label="Nama musik"
+                    placeholder="Kita Usahakan Rumah Itu"
+                    hint="Judul lagu yang tampil di pemutar musik undangan"
+                    value={draft.media.judul_musik}
+                    onChange={(e) => update((d) => void (d.media.judul_musik = e.target.value))}
+                  />
+                )}
+              </Fragment>
             ))}
           </div>
         </FieldSet>

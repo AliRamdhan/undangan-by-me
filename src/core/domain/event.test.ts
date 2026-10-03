@@ -15,7 +15,7 @@ describe('withEventDefaults', () => {
     const e = withEventDefaults(legacy)
     expect(e.couple.pria).toMatchObject({ panggilan: 'A', hp: '', email: '' })
     expect(e.gift).toEqual({ bank: '', atas_nama: '', norek: '', qris: '' })
-    expect(e.media).toEqual({ musik: '', cover: '' })
+    expect(e.media).toEqual({ musik: '', judul_musik: '', cover: '' })
     expect(e.tanggal_pengingat).toBe('')
     expect(e.sesi[0]).toMatchObject({ kode: 'S1', label: 'Akad', mulai: '' })
   })

@@ -50,7 +50,7 @@ export function withEventDefaults(e: DeepPartial<EventInfo>): EventInfo {
     batas_rsvp: e.batas_rsvp ?? '',
     sesi: (e.sesi ?? []).map((s, i) => ({ ...blankSession(`S${i + 1}`), ...s }) as Session),
     gift: { bank: '', atas_nama: '', norek: '', qris: '', ...e.gift },
-    media: { musik: '', cover: '', ...e.media },
+    media: { musik: '', judul_musik: '', cover: '', ...e.media },
     cs: { nama: '', hp: '', ...e.cs },
     kapasitas: { s1: 0, s2: 0, ...e.kapasitas },
   }
