@@ -646,9 +646,16 @@ describe('handlers (in-memory sheet)', () => {
     const row = map.get('02_Tamu')!.objects().at(-1)!
     expect(row).toMatchObject({ ID: created.ID, Event: EVENT_ID, No: 6, PIN: created.PIN, Link_Undangan: created.Link_Undangan })
 
-    // Import + generate-pins + normalize-phones + check.
-    expect(send('POST', `${E}/guests/import`, { token, rows: [{ PIN: '', Gelar: 'Ibu', Nama: 'Imp', HP: '0812 1111 2222', Email: '' }] }).data).toEqual({ added: 1, updated: 0 })
-    expect(send('POST', `${E}/guests/generate-pins`, { token }).data).toBe(3)
+    // Import assigns PINs (new rows + existing PIN-less guests), keeps set ones; then normalize-phones + check.
+    const before = send('GET', `${E}/guests`, { token }).data as Guest[]
+    expect(before.filter((g) => !g.PIN)).toHaveLength(2)
+    expect(send('POST', `${E}/guests/import`, { token, rows: [{ PIN: '999999', Gelar: 'Ibu', Nama: 'Imp', HP: '0812 1111 2222', Email: '' }] }).data).toEqual({ added: 1, updated: 0 })
+    const imported = send('GET', `${E}/guests`, { token }).data as Guest[]
+    expect(imported.every((g) => PIN_PATTERN.test(g.PIN))).toBe(true)
+    expect(new Set(imported.map((g) => g.PIN)).size).toBe(imported.length)
+    before.filter((g) => g.PIN).forEach((g) => expect(imported.find((x) => x.ID === g.ID)!.PIN).toBe(g.PIN))
+    expect(imported.at(-1)!.PIN).not.toBe('999999')
+    expect(imported.at(-1)!.Link_Undangan).toBe(`https://undangan.by.me/dimas-rara/${imported.at(-1)!.PIN}`)
     expect(send('POST', `${E}/guests/normalize-phones`, { token }).data).toBeGreaterThan(0)
     const after = send('GET', `${E}/guests`, { token }).data as Guest[]
     expect(after.every((g) => PIN_PATTERN.test(g.PIN) && UUID.test(g.ID))).toBe(true)

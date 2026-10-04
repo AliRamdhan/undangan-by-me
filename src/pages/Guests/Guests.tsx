@@ -189,12 +189,6 @@ export function Guests() {
     setTimeout(() => setFlashNo(null), 1800)
   }
 
-  const genPins = async () => {
-    const n = await run('Generate PIN', (api) => api.generatePins())
-    if (n === undefined) return
-    if (n) toast.success(`${n} PIN baru dibuat`)
-    else toast.info('Semua tamu sudah punya PIN')
-  }
   const normalize = async () => {
     const n = await run('Normalisasi HP', (api) => api.normalizePhones())
     if (n === undefined) return
@@ -226,9 +220,6 @@ export function Guests() {
           Tambah Tamu
         </Button>
         <ToolGroup label="Tamu">
-          <Button variant="outline" onClick={genPins} disabled={!!busy}>
-            Generate PIN
-          </Button>
           <Button variant="outline" onClick={normalize} disabled={!!busy}>
             Normalisasi HP
           </Button>

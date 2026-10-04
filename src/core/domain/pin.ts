@@ -14,7 +14,7 @@ function randomPin(): string {
 }
 
 /**
- * `Generate PIN (yang kosong)`: `count` new 6-digit PIN strings, unique among
+ * `count` new 6-digit PIN strings, unique among
  * themselves and against `existing`. Always strings — a PIN may start with 0.
  */
 export function generatePins(count: number, existing: Iterable<string>): string[] {

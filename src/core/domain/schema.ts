@@ -83,7 +83,7 @@ export const SHEET_COLUMNS = [
 
 /** 02_Tamu_import.csv — columns B–K, header text and order are meaningful. */
 export const IMPORT_COLUMNS = [
-  // 'PIN', — generated automatically after import (ImportDialog → generatePins)
+  // 'PIN', — assigned by the backend on import
   'Gelar',
   'Nama',
   'HP',

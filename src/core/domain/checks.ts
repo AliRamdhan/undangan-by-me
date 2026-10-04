@@ -69,7 +69,7 @@ export function cekDuplikat(guests: readonly Guest[]): Issue[] {
 
     if (!g.Nama.trim()) add('NAMA_KOSONG', 'Nama', 'Baris berisi data tetapi Nama kosong')
 
-    if (!g.PIN) add('PIN_KOSONG', 'PIN', 'Jalankan Generate PIN')
+    if (!g.PIN) add('PIN_KOSONG', 'PIN', 'PIN belum ada — import ulang atau tambah ulang tamu ini')
     else if (!PIN_PATTERN.test(g.PIN)) add('PIN_FORMAT', 'PIN', `"${g.PIN}" bukan 6 digit`)
     else if ((pinCount.get(g.PIN) ?? 0) > 1)
       add('PIN_DUPLIKAT', 'PIN', `PIN ${g.PIN} dipakai ${pinCount.get(g.PIN)} tamu`)

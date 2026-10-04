@@ -160,10 +160,9 @@ export interface UndanganApi {
   /**
    * Upserts by HP (normalised): a matching guest takes the row's non-blank
    * Gelar/Nama/Email, other rows are appended. `updated` counts guests that changed.
+   * The backend gives each new guest — and any existing one without — its PIN.
    */
   importGuests(rows: ImportRow[]): Promise<{ added: number; updated: number }>
-  /** Tamu → Generate PIN (yang kosong). Returns how many were filled. */
-  generatePins(): Promise<number>
   /** Tamu → Normalisasi Nomor HP. Returns how many changed. */
   normalizePhones(): Promise<number>
   /** Tamu → Cek Duplikat & Error. */

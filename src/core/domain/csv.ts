@@ -119,7 +119,7 @@ export function parseImportTable(table: readonly (readonly string[])[]): ImportR
     //   return
     // }
     rows.push({
-      // Not in the import file: filled right after import by generatePins.
+      // Not in the import file: assigned by the backend on import.
       PIN: '',
       Gelar: get('Gelar'),
       Nama: get('Nama'),

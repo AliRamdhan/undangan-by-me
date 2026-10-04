@@ -85,7 +85,6 @@ describe('AppsScriptApp — REST transport', () => {
       [() => ev.deleteGuests(['g1']), 'POST', '/event/x/guests/g1', 'DELETE'],
       [() => ev.deleteGuests(['g1', 'g2']), 'POST', '/event/x/guests/bulk-delete'],
       [() => ev.importGuests([]), 'POST', '/event/x/guests/import'],
-      [() => ev.generatePins(), 'POST', '/event/x/guests/generate-pins'],
       [() => ev.normalizePhones(), 'POST', '/event/x/guests/normalize-phones'],
       [() => ev.checkGuests(), 'GET', '/event/x/guests/check'],
       [() => ev.generateLinks(null, 'UNDANGAN'), 'POST', '/event/x/guests/links'],

@@ -111,9 +111,9 @@ export function Dashboard() {
 
   const warnings: { label: string; count: number; detail: string }[] = [
     // HIDDEN(sementara): { label: 'HP bermasalah', count: s.hpBermasalah, detail: 'kosong, format salah, atau duplikat — jalankan Normalisasi HP' },
-    { label: 'PIN kosong', count: s.pinKosong, detail: 'belum punya link undangan — jalankan Generate PIN' },
+    { label: 'PIN kosong', count: s.pinKosong, detail: 'belum punya link undangan' },
     // HIDDEN(sementara): { label: 'PIN duplikat', count: s.pinDuplikat, detail: 'RSVP untuk PIN ini ditolak (DUPLICATE_PIN)' },
-    { label: 'PIN duplikat', count: s.pinDuplikat, detail: 'dua tamu memakai link undangan yang sama — jalankan Generate PIN' },
+    { label: 'PIN duplikat', count: s.pinDuplikat, detail: 'dua tamu memakai link undangan yang sama — hapus salah satu' },
     // HIDDEN(sementara): { label: 'Gagal kirim', count: gagal, detail: 'kirim manual lewat Link WA' },
     // HIDDEN(sementara): { label: 'RSVP melebihi kuota', count: s.lebihKuota.length, detail: s.lebihKuota.map((g) => g.Nama).join(', ') },
   ].filter((w) => w.count > 0)

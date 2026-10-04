@@ -131,7 +131,7 @@ describe('csv', () => {
     const csv = serializeCsv([['=HYPERLINK("x")', '+628123456789', '+cmd', '@SUM(1)']])
     expect(parseCsv(csv)[0]).toEqual([`'=HYPERLINK("x")`, '+628123456789', `'+cmd`, `'@SUM(1)`])
   })
-  it('imports Gelar, Nama, HP, keeping HP as a string and leaving PIN for generatePins', () => {
+  it('imports Gelar, Nama, HP, keeping HP as a string and leaving PIN to the backend', () => {
     const text = `\uFEFF${IMPORT_COLUMNS.join(',')}\r\nBapak,Budi,0812 3456 789\n`
     const { rows, errors } = parseImport(text)
     expect(errors).toEqual([])

@@ -51,19 +51,11 @@ export function ImportDialog({ open, onClose }: { open: boolean; onClose: () => 
     if (!result?.rows.length) return
     const res = await run('Import', (api) => api.importGuests(result.rows))
     if (!res) return
-    const summary = `${res.added} tamu baru, ${res.updated} diperbarui`
-    if (!res.added) {
-      toast.success(`${summary}.`)
-    } else {
-      // A separate run: if only this step fails the import still stands, and the
-      // Generate PIN button fills the gap.
-      const pins = await run('Generate PIN', (api) => api.generatePins())
-      toast.success(
-        pins === undefined
-          ? `${summary}. PIN gagal dibuat — jalankan Generate PIN.`
-          : `${summary}, PIN dibuat otomatis. Lanjut: Normalisasi HP → Cek Duplikat.`,
-      )
-    }
+    toast.success(
+      res.added
+        ? `${res.added} tamu baru (PIN dibuat otomatis), ${res.updated} diperbarui. Lanjut: Normalisasi HP → Cek Duplikat.`
+        : `${res.added} tamu baru, ${res.updated} diperbarui.`,
+    )
     reset()
     onClose()
   }
