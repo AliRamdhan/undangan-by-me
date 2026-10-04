@@ -1,11 +1,11 @@
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import babel from '@rolldown/plugin-babel'
 import tailwindcss from '@tailwindcss/vite'
-import { createWriteStream, existsSync, mkdirSync, rmSync } from 'node:fs'
+import { createReadStream, createWriteStream, existsSync, mkdirSync, rmSync, statSync } from 'node:fs'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { fileURLToPath } from 'node:url'
 import { defineConfig, loadEnv, type Plugin } from 'vite'
-import { checkMedia, MEDIA_DIR, MEDIA_FIELDS, mediaFileName, type MediaField } from './src/core/domain/media.ts'
+import { checkMedia, extOf, MEDIA_DIR, MEDIA_FIELDS, mediaFileName, type MediaField } from './src/core/domain/media.ts'
 
 const publicDir = fileURLToPath(new URL('./public', import.meta.url))
 
@@ -56,18 +56,43 @@ function invitationConfig(mode: string): Plugin {
   }
 }
 
+/** Images the dev server serves straight from disk (see mediaUpload). */
+const MEDIA_TYPES: Record<string, string> = {
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  png: 'image/png',
+  webp: 'image/webp',
+  gif: 'image/gif',
+}
+
 /**
  * Dev only: `POST /__media/upload?slug=&field=&name=` with the raw file as body
  * saves it to `public/events/{slug}/assets/media/` and answers `{ path }`, the
  * relative path the event field stores (Hadiah & Media, #A.4). A production
  * build has no server to write to, so the form hides the upload button there.
+ *
+ * It also serves uploaded images under `/events/{slug}/assets/media/` straight
+ * from disk (audio stays with Vite, which handles range requests): Vite learns
+ * of new public files from its watcher, so for a moment after an upload it
+ * would answer the SPA's index.html and the form's preview would break.
  */
 function mediaUpload(): Plugin {
   const reply = (res: ServerResponse, status: number, body: object) =>
     res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8' }).end(JSON.stringify(body))
 
+  const serveMedia = (url: URL, res: ServerResponse) => {
+    const m = /^\/events\/([a-z0-9-]+)\/assets\/media\/([a-z0-9.-]+)$/.exec(url.pathname)
+    const type = m && MEDIA_TYPES[extOf(m[2])]
+    const file = m && `${publicDir}/events/${m[1]}/${MEDIA_DIR}/${m[2]}`
+    if (!type || !file || !existsSync(file)) return false
+    res.writeHead(200, { 'Content-Type': type, 'Content-Length': statSync(file).size, 'Cache-Control': 'no-cache' })
+    createReadStream(file).pipe(res)
+    return true
+  }
+
   const middleware = (req: IncomingMessage, res: ServerResponse, next: () => void) => {
     const url = new URL(req.url ?? '', 'http://localhost')
+    if (req.method === 'GET' && serveMedia(url, res)) return
     if (url.pathname !== '/__media/upload') return next()
     if (req.method !== 'POST') return reply(res, 405, { message: 'Gunakan POST' })
 

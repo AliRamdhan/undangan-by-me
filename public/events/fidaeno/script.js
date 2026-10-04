@@ -24,8 +24,8 @@ const BULAN = [
 const ALAMAT = 'Jl. Masjid Raya RT 03 RW 06 No. 38, Kecamatan Larangan, Kelurahan Larangan Selatan, Tangerang.'
 const MAPS = 'https://maps.app.goo.gl/6JcDw9zS62NNYCoY7?g_st=ic'
 
-// This event's own content. The admin form does not manage photos, the story or
-// the gallery, so those come from here; the rest is the fallback (see merge()).
+// This event's own content. The admin form does not manage the portraits or the
+// story, so those come from here; the rest (gallery included) is the fallback (see merge()).
 const LOCAL = {
   event: {
     v: 1,

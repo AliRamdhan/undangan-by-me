@@ -51,6 +51,7 @@ export function withEventDefaults(e: DeepPartial<EventInfo>): EventInfo {
     sesi: (e.sesi ?? []).map((s, i) => ({ ...blankSession(`S${i + 1}`), ...s }) as Session),
     gift: { bank: '', atas_nama: '', norek: '', qris: '', ...e.gift },
     media: { musik: '', judul_musik: '', cover: '', ...e.media },
+    gallery: (e.gallery ?? []).filter((s): s is string => typeof s === 'string'),
     cs: { nama: '', hp: '', ...e.cs },
     kapasitas: { s1: 0, s2: 0, ...e.kapasitas },
   }

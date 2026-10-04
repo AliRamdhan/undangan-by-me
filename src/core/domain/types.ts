@@ -167,6 +167,8 @@ export interface EventInfo {
   sesi: Session[]
   gift: { bank: string; atas_nama: string; norek: string; qris: string }
   media: { musik: string; judul_musik: string; cover: string }
+  /** Galeri foto (paths under assets/media/ or https URLs), in display order. */
+  gallery: string[]
   cs: { nama: string; hp: string }
   kapasitas: { s1: number; s2: number }
 }

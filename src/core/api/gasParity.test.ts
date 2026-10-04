@@ -565,6 +565,23 @@ describe('handlers (in-memory sheet)', () => {
     expect(send('GET', 'invitation', { id: EVENT_ID }).data.event.media.judul_musik).toBe('Kita Usahakan Rumah Itu')
   })
 
+  it('adds Galeri to a legacy 01_Event on save and serves the gallery one path per line', () => {
+    const { map, send, login } = setup()
+    const sheet = map.get('01_Event')!
+    const col = sheet.data[0].indexOf('Galeri')
+    sheet.data.forEach((r) => r.splice(col, 1))
+    expect(send('GET', 'invitation', { id: EVENT_ID }).data.event.gallery).toEqual([])
+
+    const token = login()
+    const gallery = ['assets/media/gallery-a.jpg', ' https://example.com/b.jpg ', '']
+    const saved = send('PUT', E, { token, event: { ...SEED_META.event, gallery } }).data
+    const want = ['assets/media/gallery-a.jpg', 'https://example.com/b.jpg']
+    expect(saved.event.gallery).toEqual(want)
+    expect(sheet.data[0]).toEqual([...schema.EVENT_COLUMNS])
+    expect(sheet.objects()[0]).toMatchObject({ Cover: SEED_META.event.media.cover, Galeri: want.join('\n') })
+    expect(send('GET', 'invitation', { id: EVENT_ID }).data.event.gallery).toEqual(want)
+  })
+
   it('serves the public invitation by event ID or slug, with the guest by PIN', () => {
     const { send } = setup()
     const [g0] = SEED_GUESTS

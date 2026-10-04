@@ -7,13 +7,13 @@
  */
 import { SLUG_PATTERN } from './slug.ts'
 
-export type MediaField = 'qris' | 'cover' | 'musik'
+export type MediaField = 'qris' | 'cover' | 'musik' | 'gallery'
 
 const MB = 1024 * 1024
 const IMAGE = { exts: ['jpg', 'jpeg', 'png', 'webp', 'gif'], maxBytes: 5 * MB, kind: 'Gambar' }
 const AUDIO = { exts: ['mp3', 'm4a', 'ogg', 'wav'], maxBytes: 15 * MB, kind: 'Musik' }
 
-export const MEDIA_FIELDS: Record<MediaField, typeof IMAGE> = { qris: IMAGE, cover: IMAGE, musik: AUDIO }
+export const MEDIA_FIELDS: Record<MediaField, typeof IMAGE> = { qris: IMAGE, cover: IMAGE, musik: AUDIO, gallery: IMAGE }
 
 /** Relative to the event's template folder. */
 export const MEDIA_DIR = 'assets/media'
