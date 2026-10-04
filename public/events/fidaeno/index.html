@@ -35,7 +35,14 @@
   </head>
 
   <!-- When copying this template for a new event, change data-event (01_Event.ID; admin URL /admin/events/{ID}) and data-slug (fallback). -->
-  <body data-event="00000000-0000-4000-8100-000000000002" data-slug="fidaeno" class="locked bg-blush-bg font-sans text-black antialiased">
+  <body data-event="00000000-0000-4000-8100-000000000002" data-slug="fidaeno" class="locked loading bg-blush-bg font-sans text-black antialiased">
+    <!-- 0. Loader: plain CSS (style.css) so it paints before Tailwind compiles; hidden by script.js once data is ready -->
+    <div id="loader" role="status" aria-live="polite">
+      <svg class="loader-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11z" /></svg>
+      <p class="loader-title">The Wedding</p>
+      <p class="loader-text">Memuat undangan<span class="loader-dots" aria-hidden="true"><i>.</i><i>.</i><i>.</i></span></p>
+    </div>
+
     <!-- 1. Greeting modal -->
     <div
       id="greeting"
@@ -86,7 +93,7 @@
               class="cover-in mt-3 inline-flex items-center gap-2 rounded-full border-2 border-pink-deep bg-white px-5 py-2 text-sm font-semibold text-pink-deep shadow-md transition hover:bg-blush-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:opacity-60"
             >
               <svg class="h-4 w-4 -rotate-12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 11 21 3l-8 18-2-8z" /></svg>
-              <span data-label>Memuat…</span>
+              <span>Buka detail undangan</span>
             </button>
             <p id="load-error" hidden class="mt-3 text-sm">
               Undangan gagal dimuat.

@@ -437,8 +437,9 @@ function setupMusic(src) {
   const sync = () => {
     const playing = !audio.paused
     floating.classList.toggle('playing', playing)
-    $('[data-icon="play"]', toggle).hidden = playing
-    $('[data-icon="pause"]', toggle).hidden = !playing
+    // SVG elements have no .hidden property, so toggle the attribute directly.
+    $('[data-icon="play"]', toggle).toggleAttribute('hidden', playing)
+    $('[data-icon="pause"]', toggle).toggleAttribute('hidden', !playing)
     toggle.setAttribute('aria-label', playing ? 'Jeda musik' : 'Putar musik')
   }
   audio.addEventListener('play', sync)
@@ -496,14 +497,35 @@ async function init() {
     const { event: eventId, slug } = document.body.dataset
     const data = await load(eventId, slug, params.get('pin') || '')
     render(data, params)
-    $('[data-label]', btn).textContent = 'Buka detail undangan'
+    await coverReady()
     btn.disabled = false
     btn.addEventListener('click', openInvitation, { once: true })
   } catch (err) {
     console.error('Invitation failed to load:', err)
     btn.hidden = true
     $('#load-error').hidden = false
+  } finally {
+    hideLoader()
   }
+}
+
+// Resolves when the cover photo has loaded (or failed), capped so a slow image can't hold the loader forever.
+function coverReady(ms = 4000) {
+  const img = $('#greeting img[data-src]')
+  if (!img || img.hidden || !img.src || img.complete) return Promise.resolve()
+  return new Promise((done) => {
+    img.addEventListener('load', done, { once: true })
+    img.addEventListener('error', done, { once: true })
+    setTimeout(done, ms)
+  })
+}
+
+// Fades the loader out; removing .loading lets the paused cover animations play.
+function hideLoader() {
+  const loader = $('#loader')
+  loader.classList.add('done')
+  loader.addEventListener('transitionend', () => (loader.hidden = true), { once: true })
+  document.body.classList.remove('loading')
 }
 
 init()
