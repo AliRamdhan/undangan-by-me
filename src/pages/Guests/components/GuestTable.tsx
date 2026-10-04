@@ -1,12 +1,15 @@
 import { ArrowDown01Icon, ArrowUp01Icon, LinkSquare02Icon, Settings02Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import type { ReactNode } from 'react'
+import { toast } from 'sonner'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
+import { linkLocal } from '@/core/domain/link'
 import { FROZEN_COUNT, ZONE_LABEL, type Column, type Zone } from '@/core/domain/schema'
 import { AKSES, type Guest, type GuestKey } from '@/core/domain/types'
+import { useStore } from '@/core/store'
 // HIDDEN(sementara): import { KirimBadge, RsvpBadge } from '@/components/StatusBadge'
 
 export type SortState = { key: GuestKey; dir: 1 | -1 } | null
@@ -50,13 +53,36 @@ function cellTint(g: Guest, key: GuestKey): string {
   }
 }
 
-function renderCell(g: Guest, col: Column, onOpen: (g: Guest) => void): ReactNode {
+/** Copies the guest's invitation page on this app, e.g. `http://localhost:5173/events/fidaeno/104729`. */
+async function copyLink(slug: string, pin: string) {
+  const link = linkLocal(window.location.origin, slug, pin)
+  if (!link) return toast.error('Slug event belum diisi — isi di Data Event')
+  try {
+    await navigator.clipboard.writeText(link)
+    toast.success('Link undangan disalin', { description: link })
+  } catch {
+    toast.error('Tidak bisa menyalin — izin clipboard ditolak')
+  }
+}
+
+function renderCell(g: Guest, col: Column, onOpen: (g: Guest) => void, slug: string): ReactNode {
   const v = g[col.key]
   switch (col.key) {
     // case 'No':
     //   return <span className="text-ink-3 tabular-nums">{g.No}</span>
     case 'PIN':
-      return g.PIN ? <span className="font-mono">{g.PIN}</span> : <span className="text-ink-3 italic">kosong</span>
+      return g.PIN ? (
+        <button
+          type="button"
+          onClick={() => copyLink(slug, g.PIN)}
+          title="Klik untuk menyalin link undangan"
+          className="cursor-pointer font-mono hover:text-primary"
+        >
+          {g.PIN}
+        </button>
+      ) : (
+        <span className="text-ink-3 italic">kosong</span>
+      )
     case 'HP':
       return <span className="font-mono">{g.HP || <span className="font-sans text-ink-3 italic">—</span>}</span>
     case 'Nama':
@@ -121,6 +147,7 @@ export function GuestTable({
   // Desktop freezes A–D. A phone can't fit ~450px of frozen columns, so there
   // only Nama sticks (No/PIN/Gelar scroll underneath it) — the name stays visible.
   const narrow = useMediaQuery(NARROW)
+  const slug = useStore().meta?.event.slug ?? ''
   const frozen = (i: number) => (narrow ? columns[i]?.key === 'Nama' : i < FROZEN_COUNT)
   const left: number[] = []
   let acc = CHECK_W
@@ -247,7 +274,7 @@ export function GuestTable({
                     className={`h-10 max-w-0 truncate border-b border-line px-2 ${base} ${frozen(i) ? 'sticky z-10' : ''} ${i === lastFrozen ? stickyShadow : ''} group-hover:brightness-[0.97] dark:group-hover:brightness-110`}
                     style={{ left: frozen(i) ? left[i] : undefined }}
                   >
-                    {renderCell(g, c, onOpen)}
+                    {renderCell(g, c, onOpen, slug)}
                   </TableCell>
                 )
               })}

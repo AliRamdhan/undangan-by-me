@@ -10,12 +10,24 @@ import { checkMedia, extOf, MEDIA_DIR, MEDIA_FIELDS, mediaFileName, type MediaFi
 const publicDir = fileURLToPath(new URL('./public', import.meta.url))
 
 /**
- * Serves `public/events/{slug}/index.html` at `/events/{slug}/` in dev and preview —
- * Vite's public handler only serves exact file paths, so the SPA would claim the URL.
- * Static hosts already do this in production.
+ * Serves `public/events/{slug}/index.html` at `/events/{slug}/` and at a guest's
+ * `/events/{slug}/{PIN}` in dev and preview — Vite's public handler only serves
+ * exact file paths, so the SPA would claim the URL. Production hosts need the
+ * same rewrite for the PIN form.
  */
 function publicInvitations(): Plugin {
   const middleware = (req: IncomingMessage, res: ServerResponse, next: () => void) => {
+    const guest = req.url?.match(/^\/events\/([^/?#]+)\/(\d+)(\/?)(\?.*)?$/)
+    if (guest && existsSync(`${publicDir}/events/${decodeURIComponent(guest[1])}/index.html`)) {
+      const [, slug, pin, slash, query = ''] = guest
+      // No trailing slash: the page's relative style.css / script.js / assets/ resolve to /events/{slug}/.
+      if (slash) {
+        res.writeHead(301, { Location: `/events/${slug}/${pin}${query}` }).end()
+        return
+      }
+      req.url = `/events/${slug}/index.html${query}`
+      return next()
+    }
     const match = req.url?.match(/^\/events\/([^/?#]+)(\/?)(\?.*)?$/)
     if (!match || !existsSync(`${publicDir}/events/${decodeURIComponent(match[1])}/index.html`)) return next()
     const [, slug, slash, query = ''] = match

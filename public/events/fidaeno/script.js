@@ -4,7 +4,7 @@
  * from the Apps Script Web App, so edits on /admin/events/{ID}/event show here:
  * see docs/URL-CONTRACT.md § 7 (Public invitation read).
  *
- * Guest link: /events/{slug}/?to={nama}&pin={pin}
+ * Guest link: /events/{slug}/{pin} (or /events/{slug}/?to={nama}&pin={pin})
  */
 
 const CONFIG = {
@@ -394,12 +394,18 @@ function startAnimations() {
   $$('main img').forEach((img) => img.complete || img.addEventListener('load', () => AOS.refresh(), { once: true }))
 }
 
+/** The guest's PIN: the `/events/{slug}/{pin}` path segment, else `?pin=`. */
+function pinFromUrl(params) {
+  const seg = location.pathname.match(/\/events\/[^/]+\/(\d+)\/?$/)
+  return seg ? seg[1] : params.get('pin') || ''
+}
+
 async function init() {
   const params = new URLSearchParams(location.search)
   const btn = $('#open-btn')
   try {
     const { event: eventId, slug } = document.body.dataset
-    const data = await load(eventId, slug, params.get('pin') || '')
+    const data = await load(eventId, slug, pinFromUrl(params))
     render(data, params)
     await coverReady()
     btn.disabled = false
