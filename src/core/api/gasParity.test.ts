@@ -438,12 +438,17 @@ class FakeSheet {
 function makeServices(sheets: Record<string, Cell[][]>) {
   const map = new Map(Object.entries(sheets).map(([n, d]) => [n, Object.assign(new FakeSheet(n), { data: d })]))
   const store = new Map<string, string>()
+  /** Names of the backup copies made with Spreadsheet.copy(). */
+  const copies: string[] = []
   const ss = {
     getSheetByName: (n: string) => map.get(n) ?? null,
     getSpreadsheetTimeZone: () => 'Asia/Jakarta',
+    getName: () => 'DB',
+    copy: (name: string) => void copies.push(name),
   }
   return {
     map,
+    copies,
     services: {
       SpreadsheetApp: { getActiveSpreadsheet: () => ss, flush: () => {} },
       Session: { getScriptTimeZone: () => 'Asia/Jakarta' },
@@ -497,7 +502,7 @@ function seedWorkbook() {
 
 describe('handlers (in-memory sheet)', () => {
   const setup = () => {
-    const { map, services } = makeServices(seedWorkbook())
+    const { map, copies, services } = makeServices(seedWorkbook())
     const ctx = loadGas(services)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const send = (method: string, path: string, body: Record<string, unknown> = {}): any => {
@@ -518,7 +523,7 @@ describe('handlers (in-memory sheet)', () => {
       const row = map.get('_Users')!.objects().find((r) => String(r.Email).toLowerCase() === email.toLowerCase())
       return `users/${row ? row.ID : 'nobody'}`
     }
-    return { map, ctx, send, login, klien, u }
+    return { map, ctx, copies, send, login, klien, u }
   }
   const E = `event/${EVENT_ID}`
   const fidaeno = { ...SEED_META.event, slug: 'fidaeno', nama_event: 'Fida & Eno' }
@@ -1007,6 +1012,51 @@ describe('handlers (in-memory sheet)', () => {
       'fe@example.com',
       'sa2@example.com',
     ])
+  })
+
+  it('resetProduksi clears the demo data but keeps master templates, SUPER_ADMIN and _Config', () => {
+    const { map, ctx, copies, send, login, klien } = setup()
+    const sa = login()
+    const kt = klien()
+    // One event version of a template.
+    const und = SEED_TEMPLATES[0]
+    expect(send('PUT', `${E}/templates/${und.ID}`, { token: sa, template: { ...und, Isi_Pesan: 'Khusus' } }).data.Custom).toBe(true)
+    const data = (tab: string) => map.get(tab)!.objects().filter((r) => Object.values(r).some((v) => v !== ''))
+    const snapshot = () => JSON.stringify([...map.entries()].map(([n, sh]) => [n, sh.data]))
+    const config = JSON.stringify(map.get('_Config')!.data)
+    const counts = { hapus: { event: 1, sesi: 2, tamu: 6, template: 1, akun: 2 }, sisa: { template_master: 6, super_admin: 1 } }
+
+    // The dry run reports and changes nothing.
+    const before = snapshot()
+    expect(plain((ctx.cekResetProduksi as () => unknown)())).toEqual({
+      ...counts,
+      peringatan: [expect.stringMatching(/^Akun demo Admin@Example\.com masih SUPER_ADMIN/)],
+    })
+    expect(snapshot()).toBe(before)
+
+    // Without the exact confirmation nothing happens.
+    const reset = ctx.resetProduksi as (k?: string) => unknown
+    expect(() => reset()).toThrow(/HAPUS DATA DEMO/)
+    expect(() => reset('hapus data demo')).toThrow(/HAPUS DATA DEMO/)
+    expect(snapshot()).toBe(before)
+    expect(copies).toEqual([])
+
+    const out = plain(reset('HAPUS DATA DEMO')) as { backup: string }
+    expect(out).toMatchObject(counts)
+    expect(copies).toEqual([out.backup])
+    expect(out.backup).toMatch(/^BACKUP DB \d{4}-/)
+    for (const tab of ['01_Event', '01_Sesi', '02_Tamu']) expect(data(tab), tab).toEqual([])
+    expect(data('03_Template').map((r) => [r.Event, r.ID])).toEqual(SEED_TEMPLATES.map((t) => ['', t.ID]))
+    expect(data('_Users').map((r) => r.Email)).toEqual(['Admin@Example.com'])
+    expect(JSON.stringify(map.get('_Config')!.data)).toBe(config)
+
+    // The client is logged out; the super admin is not, and a new event starts clean with every master.
+    expect(send('GET', 'auth/me', { token: kt }).code).toBe('AUTH')
+    expect(send('GET', 'auth/me', { token: sa }).ok).toBe(true)
+    expect(send('GET', 'event', { token: sa }).data).toEqual([])
+    const id = send('POST', 'event', { token: sa, event: fidaeno }).data.event.id as string
+    expect(send('GET', `event/${id}/templates`, { token: sa }).data).toEqual(SEED_TEMPLATES.map((t) => ({ ...t, Custom: false })))
+    expect(send('GET', `event/${id}/guests`, { token: sa }).data).toEqual([])
   })
 
   it('setup() migrates a slug-keyed workbook to row IDs, idempotently', () => {
