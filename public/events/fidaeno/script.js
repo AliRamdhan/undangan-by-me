@@ -10,7 +10,7 @@
 const CONFIG = {
   // Apps Script /exec URL, set by ../config.js (Vite, from VITE_APPS_SCRIPT_URL).
   // Public by design — never put an admin token here.
-  // Empty → render LOCAL (this event's own content), for design and local dev.
+  // Empty → the page shows its load error: event data only comes from the API.
   API_URL: window.INVITATION_API || '',
 }
 
@@ -20,64 +20,6 @@ const BULAN = [
   'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
 ]
-
-const ALAMAT = 'Jl. Masjid Raya RT 03 RW 06 No. 38, Kecamatan Larangan, Kelurahan Larangan Selatan, Tangerang.'
-const MAPS = 'https://maps.app.goo.gl/6JcDw9zS62NNYCoY7?g_st=ic'
-
-// This event's own content. The admin form does not manage the portraits or the
-// story, so those come from here; the rest (gallery included) is the fallback (see merge()).
-const LOCAL = {
-  event: {
-    v: 1,
-    slug: 'fidaeno',
-    tipe: 'PERNIKAHAN',
-    bahasa: 'id',
-    timezone: 'WIB',
-    couple: {
-      pria: {
-        panggilan: 'Eno',
-        lengkap: 'Hendro Tri Suseno, S.S.',
-        ortu: 'Bapak Mintro S. Miharjo & Ibu Metih',
-        foto: 'assets/pria.jpg',
-      },
-      wanita: {
-        panggilan: 'Fida',
-        lengkap: 'Firda Aulia, S.S.',
-        ortu: 'Bapak Ahmad Rizki & Ibu Rahmawati',
-        foto: 'assets/wanita.jpg',
-      },
-      hashtag: '',
-    },
-    tanggal_utama: '2026-11-01',
-    sesi: [
-      { kode: 'S1', label: 'Akad Nikah', tanggal: '2026-11-01', mulai: '09:00', selesai: '', tempat: '', alamat: ALAMAT, maps: MAPS, dress_code: '', live_stream: '' },
-      { kode: 'S2', label: 'Resepsi', tanggal: '2026-11-01', mulai: '11:00', selesai: '18:00', tempat: '', alamat: ALAMAT, maps: MAPS, dress_code: '', live_stream: '' },
-    ],
-    gift: { bank: 'SeaBank', atas_nama: 'Firda Aulia', norek: '901198500332', qris: '' },
-    media: {
-      musik: 'assets/music.mp3',
-      judul_musik: 'Kita Usahakan Rumah Itu',
-      cover: 'assets/greeting.jpg',
-      foto_header: 'assets/header.jpg',
-    },
-    story: {
-      judul: 'Our Journey',
-      foto: 'assets/gallery-2.jpg',
-      teks: [
-        'Tidak pernah ada yang benar-benar tahu\nke mana sebuah pertemuan akan membawa kita.',
-        'Kami bertemu di satu kampus, di satu kelas, sebagai dua orang yang awalnya hanya saling mengenal.',
-        'Kemudian sebuah reply Instagram Story membuka percakapan kecil yang perlahan menjadi bagian dari perjalanan kami.',
-        'Kami tidak pernah terburu-buru memberi nama pada hubungan ini. Tidak ada tanggal jadian yang harus dirayakan. Kami hanya memilih untuk terus berjalan, saling mengenal lebih dalam, saling menemani dalam berbagai keadaan, hingga akhirnya komitmen itu tumbuh dengan sendirinya.',
-        'Delapan tahun.',
-        'Delapan tahun penuh cerita, tawa, perbedaan, pembelajaran, dan banyak hal yang mungkin tidak selalu mudah. Namun di antara semuanya, kami tetap menemukan alasan untuk memilih satu sama lain.',
-        'Selanjutnya?',
-        'Dari teman satu kelas, menjadi teman satu rumah. 🤍\nSampai jumpa di bab berikutnya,\n1 November 2026.',
-      ].join('\n\n'),
-    },
-    gallery: [1, 2, 3, 4, 5].map((n) => `assets/gallery-${n}.jpg`),
-  },
-  guest: null,
-}
 
 // ---------- helpers ----------
 
@@ -159,8 +101,9 @@ function fill(root, obj) {
   })
   $$('[data-src]', root).forEach((el) => {
     const url = safeUrl(get(obj, el.dataset.src))
+    // A blank keeps the image hardcoded in the HTML, if any (the cover).
     if (url) el.src = url
-    else el.hidden = true
+    else if (!el.getAttribute('src')) el.hidden = true
   })
   return root
 }
@@ -176,7 +119,7 @@ function toast(text) {
 // ---------- data ----------
 
 async function load(eventId, slug, pin) {
-  if (!CONFIG.API_URL) return LOCAL
+  if (!CONFIG.API_URL) throw new Error('NO_API_URL')
   const url = new URL(CONFIG.API_URL)
   // By ID first: it survives a slug rename in the admin.
   const by = eventId ? { id: eventId } : { slug }
@@ -185,31 +128,7 @@ async function load(eventId, slug, pin) {
   const res = await fetch(url, { redirect: 'follow' })
   const env = await res.json()
   if (!env.ok) throw new Error(env.code)
-  return { event: merge(LOCAL.event, env.data.event), guest: env.data.guest }
-}
-
-const filled = (v) => (Array.isArray(v) ? v.length > 0 : v != null && String(v).trim() !== '')
-const pick = (remote, local) => (filled(remote) ? remote : local)
-
-// The server is the source of truth for everything it sends, blanks included
-// (a cleared gift hides the gift section). Template-only content — photos,
-// story, gallery — and a blank music, song title or cover fall back to LOCAL.
-function merge(local, remote) {
-  const person = (k) => ({ ...remote.couple?.[k], foto: pick(remote.couple?.[k]?.foto, local.couple[k].foto) })
-  const lm = local.media
-  const rm = remote.media || {}
-  return {
-    ...remote,
-    couple: { ...remote.couple, pria: person('pria'), wanita: person('wanita') },
-    media: {
-      musik: pick(rm.musik, lm.musik),
-      judul_musik: pick(rm.judul_musik, lm.judul_musik),
-      cover: pick(rm.cover, lm.cover),
-      foto_header: pick(rm.foto_header, lm.foto_header),
-    },
-    story: filled(remote.story?.teks) ? remote.story : local.story,
-    gallery: pick(remote.gallery, local.gallery),
-  }
+  return env.data
 }
 
 // ---------- render ----------
@@ -237,7 +156,6 @@ function render({ event: ev, guest }, params) {
   if (nama) put($('#guest-name'), nama)
 
   renderCountdown(ev, utama, sesi, tz)
-  renderStory(ev.story)
   renderVenue(sesi, tz)
   renderGift(ev.gift || {})
   renderGallery((ev.gallery || []).map(safeUrl).filter(Boolean))
@@ -305,20 +223,6 @@ function renderCountdown(ev, utama, sesi, tz) {
     location: [first.tempat, first.alamat].filter(Boolean).join(', '),
   })
   cal.href = `https://calendar.google.com/calendar/render?${q}`
-}
-
-function renderStory(story) {
-  if (!story?.teks) return ($('#story').hidden = true)
-  const box = $('#story-text')
-  story.teks
-    .split(/\n\s*\n/)
-    .filter((p) => p.trim())
-    .forEach((p) => {
-      const el = document.createElement('p')
-      put(el, p.trim())
-      el.dataset.aos = 'fade-up'
-      box.append(el)
-    })
 }
 
 function renderVenue(sesi, tz) {
