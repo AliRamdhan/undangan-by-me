@@ -11,6 +11,7 @@ import type {
   EventSummary,
   LinkResult,
   ManagedUser,
+  MasterWrite,
   NewUser,
   Preview,
   Session,
@@ -65,6 +66,16 @@ export class AppsScriptApp implements AppApi {
   }
   async deleteUser(id: string) {
     await this.rest.request('DELETE', `users/${encodeURIComponent(id)}`)
+  }
+  listMasterTemplates() {
+    return this.rest.request<Template[]>('GET', 'templates')
+  }
+  saveMasterTemplate(template: Template) {
+    if (!template.ID) return this.rest.request<MasterWrite>('POST', 'templates', { body: { template } })
+    return this.rest.request<MasterWrite>('PUT', `templates/${encodeURIComponent(template.ID)}`, { body: { template } })
+  }
+  deleteMasterTemplate(id: string) {
+    return this.rest.request<{ custom: number }>('DELETE', `templates/${encodeURIComponent(id)}`)
   }
 }
 
@@ -122,11 +133,10 @@ export class AppsScriptEventApi implements UndanganApi {
     return this.rest.request<Template[]>('GET', `${this.base}/templates`)
   }
   saveTemplate(template: Template) {
-    if (!template.ID) return this.rest.request<Template>('POST', `${this.base}/templates`, { body: { template } })
     return this.rest.request<Template>('PUT', `${this.base}/templates/${encodeURIComponent(template.ID)}`, { body: { template } })
   }
-  async deleteTemplate(id: string) {
-    await this.rest.request('DELETE', `${this.base}/templates/${encodeURIComponent(id)}`)
+  resetTemplate(id: string) {
+    return this.rest.request<Template>('POST', `${this.base}/templates/${encodeURIComponent(id)}/reset`)
   }
   validateTemplates() {
     return this.rest.request<TemplateReport[]>('GET', `${this.base}/templates/validate`)

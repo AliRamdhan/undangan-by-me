@@ -113,6 +113,13 @@ export interface DeletedEvent {
   akun: number
 }
 
+/** A master template write. */
+export interface MasterWrite {
+  template: Template
+  /** Events with their own version of it, which keep their own text and Aktif. */
+  custom: number
+}
+
 /**
  * Everything that is not scoped to one event: auth and the event list.
  * `forEvent` hands out the per-event API.
@@ -138,6 +145,12 @@ export interface AppApi {
   /** Ends that user's sessions. */
   resetPassword(id: string, password: string): Promise<void>
   deleteUser(id: string): Promise<void>
+  // SUPER_ADMIN only — /templates (master templates, copied into every event).
+  listMasterTemplates(): Promise<Template[]>
+  /** Creates when `t.ID` is empty; otherwise updates it. Every event without its own version sees it at once. */
+  saveMasterTemplate(t: Template): Promise<MasterWrite>
+  /** Also removes every event's own version of it (`custom` = how many). */
+  deleteMasterTemplate(id: string): Promise<{ custom: number }>
 }
 
 /**
@@ -168,9 +181,13 @@ export interface UndanganApi {
   /** Tamu → Cek Duplikat & Error. */
   checkGuests(): Promise<Issue[]>
   listTemplates(): Promise<Template[]>
-  /** Creates when `t.ID` is empty (the backend assigns it); otherwise updates that template, Kode included. */
+  /**
+   * Saves this event's own version of master `t.ID`: only Isi_Pesan,
+   * Header_Image_URL and Aktif are taken. Templates are never created or deleted per event.
+   */
   saveTemplate(t: Template): Promise<Template>
-  deleteTemplate(id: string): Promise<void>
+  /** Drops this event's own version: it follows the master again. */
+  resetTemplate(id: string): Promise<Template>
   /** Template → Validasi Template. */
   validateTemplates(): Promise<TemplateReport[]>
   /** Blast → Preview Pesan: what THIS guest will receive. */

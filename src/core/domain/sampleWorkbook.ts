@@ -1,6 +1,6 @@
 import type { Workbook, Worksheet } from 'exceljs'
 import { ROLES } from '@/core/api/types'
-import { SEED_EVENTS, SEED_USERS } from '@/core/api/seed'
+import { SEED_EVENTS, SEED_TEMPLATES, SEED_USERS } from '@/core/api/seed'
 import { applyFormulas } from '@/core/domain/derive'
 import {
   CONFIG_COLUMNS,
@@ -102,7 +102,8 @@ const PANDUAN = [
   '  01_Event — satu baris per event; ID adalah kuncinya (URL admin /event/:code). Slug hanya untuk link undangan dan boleh diganti.',
   '  01_Sesi — sesi per event (S1, S2…), kolom Event = ID event.',
   '  02_Tamu — tamu per event. No, HP_Valid, Link_Undangan, Preview_Pesan, Link_WA ditulis script — jangan diketik manual.',
-  '  03_Template — template WhatsApp per event.',
+  '  03_Template — template WhatsApp. Event kosong = template master (SUPER_ADMIN, menu Template), otomatis berlaku di setiap event.',
+  '    Baris dengan Event = versi event itu sendiri dari master ber-Kode sama (isi pesan, gambar header, Aktif); dibuat saat klien menyimpan.',
   '  _Config, _Enum, _Users, _Sessions — tab sistem. Password disimpan sebagai hash; token sesi juga di-hash.',
   '  _Users.Event — ID event untuk akun CLIENT; kosong untuk SUPER_ADMIN.',
   '  Baris yang diketik manual tanpa ID mendapat ID otomatis saat dibaca aplikasi atau saat setup() dijalankan.',
@@ -145,12 +146,8 @@ export function buildSampleWorkbook({ ExcelJS, sha256Hex, randomSalt, now }: Sam
   dropdown(tamu, 'Sisi', SISI)
   dropdown(tamu, 'Gelar', GELAR, false)
 
-  const tpl = table(
-    wb,
-    SHEETS.template,
-    TEMPLATE_SHEET_COLUMNS,
-    SEED_EVENTS.flatMap(({ meta, templates }) => templates.map((t) => ({ ...t, Event: meta.event.id }))),
-  )
+  // Master templates only (blank Event): every event has them until it saves its own version.
+  const tpl = table(wb, SHEETS.template, TEMPLATE_SHEET_COLUMNS, SEED_TEMPLATES.map((t) => ({ ...t, Event: '' })))
   dropdown(tpl, 'Tipe', TEMPLATE_TIPE)
   dropdown(tpl, 'Akses', TEMPLATE_AKSES)
   tpl.getColumn('Isi_Pesan').alignment = { wrapText: true, vertical: 'top' }

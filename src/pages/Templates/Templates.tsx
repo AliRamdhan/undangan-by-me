@@ -1,57 +1,61 @@
-import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { useCallback, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router'
+import { toast } from 'sonner'
 import type { TemplateReport } from '@/core/api/types'
 import { Badge } from '@/components/ui/badge'
-import { Add01Icon, FileSearchIcon, Link04Icon } from '@hugeicons/core-free-icons'
+import { FileSearchIcon, Link04Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/empty'
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/empty'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 import type { Template } from '@/core/domain/types'
 import { GenerateLinksDialog } from '@/components/GenerateLinksDialog'
+import { TemplateEditor } from '@/components/TemplateEditor'
+import { useAuth } from '@/core/auth'
 import { useStore } from '@/core/store'
-import { TemplateEditor } from './components/TemplateEditor'
 import { ValidateReport } from './components/ValidateReport'
-import { eventPaths, templatePath } from '@/route.paths'
+import { eventPaths, PATHS, templatePath } from '@/route.paths'
 
-const NEW: Template = {
-  ID: '',
-  Kode: '',
-  Tipe: 'UNDANGAN',
-  Akses: 'SEMUA',
-  Bahasa: 'id',
-  Header_Image_URL: '',
-  Isi_Pesan: '{{greet}} {{tamu.gelar}} *{{tamu.nama}}*,\n\n',
-  Aktif: true,
-}
-
+/**
+ * An event's templates: the SUPER_ADMIN's master templates (menu Template).
+ * Saving here writes the event's own version (text, header image, Aktif);
+ * templates are never created or deleted per event.
+ */
 export function Templates() {
-  const { eventId, templates, run, busy, loading } = useStore()
+  const { api, eventId, templates, guests, run, busy, loading } = useStore()
+  const { isSuperAdmin } = useAuth()
   // The selected template lives in the URL (/template/:templateId), so it is linkable and survives refresh.
   const selected = useParams().templateId ?? null
   const navigate = useNavigate()
   const setSelected = (id: string | null, replace = false) =>
     navigate(id ? templatePath(eventId, id) : eventPaths(eventId).template, { replace })
-  const [creating, setCreating] = useState(false)
   const [report, setReport] = useState<TemplateReport[] | null>(null)
   const [linksOpen, setLinksOpen] = useState(false)
+  const renderDraft = useCallback((body: string, guestId: string | null) => api.renderDraft(body, guestId), [api])
 
-  const current = creating ? null : (templates.find((t) => t.ID === selected) ?? templates[0] ?? null)
+  const current = templates.find((t) => t.ID === selected) ?? templates[0] ?? null
 
   const validate = async () => {
     const r = await run('Validasi Template', (api) => api.validateTemplates())
     if (r) setReport(r)
   }
 
+  const save = async (draft: Template) => {
+    const saved = await run('Simpan template', (api) => api.saveTemplate(draft))
+    if (saved) toast.success(`Template ${saved.Kode} disimpan`)
+  }
+
+  const reset = async (t: Template) => {
+    const saved = await run('Kembalikan ke master', (api) => api.resetTemplate(t.ID))
+    if (saved) toast.success(`Template ${saved.Kode} kembali mengikuti master`)
+    return saved
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center gap-2">
-        <Button size="lg" onClick={() => setCreating(true)}>
-          <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" />
-          Template baru
-        </Button>
         <Button variant="outline" onClick={validate} disabled={!!busy}>
           <HugeiconsIcon icon={FileSearchIcon} strokeWidth={2} data-icon="inline-start" />
           Validasi Template
@@ -72,21 +76,19 @@ export function Templates() {
           {loading && <Skeleton className="h-40" />}
           {!loading && templates.length === 0 && <p className="p-3 text-muted-foreground">Belum ada template.</p>}
           {templates.map((t) => {
-            const active = !creating && current?.ID === t.ID
+            const active = current?.ID === t.ID
             return (
               <button
                 key={t.ID}
                 type="button"
                 aria-current={active ? 'true' : undefined}
-                onClick={() => {
-                  setCreating(false)
-                  setSelected(t.ID)
-                }}
+                onClick={() => setSelected(t.ID)}
                 className={cn('flex flex-col gap-1 rounded-md px-3 py-2 text-left', active ? 'bg-primary-soft' : 'hover:bg-muted')}
               >
-                <span className="flex items-center gap-2">
+                <span className="flex flex-wrap items-center gap-2">
                   <span className="font-mono text-[13px] font-medium">{t.Kode}</span>
                   {!t.Aktif && <Badge variant="muted">nonaktif</Badge>}
+                  {t.Custom && <Badge variant="muted">disesuaikan</Badge>}
                 </span>
                 {/* HIDDEN(sementara): {t.Tipe} · {t.Akses} */}
                 <span className="text-muted-foreground">{t.Tipe}</span>
@@ -97,30 +99,33 @@ export function Templates() {
         </CardContent>
         </Card>
 
-        {creating ? (
-          <TemplateEditor
-            key="new"
-            template={NEW}
-            isNew
-            onDone={(id) => {
-              setCreating(false)
-              if (id) setSelected(id, true)
-            }}
-          />
-        ) : current ? (
+        {current ? (
           <TemplateEditor
             key={current.ID}
             template={current}
-            isNew={false}
-            onDone={(id) => setSelected(id ?? null, true)}
+            lockIdentity
+            guests={guests}
+            renderDraft={renderDraft}
+            busy={!!busy}
+            onSave={save}
+            onReset={() => reset(current)}
           />
         ) : (
           !loading && (
             <Empty>
               <EmptyHeader>
                 <EmptyTitle>Belum ada template</EmptyTitle>
-                <EmptyDescription>Buat template pertama untuk tipe UNDANGAN, akses SEMUA.</EmptyDescription>
+                <EmptyDescription>
+                  Template dibuat oleh Super Admin di menu Template dan otomatis tersedia untuk setiap event.
+                </EmptyDescription>
               </EmptyHeader>
+              {isSuperAdmin && (
+                <EmptyContent>
+                  <Link to={PATHS.templates} className={buttonVariants({ variant: 'outline' })}>
+                    Kelola template master
+                  </Link>
+                </EmptyContent>
+              )}
             </Empty>
           )
         )}

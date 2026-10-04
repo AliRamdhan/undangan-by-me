@@ -35,6 +35,9 @@ export function AppLayout() {
               <NavLink to={PATHS.users} className={navCls}>
                 Pengguna
               </NavLink>
+              <NavLink to={PATHS.templates} className={navCls}>
+                Template
+              </NavLink>
             </nav>
           )}
           <div className="ml-auto flex items-center gap-2">

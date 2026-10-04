@@ -7,6 +7,7 @@ import { EventCreatePage, EventPage } from '@/pages/Event'
 import { Events } from '@/pages/Events'
 import { Guests } from '@/pages/Guests'
 import { Login } from '@/pages/Login'
+import { MasterTemplates } from '@/pages/MasterTemplates'
 import { NotFound } from '@/pages/NotFound'
 import { Templates } from '@/pages/Templates'
 import { Users } from '@/pages/Users'
@@ -29,6 +30,8 @@ export const router = createBrowserRouter([
               { path: PATHS.events, Component: Events },
               { path: PATHS.newEvent, Component: EventCreatePage },
               { path: PATHS.users, Component: Users },
+              { path: PATHS.templates, Component: MasterTemplates },
+              { path: `${PATHS.templates}/:templateId`, Component: MasterTemplates },
             ],
           },
           {

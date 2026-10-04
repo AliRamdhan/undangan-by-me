@@ -50,7 +50,9 @@ describe('sample database workbook', () => {
     const events = rows(wb.getWorksheet(schema.SHEETS.event)!)
     expect(events.map((r) => r.Slug)).toEqual(['fidaeno'])
     const ids = events.map((r) => r.ID)
-    for (const tab of [schema.SHEETS.sesi, schema.SHEETS.tamu, schema.SHEETS.template]) {
+    // 03_Template ships master templates only: a blank Event, shared by every event.
+    expect(new Set(rows(wb.getWorksheet(schema.SHEETS.template)!).map((r) => r.Event ?? ''))).toEqual(new Set(['']))
+    for (const tab of [schema.SHEETS.sesi, schema.SHEETS.tamu]) {
       expect(new Set(rows(wb.getWorksheet(tab)!).map((r) => r.Event))).toEqual(new Set(ids))
     }
     for (const tab of [schema.SHEETS.event, schema.SHEETS.sesi, schema.SHEETS.tamu, schema.SHEETS.template, schema.SHEETS.users]) {

@@ -48,8 +48,8 @@ describe('AppsScriptApp — REST transport', () => {
     expect(last().body).toEqual({ v: 1, _method: 'PATCH', token: 'tok', fields: { Meja: 'A' } })
     expect(path(last())).toBe(`/event/${EVENT}/guests/${GUEST}`)
 
-    await ev.deleteTemplate('T 1')
-    expect(path(last())).toBe(`/event/${EVENT}/templates/T%201`)
+    await new AppsScriptApp(EXEC, 'tok').deleteMasterTemplate('T 1')
+    expect(path(last())).toBe('/templates/T%201')
     expect(last().body).toMatchObject({ _method: 'DELETE' })
   })
 
@@ -90,8 +90,12 @@ describe('AppsScriptApp — REST transport', () => {
       [() => ev.generateLinks(null, 'UNDANGAN'), 'POST', '/event/x/guests/links'],
       [() => ev.listTemplates(), 'GET', '/event/x/templates'],
       [() => ev.validateTemplates(), 'GET', '/event/x/templates/validate'],
-      [() => ev.saveTemplate({ ID: '', Kode: 'N' } as never), 'POST', '/event/x/templates'],
       [() => ev.saveTemplate({ ID: 't1', Kode: 'N' } as never), 'POST', '/event/x/templates/t1', 'PUT'],
+      [() => ev.resetTemplate('t1'), 'POST', '/event/x/templates/t1/reset'],
+      [() => app.listMasterTemplates(), 'GET', '/templates'],
+      [() => app.saveMasterTemplate({ ID: '', Kode: 'N' } as never), 'POST', '/templates'],
+      [() => app.saveMasterTemplate({ ID: 'm1', Kode: 'N' } as never), 'POST', '/templates/m1', 'PUT'],
+      [() => app.deleteMasterTemplate('m1'), 'POST', '/templates/m1', 'DELETE'],
       [() => ev.renderDraft('b', null), 'POST', '/event/x/render/draft'],
       [() => app.listUsers(), 'GET', '/users'],
       [() => app.createUser({ email: 'a@b.c', nama: 'A', role: 'CLIENT', event: 'x', password: 'p' }), 'POST', '/users'],

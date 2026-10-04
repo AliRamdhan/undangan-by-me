@@ -143,8 +143,12 @@ describe('01_Http.gs + 02_Router.gs', () => {
     expect(match('POST', 'event')).toMatchObject({ handler: 'handleCreateEvent_', opts: { role: 'SUPER_ADMIN', lock: true } })
     expect(match('PUT', 'event/x').opts).toEqual({ lock: true })
     expect(match('DELETE', 'event/x').opts).toEqual({ role: 'SUPER_ADMIN', lock: true })
+    expect(match('PUT', 'event/x/templates/K').opts).toEqual({ lock: true })
+    expect(match('POST', 'event/x/templates/K/reset')).toMatchObject({ handler: 'handleResetTemplate_', params: { id: 'K' }, opts: { lock: true } })
+    expect(match('GET', 'templates')).toMatchObject({ handler: 'handleListMasters_', opts: { role: 'SUPER_ADMIN' } })
+    expect(match('PUT', 'templates/m1')).toMatchObject({ handler: 'handleUpdateMaster_', params: { id: 'm1' } })
     for (const m of ['POST', 'PUT', 'DELETE']) {
-      expect(match(m, m === 'POST' ? 'event/x/templates' : 'event/x/templates/K').opts).toEqual({ lock: true })
+      expect(match(m, m === 'POST' ? 'templates' : 'templates/K').opts).toEqual({ role: 'SUPER_ADMIN', lock: true })
     }
     expect(match('GET', 'users')).toMatchObject({ handler: 'handleListUsers_', opts: { role: 'SUPER_ADMIN' } })
     expect(match('POST', 'users')).toMatchObject({ handler: 'handleCreateUser_', opts: { role: 'SUPER_ADMIN', lock: true } })
@@ -168,6 +172,9 @@ describe('01_Http.gs + 02_Router.gs', () => {
       ['PATCH', 'event/x'],
       ['GET', 'event/x/guests/1/2/3'],
       ['POST', 'event/x/templates/validate'],
+      // An event's templates are copies of the masters: never created or deleted per event.
+      ['POST', 'event/x/templates'],
+      ['DELETE', 'event/x/templates/K'],
       ['PUT', 'users/a@x.com'],
       ['GET', 'users/a@x.com'],
     ]) {
@@ -474,7 +481,8 @@ function seedWorkbook() {
     ]),
     '03_Template': table(
       schema.TEMPLATE_SHEET_COLUMNS,
-      SEED_TEMPLATES.map((t) => ({ Event: EVENT_ID, ...t, Aktif: t.Aktif ? 'TRUE' : 'Ya-bukan' })),
+      // Master templates: a blank Event, so every event has them.
+      SEED_TEMPLATES.map((t) => ({ Event: '', ...t, Aktif: t.Aktif ? 'TRUE' : 'Ya-bukan' })),
     ),
     _Config: table(schema.CONFIG_COLUMNS, [{ Key: 'GREETINGS', Value: SEED_META.greetings.join('|') }]),
     _Users: table(schema.USER_COLUMNS, [
@@ -510,7 +518,7 @@ describe('handlers (in-memory sheet)', () => {
       const row = map.get('_Users')!.objects().find((r) => String(r.Email).toLowerCase() === email.toLowerCase())
       return `users/${row ? row.ID : 'nobody'}`
     }
-    return { map, send, login, klien, u }
+    return { map, ctx, send, login, klien, u }
   }
   const E = `event/${EVENT_ID}`
   const fidaeno = { ...SEED_META.event, slug: 'fidaeno', nama_event: 'Fida & Eno' }
@@ -734,24 +742,82 @@ describe('handlers (in-memory sheet)', () => {
     expect(reports.map((r: { kode: string }) => r.kode)).toEqual(SEED_TEMPLATES.filter((t) => t.Aktif).map((t) => t.Kode))
   })
 
-  it('does template CRUD by ID, with Kode unique per event', () => {
-    const { send, login } = setup()
+  it('gives every event the master templates; an event save writes its own version', () => {
+    const { map, send, login } = setup()
     const token = login()
-    const list = send('GET', `${E}/templates`, { token }).data as Template[]
-    expect(list).toEqual(SEED_TEMPLATES)
-    const t = { ...SEED_TEMPLATES[0], ID: '', Kode: ' NEW ' }
-    const made = send('POST', `${E}/templates`, { token, template: t }).data as Template
-    expect(made.Kode).toBe('NEW')
-    expect(made.ID).toMatch(UUID)
-    expect(send('POST', `${E}/templates`, { token, template: t }).code).toBe('VALIDATION')
-    expect(send('PUT', `${E}/templates/${made.ID}`, { token, template: { ...t, Kode: 'UND-VIP' } }).code).toBe('VALIDATION')
-    // A new Kode keeps the ID; an ID in the body is ignored.
-    expect(send('PUT', `${E}/templates/${made.ID}`, { token, template: { ...t, ID: 'x', Kode: 'NEW2', Aktif: false } }).data).toMatchObject({ ID: made.ID, Kode: 'NEW2', Aktif: false })
-    expect(send('GET', `${E}/templates/${made.ID}`, { token }).data).toMatchObject({ Kode: 'NEW2', Aktif: false })
-    expect(send('GET', `${E}/templates/NEW2`, { token }).code).toBe('NOT_FOUND') // a Kode is not an ID
-    expect(send('DELETE', `${E}/templates/${made.ID}`, { token }).ok).toBe(true)
-    expect(send('GET', `${E}/templates/${made.ID}`, { token }).code).toBe('NOT_FOUND')
-    expect(send('GET', `${E}/templates`, { token }).data).toHaveLength(SEED_TEMPLATES.length)
+    const ownRows = (event: string) => map.get('03_Template')!.objects().filter((r) => r.Event === event)
+    const asEvent = SEED_TEMPLATES.map((t) => ({ ...t, Custom: false }))
+    expect(send('GET', 'templates', { token }).data).toEqual(SEED_TEMPLATES)
+    expect(send('GET', `${E}/templates`, { token }).data).toEqual(asEvent)
+    // A new event has every master at once.
+    const oid = send('POST', 'event', { token, event: fidaeno }).data.event.id as string
+    const O = `event/${oid}`
+    expect(send('GET', `${O}/templates`, { token }).data).toEqual(asEvent)
+
+    // A new master reaches every event; Kode is unique among masters.
+    const made = send('POST', 'templates', { token, template: { ...SEED_TEMPLATES[0], ID: '', Kode: ' NEW ', Isi_Pesan: 'Halo {{tamu.nama}}' } }).data
+    expect(made).toMatchObject({ template: { Kode: 'NEW', Isi_Pesan: 'Halo {{tamu.nama}}' }, custom: 0 })
+    expect(made.template.ID).toMatch(UUID)
+    expect(send('POST', 'templates', { token, template: { ...SEED_TEMPLATES[0], ID: '' } }).code).toBe('VALIDATION')
+    for (const ev of [E, O]) expect(send('GET', `${ev}/templates/${made.template.ID}`, { token }).data).toMatchObject({ Kode: 'NEW', Custom: false })
+
+    // An event save writes that event's own row (once); Kode/Tipe and the ID stay the master's.
+    const und = SEED_TEMPLATES[0]
+    const custom = { ...und, ID: 'x', Kode: 'LAIN', Tipe: 'REMINDER', Isi_Pesan: 'Khusus', Aktif: false }
+    expect(send('PUT', `${E}/templates/${und.ID}`, { token, template: custom }).data).toEqual({ ...und, Isi_Pesan: 'Khusus', Aktif: false, Custom: true })
+    expect(send('PUT', `${E}/templates/${und.ID}`, { token, template: { ...custom, Isi_Pesan: 'Khusus 2' } }).data.Isi_Pesan).toBe('Khusus 2')
+    expect(ownRows(EVENT_ID)).toMatchObject([{ Kode: und.Kode, Isi_Pesan: 'Khusus 2' }])
+    expect(send('GET', `${O}/templates/${und.ID}`, { token }).data).toEqual({ ...und, Custom: false })
+    // Saving the master's own values drops the row again.
+    expect(send('PUT', `${E}/templates/${und.ID}`, { token, template: und }).data).toEqual({ ...und, Custom: false })
+    expect(ownRows(EVENT_ID)).toEqual([])
+    send('PUT', `${E}/templates/${und.ID}`, { token, template: custom })
+
+    // A master edit reaches every event without its own version; a rename follows into those rows.
+    expect(send('PUT', `templates/${und.ID}`, { token, template: { ...und, Kode: 'UND', Isi_Pesan: 'Hai' } }).data).toMatchObject({
+      template: { ID: und.ID, Kode: 'UND', Isi_Pesan: 'Hai' },
+      custom: 1,
+    })
+    expect(send('GET', `${E}/templates/${und.ID}`, { token }).data).toMatchObject({ Kode: 'UND', Isi_Pesan: 'Khusus', Aktif: false, Custom: true })
+    expect(send('GET', `${O}/templates/${und.ID}`, { token }).data).toMatchObject({ Kode: 'UND', Isi_Pesan: 'Hai', Custom: false })
+    expect(send('PUT', `templates/${und.ID}`, { token, template: { ...und, Kode: 'NEW' } }).code).toBe('VALIDATION')
+
+    // Reset drops the event's version.
+    expect(send('POST', `${E}/templates/${und.ID}/reset`, { token }).data).toMatchObject({ Kode: 'UND', Isi_Pesan: 'Hai', Aktif: true, Custom: false })
+    expect(ownRows(EVENT_ID)).toEqual([])
+    expect(send('GET', `${E}/templates/NEW`, { token }).code).toBe('NOT_FOUND') // a Kode is not an ID
+    expect(send('GET', `${E}/templates/x`, { token }).code).toBe('NOT_FOUND')
+
+    // Deleting a master removes it, and every event's version of it.
+    send('PUT', `${O}/templates/${made.template.ID}`, { token, template: { ...made.template, Isi_Pesan: 'Punya O' } })
+    expect(send('DELETE', `templates/${made.template.ID}`, { token }).data).toEqual({ custom: 1 })
+    expect(send('GET', 'templates', { token }).data).toHaveLength(SEED_TEMPLATES.length)
+    expect(send('GET', `${O}/templates`, { token }).data).toHaveLength(SEED_TEMPLATES.length)
+    expect(ownRows(oid)).toEqual([])
+    expect(send('DELETE', `templates/${made.template.ID}`, { token }).data).toEqual({ custom: 0 })
+  })
+
+  it('setup migration turns per-event rows into masters plus event versions, idempotently', () => {
+    const { map, ctx, send, login } = setup()
+    const token = login()
+    const oid = send('POST', 'event', { token, event: fidaeno }).data.event.id as string
+    // A legacy 03_Template: every row bound to an event. O has one row of its own and one identical copy.
+    const sheet = map.get('03_Template')!
+    const cols = sheet.data[0] as string[]
+    sheet.data.slice(1).forEach((r) => (r[cols.indexOf('Event')] = EVENT_ID))
+    const row = (t: Template) => cols.map((c) => (c === 'Event' ? oid : c === 'ID' ? randomUUID() : String(t[c as keyof Template] ?? '')))
+    sheet.data.push(row({ ...SEED_TEMPLATES[0], Isi_Pesan: 'Punya O' }), row({ ...SEED_TEMPLATES[1], Aktif: 'TRUE' as never }))
+
+    const migrate = () => (ctx.migrateMasterTemplates_ as () => void)()
+    migrate()
+    const rows = sheet.objects()
+    expect(rows.filter((r) => r.Event === '').map((r) => r.ID)).toEqual(SEED_TEMPLATES.map((t) => t.ID))
+    expect(rows.filter((r) => r.Event === oid).map((r) => r.Isi_Pesan)).toEqual(['Punya O'])
+    expect(send('GET', `${E}/templates`, { token }).data.every((t: Template) => !t.Custom)).toBe(true)
+    expect(send('GET', `event/${oid}/templates/${SEED_TEMPLATES[0].ID}`, { token }).data).toMatchObject({ Isi_Pesan: 'Punya O', Custom: true })
+
+    migrate()
+    expect(sheet.objects()).toEqual(rows)
   })
 
   it('creates, renames (the ID stays) and deletes events', () => {
@@ -791,7 +857,8 @@ describe('handlers (in-memory sheet)', () => {
     // Nothing else had to move: every other tab points at the ID.
     expect(map.get('_Users')!.objects().find((r) => r.Email === 'klien@example.com')!.Event).toBe(EVENT_ID)
 
-    expect(send('DELETE', E, { token }).data).toEqual({ tamu: 5, template: 6, sesi: 1, akun: 1 })
+    // The event had no own template versions; the masters stay.
+    expect(send('DELETE', E, { token }).data).toEqual({ tamu: 5, template: 0, sesi: 1, akun: 1 })
     expect(send('GET', 'event', { token }).data.map((e: { slug: string }) => e.slug)).toEqual(['baru'])
     expect(map.get('02_Tamu')!.objects().map((r) => r.Event)).toEqual(['other'])
     expect(map.get('_Users')!.objects().map((r) => r.Email)).toEqual(['Admin@Example.com', 'operator@example.com'])
@@ -830,12 +897,11 @@ describe('handlers (in-memory sheet)', () => {
     expect(send('PUT', E, { token, event: { ...SEED_META.event, domain: 'lain.id' } }).code).toBe('FORBIDDEN')
     expect(send('GET', E, { token }).data.event).toMatchObject({ slug: 'dimas-rara', domain: SEED_META.event.domain })
 
-    // Templates: full CRUD.
-    const t = { ...SEED_TEMPLATES[0], ID: '', Kode: 'KLIEN' }
-    const made = send('POST', `${E}/templates`, { token, template: t }).data
-    expect(made.Kode).toBe('KLIEN')
-    expect(send('PUT', `${E}/templates/${made.ID}`, { token, template: { ...t, Aktif: false } }).data.Aktif).toBe(false)
-    expect(send('DELETE', `${E}/templates/${made.ID}`, { token }).ok).toBe(true)
+    // Templates: own copies' text and Aktif only — no create, no delete, no Kode change.
+    const t = SEED_TEMPLATES[0]
+    expect(send('PUT', `${E}/templates/${t.ID}`, { token, template: { ...t, Kode: 'KLIEN', Aktif: false } }).data).toMatchObject({ Kode: t.Kode, Aktif: false })
+    expect(send('POST', `${E}/templates`, { token, template: t }).code).toBe('ROUTE_NOT_FOUND')
+    expect(send('DELETE', `${E}/templates/${t.ID}`, { token }).code).toBe('ROUTE_NOT_FOUND')
 
     // SUPER_ADMIN only.
     for (const [m, p, b] of [
@@ -846,6 +912,10 @@ describe('handlers (in-memory sheet)', () => {
       ['PATCH', u('klien@example.com'), { aktif: false }],
       ['POST', u('klien@example.com') + '/reset-password', { password: 'Password#1' }],
       ['DELETE', u('klien@example.com'), {}],
+      ['GET', 'templates', {}],
+      ['POST', 'templates', { template: SEED_TEMPLATES[0] }],
+      ['PUT', 'templates/x', { template: SEED_TEMPLATES[0] }],
+      ['DELETE', 'templates/x', {}],
     ] as const) {
       expect(send(m, p, { token, ...b }).code).toBe('FORBIDDEN')
     }
@@ -945,6 +1015,8 @@ describe('handlers (in-memory sheet)', () => {
     for (const tab of ['01_Event', '01_Sesi', '02_Tamu', '03_Template', '_Users'] as const) {
       legacy[tab] = legacy[tab].map((r) => r.slice(1).map((c) => (c === EVENT_ID ? 'dimas-rara' : c)))
     }
+    // Templates were per event then, too.
+    legacy['03_Template'].slice(1).forEach((r) => (r[0] = 'dimas-rara'))
     const { map, services } = makeServices(legacy)
     const ctx = loadGas(services)
     const ss = services.SpreadsheetApp.getActiveSpreadsheet()

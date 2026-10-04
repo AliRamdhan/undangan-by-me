@@ -1,6 +1,6 @@
-import { Delete02Icon } from '@hugeicons/core-free-icons'
+import { ArrowTurnBackwardIcon, Delete02Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { toast } from 'sonner'
 import { WhatsAppBubble } from '@/components/WhatsAppBubble'
 import {
@@ -20,39 +20,91 @@ import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldTitle
 import { Input } from '@/components/ui/input'
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Spinner } from '@/components/ui/spinner'
 import { Textarea } from '@/components/ui/textarea'
 import { HIDDEN_TOKENS, TOKENS, type RenderResult } from '@/core/domain/template'
-import { /* HIDDEN(sementara): TEMPLATE_AKSES, */ TEMPLATE_TIPE, type Template } from '@/core/domain/types'
-import { errorText, useStore } from '@/core/store'
+import { /* HIDDEN(sementara): TEMPLATE_AKSES, */ TEMPLATE_TIPE, type Guest, type Template } from '@/core/domain/types'
+import { errorText } from '@/core/store'
+import { cn } from '@/lib/utils'
 
-type DraftRender = { key: string; result?: RenderResult; error?: string }
+/** `sample` = the scope + guest it was rendered for, so a guest switch can show a loading state. */
+type DraftRender = { key: string; sample: string; result?: RenderResult; error?: string }
 
-export function TemplateEditor({ template, isNew, onDone }: { template: Template; isNew: boolean; onDone: (id?: string) => void }) {
-  const { api, run, busy, guests } = useStore()
+/** The fields a save sends; `Custom` is server-computed and never makes the form dirty. */
+const FIELDS = ['Kode', 'Tipe', 'Akses', 'Bahasa', 'Header_Image_URL', 'Isi_Pesan', 'Aktif'] as const
+
+export interface TemplateEditorProps {
+  template: Template
+  isNew?: boolean
+  /** Kode and Tipe belong to the master: shown, not editable (an event's copy). */
+  lockIdentity?: boolean
+  /** Sample guests for the preview. */
+  guests: Guest[]
+  /** Renders `body` for one guest (`null` = the dummy guest). Must be stable (useCallback). */
+  renderDraft: (body: string, guestId: string | null) => Promise<RenderResult>
+  /** What `renderDraft` renders against (the master page's chosen event); a change resets the sample guest. */
+  scope?: string
+  /** Extra control in the preview header, before the guest picker. */
+  previewAction?: ReactNode
+  busy: boolean
+  onSave: (draft: Template) => Promise<void>
+  /** Shown for a saved template; the confirmation says what else goes with it. */
+  onDelete?: () => Promise<void>
+  deleteDescription?: string
+  /** Shown while `template.Custom`: drops the event's own version. Resolves to the template as saved. */
+  onReset?: () => Promise<Template | undefined>
+}
+
+export function TemplateEditor({
+  template,
+  isNew = false,
+  lockIdentity = false,
+  guests,
+  renderDraft,
+  scope = '',
+  previewAction,
+  busy,
+  onSave,
+  onDelete,
+  deleteDescription,
+  onReset,
+}: TemplateEditorProps) {
   const [draft, setDraft] = useState<Template>(template)
-  const [sampleId, setSampleId] = useState<string>(() => guests.find((g) => g.PIN && g.Nama)?.ID ?? '')
+  const [pick, setPick] = useState(() => ({ scope, id: guests.find((g) => g.PIN && g.Nama)?.ID ?? '' }))
   const [render, setRender] = useState<DraftRender | null>(null)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const area = useRef<HTMLTextAreaElement>(null)
-  const dirty = JSON.stringify(draft) !== JSON.stringify(template)
+  /** The sample the last result was rendered for: a new one renders at once, a text edit is debounced. */
+  const rendered = useRef<string | null>(null)
+  const dirty = FIELDS.some((k) => draft[k] !== template[k])
 
+  const sampleId = pick.scope === scope ? pick.id : ''
   const sample = guests.find((g) => g.ID === sampleId) ?? null
-  const key = `${draft.Isi_Pesan}\u0000${sample?.ID}`
+  const sampleKey = `${scope}\u0000${sample?.ID ?? ''}`
+  const key = `${draft.Isi_Pesan}\u0000${sampleKey}`
+  const switching = !!render && render.sample !== sampleKey
 
-  // Debounced live render through the API — the backend renderer, not a local copy.
+  // Live render through the API — the backend renderer, not a local copy.
   useEffect(() => {
     let alive = true
-    const t = setTimeout(() => {
-      api
-        .renderDraft(draft.Isi_Pesan, sample?.ID ?? null)
-        .then((result) => alive && setRender({ key, result }))
-        .catch((e: unknown) => alive && setRender({ key, error: errorText(e) }))
-    }, 250)
+    const done = (r: Omit<DraftRender, 'key' | 'sample'>) => {
+      if (!alive) return
+      rendered.current = sampleKey
+      setRender({ key, sample: sampleKey, ...r })
+    }
+    const t = setTimeout(
+      () => {
+        renderDraft(draft.Isi_Pesan, sample?.ID ?? null)
+          .then((result) => done({ result }))
+          .catch((e: unknown) => done({ error: errorText(e) }))
+      },
+      rendered.current === sampleKey ? 250 : 0,
+    )
     return () => {
       alive = false
       clearTimeout(t)
     }
-  }, [api, draft.Isi_Pesan, sample, key])
+  }, [renderDraft, draft.Isi_Pesan, sample, sampleKey, key])
 
   const insert = (token: string) => {
     const el = area.current
@@ -75,20 +127,17 @@ export function TemplateEditor({ template, isNew, onDone }: { template: Template
       toast.error('Kode template wajib diisi')
       return
     }
-    const saved = await run('Simpan template', (api) => api.saveTemplate(draft))
-    if (saved) {
-      toast.success(`Template ${saved.Kode} disimpan`)
-      onDone(saved.ID)
-    }
+    await onSave(draft)
   }
 
   const remove = async () => {
-    const ok = await run('Hapus template', (api) => api.deleteTemplate(template.ID).then(() => true))
+    await onDelete?.()
     setConfirmDelete(false)
-    if (ok) {
-      toast.success(`Template ${template.Kode} dihapus`)
-      onDone()
-    }
+  }
+
+  const reset = async () => {
+    const saved = await onReset?.()
+    if (saved) setDraft(saved)
   }
 
   const set = <K extends keyof Template>(k: K, v: Template[K]) => setDraft((d) => ({ ...d, [k]: v }))
@@ -100,16 +149,23 @@ export function TemplateEditor({ template, isNew, onDone }: { template: Template
           <FieldGroup>
             {/* HIDDEN(sementara): sm:grid-cols-4 while Akses is hidden */}
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              <Field>
+              <Field data-disabled={lockIdentity || undefined}>
                 <FieldLabel htmlFor="tpl-kode">Kode *</FieldLabel>
-                <Input id="tpl-kode" className="font-mono" value={draft.Kode} onChange={(e) => set('Kode', e.target.value)} />
+                <Input
+                  id="tpl-kode"
+                  className="font-mono"
+                  value={draft.Kode}
+                  disabled={lockIdentity}
+                  onChange={(e) => set('Kode', e.target.value)}
+                />
               </Field>
-              <Field>
+              <Field data-disabled={lockIdentity || undefined}>
                 <FieldLabel htmlFor="tpl-tipe">Tipe</FieldLabel>
                 <NativeSelect
                   id="tpl-tipe"
                   className="w-full"
                   value={draft.Tipe}
+                  disabled={lockIdentity}
                   onChange={(e) => set('Tipe', e.target.value as Template['Tipe'])}
                 >
                   {TEMPLATE_TIPE.map((t) => (
@@ -141,6 +197,9 @@ export function TemplateEditor({ template, isNew, onDone }: { template: Template
                 <FieldLabel htmlFor="tpl-aktif">Aktif</FieldLabel>
               </Field>
             </div>
+            {lockIdentity && (
+              <FieldDescription className="-mt-3">Kode dan tipe mengikuti template master dari Super Admin.</FieldDescription>
+            )}
 
             <Field>
               <FieldTitle>Sisipkan token</FieldTitle>
@@ -202,10 +261,16 @@ export function TemplateEditor({ template, isNew, onDone }: { template: Template
           </FieldGroup>
         </CardContent>
         <CardFooter className="flex-wrap gap-2 border-t">
-          {!isNew && (
-            <Button variant="destructive" onClick={() => setConfirmDelete(true)} disabled={!!busy}>
+          {!isNew && onDelete && (
+            <Button variant="destructive" onClick={() => setConfirmDelete(true)} disabled={busy}>
               <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} data-icon="inline-start" />
               Hapus
+            </Button>
+          )}
+          {onReset && template.Custom && !dirty && (
+            <Button variant="outline" onClick={reset} disabled={busy} title="Hapus versi event ini dan pakai lagi template master">
+              <HugeiconsIcon icon={ArrowTurnBackwardIcon} strokeWidth={2} data-icon="inline-start" />
+              Kembalikan ke master
             </Button>
           )}
           <span className="ml-auto" />
@@ -214,7 +279,7 @@ export function TemplateEditor({ template, isNew, onDone }: { template: Template
               Buang perubahan
             </Button>
           )}
-          <Button onClick={save} disabled={!!busy || (!dirty && !isNew) || invalid} title={invalid ? 'Perbaiki token dulu' : undefined}>
+          <Button onClick={save} disabled={busy || (!dirty && !isNew) || invalid} title={invalid ? 'Perbaiki token dulu' : undefined}>
             {isNew ? 'Buat template' : 'Simpan'}
           </Button>
         </CardFooter>
@@ -223,8 +288,15 @@ export function TemplateEditor({ template, isNew, onDone }: { template: Template
       <Card className="self-start xl:sticky xl:top-20">
         <CardHeader>
           <CardTitle>Preview</CardTitle>
-          <CardAction>
-            <NativeSelect aria-label="Tamu contoh" size="sm" className="w-44" value={sampleId} onChange={(e) => setSampleId(e.target.value)}>
+          <CardAction className="flex flex-wrap justify-end gap-2">
+            {previewAction}
+            <NativeSelect
+              aria-label="Tamu contoh"
+              size="sm"
+              className="w-44"
+              value={sampleId}
+              onChange={(e) => setPick({ scope, id: e.target.value })}
+            >
               <NativeSelectOption value="">Tamu contoh (dummy)</NativeSelectOption>
               {guests
                 .filter((g) => g.PIN && g.Nama)
@@ -236,16 +308,32 @@ export function TemplateEditor({ template, isNew, onDone }: { template: Template
             </NativeSelect>
           </CardAction>
         </CardHeader>
-        <CardContent>
-          {render?.error ? (
-            <p className="text-critical-ink">{render.error}</p>
-          ) : r ? (
-            <div className="flex flex-col gap-3">
-              <WhatsAppBubble text={r.text} />
-              {r.empty.length > 0 && (
-                <p className="text-warning-ink">⚠ Kosong untuk tamu ini: {r.empty.map((t) => `{{${t}}}`).join(', ')}</p>
+        <CardContent aria-busy={switching}>
+          {render ? (
+            <div className="relative">
+              <div className={cn('flex flex-col gap-3 transition-opacity', switching && 'opacity-40')}>
+                {render.error ? (
+                  <p className="text-critical-ink">{render.error}</p>
+                ) : (
+                  r && (
+                    <>
+                      <WhatsAppBubble text={r.text} />
+                      {r.empty.length > 0 && (
+                        <p className="text-warning-ink">⚠ Kosong untuk tamu ini: {r.empty.map((t) => `{{${t}}}`).join(', ')}</p>
+                      )}
+                      <p className="text-muted-foreground">{r.text.length} karakter</p>
+                    </>
+                  )
+                )}
+              </div>
+              {switching && (
+                <div className="absolute inset-x-0 top-16 flex justify-center">
+                  <span className="flex items-center gap-2 rounded-full border bg-card px-3 py-1.5 text-muted-foreground shadow-sm">
+                    <Spinner />
+                    Memuat preview…
+                  </span>
+                </div>
               )}
-              <p className="text-muted-foreground">{r.text.length} karakter</p>
             </div>
           ) : (
             <Skeleton className="h-64 rounded-xl" />
@@ -257,11 +345,11 @@ export function TemplateEditor({ template, isNew, onDone }: { template: Template
         <AlertDialogContent size="sm">
           <AlertDialogHeader>
             <AlertDialogTitle>Hapus template {template.Kode}?</AlertDialogTitle>
-            <AlertDialogDescription>Tamu dengan akses ini akan memakai template SEMUA sebagai gantinya.</AlertDialogDescription>
+            {deleteDescription && <AlertDialogDescription>{deleteDescription}</AlertDialogDescription>}
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Batal</AlertDialogCancel>
-            <AlertDialogAction variant="destructive" onClick={remove} disabled={!!busy}>
+            <AlertDialogAction variant="destructive" onClick={remove} disabled={busy}>
               Ya, hapus
             </AlertDialogAction>
           </AlertDialogFooter>

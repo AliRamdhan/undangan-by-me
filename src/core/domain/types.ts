@@ -193,4 +193,9 @@ export interface Template {
   Header_Image_URL: string
   Isi_Pesan: string
   Aktif: boolean
+  /**
+   * An event's view only: the event saved its own version (its own 03_Template
+   * row), so the master's text and Aktif no longer reach it. `ID` stays the master's.
+   */
+  Custom?: boolean
 }
