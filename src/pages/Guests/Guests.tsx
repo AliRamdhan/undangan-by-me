@@ -40,7 +40,7 @@ import { useStore } from '@/core/store'
 import { GenerateLinksDialog } from '@/components/GenerateLinksDialog'
 import { MessagePreviewDialog } from '@/components/MessagePreviewDialog'
 import { downloadBlob, downloadText } from '@/utils/download'
-import { GuestDrawer } from '@/pages/Guests/components/GuestDrawer'
+import { GuestDialog } from '@/pages/Guests/components/GuestDialog'
 import { GuestTable, type SortState } from '@/pages/Guests/components/GuestTable'
 import { ImportDialog } from '@/pages/Guests/components/ImportDialog'
 import { IssuesPanel } from '@/pages/Guests/components/IssuesPanel'
@@ -143,7 +143,7 @@ export function Guests() {
   // so a bulk action can never hit rows that moved underneath.
   const [sel, setSel] = useState<{ src: Guest[]; ids: Set<number> }>({ src: guests, ids: new Set() })
   const selected = sel.src === guests ? sel.ids : new Set<number>()
-  const [drawer, setDrawer] = useState<{ guest: Guest | null; isNew: boolean } | null>(null)
+  const [detail, setDetail] = useState<{ guest: Guest | null; isNew: boolean } | null>(null)
   const [preview, setPreview] = useState<Guest | null>(null)
   const [issues, setIssues] = useState<Issue[] | null>(null)
   const [importOpen, setImportOpen] = useState(false)
@@ -215,7 +215,7 @@ export function Guests() {
     <div className="flex min-h-0 flex-1 flex-col gap-3">
       {/* Menu → Tamu, as buttons: discoverable on first open, no training needed. */}
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-        <Button size="lg" onClick={() => setDrawer({ guest: null, isNew: true })}>
+        <Button size="lg" onClick={() => setDetail({ guest: null, isNew: true })}>
           <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" />
           Tambah Tamu
         </Button>
@@ -357,7 +357,7 @@ export function Guests() {
             selected={selected}
             onToggle={toggle}
             onToggleAll={toggleAll}
-            onOpen={(g) => setDrawer({ guest: g, isNew: false })}
+            onOpen={(g) => setDetail({ guest: g, isNew: false })}
             sort={sort}
             onSort={onSort}
             flashNo={flashNo}
@@ -369,14 +369,14 @@ export function Guests() {
         {' · '}Kolom abu-abu bertanda ⚙ diisi otomatis. Klik nama untuk mengedit.
       </p>
 
-      {drawer && (
-        <GuestDrawer
-          key={drawer.isNew ? 'new' : drawer.guest?.ID}
+      {detail && (
+        <GuestDialog
+          key={detail.isNew ? 'new' : detail.guest?.ID}
           open
-          guest={drawer.guest}
-          isNew={drawer.isNew}
+          guest={detail.guest}
+          isNew={detail.isNew}
           groups={groups}
-          onClose={() => setDrawer(null)}
+          onClose={() => setDetail(null)}
           onPreview={(g) => setPreview(g)}
         />
       )}

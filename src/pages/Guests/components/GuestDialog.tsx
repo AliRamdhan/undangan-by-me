@@ -14,10 +14,10 @@ import {
 } from '@/components/ui/alert-dialog'
 // HIDDEN(sementara): import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldSet } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 // HIDDEN(sementara): import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
-import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Spinner } from '@/components/ui/spinner'
 import { Textarea } from '@/components/ui/textarea'
 import { HP_PATTERN, normalizePhone } from '@/core/domain/phone'
@@ -81,7 +81,7 @@ function ReadOnly({ label, children }: { label: string; children: ReactNode }) {
   )
 }
 
-export function GuestDrawer({
+export function GuestDialog({
   guest,
   isNew,
   open,
@@ -136,11 +136,11 @@ export function GuestDrawer({
   const showErr = (k: keyof GuestInput) => (touched || form[k] !== initial[k] ? errors[k] : undefined)
 
   return (
-    <Sheet open={open} onOpenChange={(o) => !o && onClose()}>
-      <SheetContent className="w-full gap-0 data-[side=right]:sm:max-w-xl">
-        <SheetHeader className="border-b">
-          <SheetTitle className="truncate text-base">{isNew ? 'Tambah Tamu' : guest?.Nama || '(tanpa nama)'}</SheetTitle>
-          <SheetDescription render={<div />} className="flex flex-wrap items-center gap-2">
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="flex max-h-[90dvh] flex-col gap-0 p-0 sm:max-w-2xl">
+        <DialogHeader className="border-b p-6 pr-12">
+          <DialogTitle className="truncate text-base">{isNew ? 'Tambah Tamu' : guest?.Nama || '(tanpa nama)'}</DialogTitle>
+          <DialogDescription render={<div />} className="flex flex-wrap items-center gap-2">
             {!isNew && guest ? (
               <>
                 <span>Baris {guest.No}</span>
@@ -154,12 +154,12 @@ export function GuestDrawer({
             ) : (
               'PIN dibuat otomatis saat disimpan.'
             )}
-          </SheetDescription>
-        </SheetHeader>
+          </DialogDescription>
+        </DialogHeader>
 
         <form
           id={fid('form')}
-          className="flex-1 overflow-y-auto p-6"
+          className="min-h-0 flex-1 overflow-y-auto p-6"
           onSubmit={(e) => {
             e.preventDefault()
             void save()
@@ -374,7 +374,7 @@ export function GuestDrawer({
           </FieldGroup>
         </form>
 
-        <SheetFooter className="flex-row flex-wrap justify-end border-t">
+        <DialogFooter className="flex-row flex-wrap justify-end border-t p-4">
           {!isNew && (
             <Button variant="destructive" className="mr-auto" onClick={() => setConfirmDelete(true)} disabled={!!busy}>
               <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} data-icon="inline-start" />
@@ -393,8 +393,8 @@ export function GuestDrawer({
             {busy && <Spinner data-icon="inline-start" />}
             {busy ? 'Menyimpan…' : isNew ? 'Tambah' : 'Simpan'}
           </Button>
-        </SheetFooter>
-      </SheetContent>
+        </DialogFooter>
+      </DialogContent>
 
       <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
         <AlertDialogContent size="sm">
@@ -412,6 +412,6 @@ export function GuestDrawer({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </Sheet>
+    </Dialog>
   )
 }
