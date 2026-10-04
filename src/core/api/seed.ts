@@ -1,106 +1,13 @@
 import type { Role } from '@/core/api/types'
+import { DEMO_META, GREETINGS, blankGuest, seedId } from '@/core/domain/demo'
 import type { Guest, Meta, Template } from '@/core/domain/types'
 
-const GREETINGS = ['Halo', 'Hai', 'Salam hangat', 'Dengan hormat']
+export { blankGuest, seedId }
 
-/**
- * Fixed UUIDs, so the sample workbook and the tests are reproducible.
- * `kind` keeps the tabs apart: 1 event, 2 sesi, 3 tamu, 4 template, 5 user.
- */
-export const seedId = (kind: number, n: number) => `00000000-0000-4000-8${kind}00-${String(n).padStart(12, '0')}`
-
-// Sample event from docs/URL-CONTRACT.md § 2.
-export const SEED_META: Meta = {
-  mode: 'DRY-RUN',
-  greetings: GREETINGS,
-  event: {
-    id: seedId(1, 1),
-    slug: 'dimas-rara',
-    domain: 'https://undangan.by.me',
-    nama_event: 'Pernikahan Dimas & Rara',
-    tipe: 'PERNIKAHAN',
-    bahasa: 'id',
-    timezone: 'WIB',
-    web_template: 'klasik',
-    couple: {
-      pria: { panggilan: 'Dimas', lengkap: 'Dimas Prasetyo, S.T.', ortu: 'Bapak Hadi & Ibu Sri', hp: '+6281277770001', email: 'dimas@example.com' },
-      wanita: { panggilan: 'Rara', lengkap: 'Rara Anindita, S.Psi.', ortu: 'Bapak Agus & Ibu Wulan', hp: '+6281277770002', email: 'rara@example.com' },
-      hashtag: '#DimasRara',
-    },
-    tanggal_utama: '2026-11-14',
-    tanggal_pengingat: '2026-11-12T09:00',
-    batas_rsvp: '2026-11-01',
-    sesi: [
-      {
-        id: seedId(2, 1),
-      kode: 'S1',
-        label: 'Akad Nikah',
-        tanggal: '2026-11-14',
-        mulai: '08:00',
-        selesai: '10:00',
-        tempat: 'Masjid Al-Azhar',
-        alamat: 'Jl. Sisingamangaraja, Kebayoran Baru, Jakarta Selatan',
-        maps: 'https://maps.app.goo.gl/alazhar',
-        dress_code: 'Putih',
-        live_stream: '',
-      },
-      {
-        id: seedId(2, 2),
-      kode: 'S2',
-        label: 'Resepsi',
-        tanggal: '2026-11-14',
-        mulai: '11:00',
-        selesai: '14:00',
-        tempat: 'Balai Kartini',
-        alamat: 'Jl. Gatot Subroto Kav. 37, Jakarta Selatan',
-        maps: 'https://maps.app.goo.gl/balaikartini',
-        dress_code: 'Batik / Formal',
-        live_stream: 'https://youtube.com/@dimasrara',
-      },
-    ],
-    gift: { bank: 'BCA', atas_nama: 'Rara Anindita', norek: '1234567890', qris: '' },
-    media: { musik: '', judul_musik: '', cover: '' },
-    gallery: [],
-    cs: { nama: 'Sari', hp: '+628123456789' },
-    kapasitas: { s1: 200, s2: 400 },
-  },
-}
+/** The Dimas & Rara demo event (core/domain/demo.ts); the tests' main fixture. */
+export const SEED_META: Meta = DEMO_META
 
 type Row = Partial<Guest> & Pick<Guest, 'Nama'>
-
-const blank: Guest = {
-  ID: '',
-  No: 0,
-  PIN: '',
-  Gelar: '',
-  Nama: '',
-  HP: '',
-  Email: '',
-  Akses: 'REGULAR',
-  Grup: '',
-  Sisi: 'BERSAMA',
-  Q_S1: 0,
-  Q_S2: 2,
-  Status_RSVP: 'BELUM',
-  RSVP_S1: 0,
-  RSVP_S2: 0,
-  RSVP_Waktu: '',
-  Nama_Pax: '',
-  Pesan_Tamu: '',
-  Status_Kirim: 'BELUM',
-  Kirim_Terakhir: '',
-  Kirim_Count: 0,
-  Kirim_Error: '',
-  Meja: '',
-  Note_Unik: '',
-  Catatan: '',
-  HP_Valid: '✅',
-  Link_Undangan: '',
-  Preview_Pesan: '',
-  Link_WA: '',
-}
-
-export const blankGuest = (): Guest => ({ ...blank })
 
 const hadir = (s1: number, s2: number, waktu: string, pax = '', pesan = ''): Partial<Guest> => ({
   Status_RSVP: 'HADIR',
@@ -160,7 +67,7 @@ const ROWS: Row[] = [
   { PIN: '729104', Gelar: 'Sdr.', Nama: 'Dian Santoso', HP: '+6281211110034', Grup: 'Teman Kantor', Sisi: 'WANITA', Catatan: 'PIN bentrok — impor manual' },
 ]
 
-export const SEED_GUESTS: Guest[] = ROWS.map((r, i) => ({ ...blank, ID: seedId(3, i + 1), ...r }))
+export const SEED_GUESTS: Guest[] = ROWS.map((r, i) => ({ ...blankGuest(), ID: seedId(3, i + 1), ...r }))
 
 export const SEED_TEMPLATES: Template[] = [
   {
@@ -322,7 +229,7 @@ export const SEED_FIDAENO_GUESTS: Guest[] = [
   { PIN: '593018', Gelar: 'Ibu', Nama: 'Rahmawati', HP: '+6281311110002', Akses: 'KELUARGA', Sisi: 'WANITA' },
   { PIN: '287465', Gelar: 'Sdr.', Nama: 'Galih Pratama', HP: '081311110003', Grup: 'Teman Kuliah', Sisi: 'BERSAMA' },
   { PIN: '', Gelar: 'Sdri.', Nama: 'Nurul Hidayah', HP: '+6281311110004', Grup: 'Teman Kuliah', Sisi: 'BERSAMA' },
-].map((r, i) => ({ ...blank, ID: seedId(3, 101 + i), ...r }) as Guest)
+].map((r, i) => ({ ...blankGuest(), ID: seedId(3, 101 + i), ...r }) as Guest)
 
 /**
  * Every event in the sample workbook (npm run sample:xlsx); templates are copied per event.

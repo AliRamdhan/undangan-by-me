@@ -8,11 +8,11 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/empty'
-import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useAuth } from '@/core/auth'
-import type { Guest, Template } from '@/core/domain/types'
+import { DEMO_GUESTS, renderDemo } from '@/core/domain/demo'
+import type { Template } from '@/core/domain/types'
 import { errorText, useEventList } from '@/core/store'
 import { cn } from '@/lib/utils'
 import { masterTemplatePath, PATHS } from '@/route.paths'
@@ -31,7 +31,8 @@ const NEW: Template = {
 /**
  * /admin/templates — SUPER_ADMIN's master templates (03_Template rows with a
  * blank Event). Every event has every master; an edit reaches every event that
- * has not saved its own version. The preview renders against a chosen event.
+ * has not saved its own version. The preview renders locally against demo data
+ * only: no real event or guest is loaded here (they are confidential).
  */
 export function MasterTemplates() {
   const { app } = useAuth()
@@ -43,12 +44,6 @@ export function MasterTemplates() {
   const [error, setError] = useState<string | null>(null)
   const [creating, setCreating] = useState(false)
   const [busy, setBusy] = useState(false)
-
-  // Preview event: picked, else the first one. Its guests are the sample guests.
-  const [pickedEvent, setPickedEvent] = useState('')
-  const eventId = events?.some((e) => e.id === pickedEvent) ? pickedEvent : (events?.[0]?.id ?? '')
-  const [sampleGuests, setSampleGuests] = useState<{ eventId: string; guests: Guest[] }>({ eventId: '', guests: [] })
-  const guests = sampleGuests.eventId === eventId ? sampleGuests.guests : []
 
   const reload = useCallback(async () => {
     try {
@@ -64,25 +59,6 @@ export function MasterTemplates() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     void reload()
   }, [reload])
-
-  useEffect(() => {
-    if (!eventId) return
-    let alive = true
-    app
-      .forEvent(eventId)
-      .listGuests()
-      .then((guests) => alive && setSampleGuests({ eventId, guests }))
-      .catch(() => alive && setSampleGuests({ eventId, guests: [] }))
-    return () => {
-      alive = false
-    }
-  }, [app, eventId])
-
-  const renderDraft = useCallback(
-    (body: string, guestId: string | null) =>
-      eventId ? app.forEvent(eventId).renderDraft(body, guestId) : Promise.reject(new Error('Buat event dulu untuk melihat preview')),
-    [app, eventId],
-  )
 
   const current = creating ? null : ((masters ?? []).find((t) => t.ID === selected) ?? masters?.[0] ?? null)
   const eventCount = events?.length ?? 0
@@ -120,21 +96,14 @@ export function MasterTemplates() {
     setSelected(null, true)
   }
 
-  const eventPicker = (
-    <NativeSelect aria-label="Event untuk preview" size="sm" className="w-44" value={eventId} onChange={(e) => setPickedEvent(e.target.value)}>
-      {(events ?? []).map((ev) => (
-        <NativeSelectOption key={ev.id} value={ev.id}>
-          {ev.nama_event || ev.slug}
-        </NativeSelectOption>
-      ))}
-    </NativeSelect>
-  )
-
   const editorProps = {
-    guests,
-    renderDraft,
-    scope: eventId,
-    previewAction: eventCount > 1 ? eventPicker : undefined,
+    guests: DEMO_GUESTS,
+    renderDraft: renderDemo,
+    previewAction: (
+      <Badge variant="muted" title="Preview memakai event dan tamu contoh, bukan data event sungguhan">
+        Data demo
+      </Badge>
+    ),
     busy,
     onSave: save,
   }

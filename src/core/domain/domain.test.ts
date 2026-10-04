@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { SEED_GUESTS, SEED_META, SEED_TEMPLATES, blankGuest } from '@/core/api/seed'
 import { cekDuplikat } from '@/core/domain/checks'
+import { DEMO_DUMMY, DEMO_GUESTS, renderDemo } from '@/core/domain/demo'
 import { exportGuestsCsv, parseCsv, parseImport, serializeCsv } from '@/core/domain/csv'
 import { applyFormulas } from '@/core/domain/derive'
 import { linkUndangan, waLink } from '@/core/domain/link'
@@ -208,5 +209,19 @@ describe('computeStats', () => {
     expect(s.sesi[1]).toMatchObject({ kuota: 5, hadir: 4, kapasitas: 400 })
     expect(s.akses.find((b) => b.key === 'REGULAR')).toMatchObject({ total: 2, hadir: 1 })
     expect(s.lebihKuota.map((g) => g.Nama)).toEqual(['C'])
+  })
+})
+
+describe('demo preview data', () => {
+  it('renders every seed template against the demo event and guests, like the event renderer', async () => {
+    for (const t of SEED_TEMPLATES) {
+      for (const g of [...DEMO_GUESTS, null]) {
+        const r = await renderDemo(t.Isi_Pesan, g?.ID ?? null)
+        expect(r.unknown, t.Kode).toEqual([])
+        expect(r).toEqual(inspectTemplate(t.Isi_Pesan, buildContext(g ?? DEMO_DUMMY, SEED_META)))
+      }
+    }
+    expect((await renderDemo('{{tamu.nama}}', DEMO_GUESTS[0].ID)).text).toBe('H. Bambang Sutrisno')
+    expect((await renderDemo('{{tamu.nama}}', null)).text).toBe('Nama Tamu')
   })
 })

@@ -27,7 +27,7 @@ import { /* HIDDEN(sementara): TEMPLATE_AKSES, */ TEMPLATE_TIPE, type Guest, typ
 import { errorText } from '@/core/store'
 import { cn } from '@/lib/utils'
 
-/** `sample` = the scope + guest it was rendered for, so a guest switch can show a loading state. */
+/** `sample` = the guest it was rendered for, so a guest switch can show a loading state. */
 type DraftRender = { key: string; sample: string; result?: RenderResult; error?: string }
 
 /** The fields a save sends; `Custom` is server-computed and never makes the form dirty. */
@@ -42,9 +42,7 @@ export interface TemplateEditorProps {
   guests: Guest[]
   /** Renders `body` for one guest (`null` = the dummy guest). Must be stable (useCallback). */
   renderDraft: (body: string, guestId: string | null) => Promise<RenderResult>
-  /** What `renderDraft` renders against (the master page's chosen event); a change resets the sample guest. */
-  scope?: string
-  /** Extra control in the preview header, before the guest picker. */
+  /** Extra content in the preview header, before the guest picker. */
   previewAction?: ReactNode
   busy: boolean
   onSave: (draft: Template) => Promise<void>
@@ -61,7 +59,6 @@ export function TemplateEditor({
   lockIdentity = false,
   guests,
   renderDraft,
-  scope = '',
   previewAction,
   busy,
   onSave,
@@ -70,7 +67,7 @@ export function TemplateEditor({
   onReset,
 }: TemplateEditorProps) {
   const [draft, setDraft] = useState<Template>(template)
-  const [pick, setPick] = useState(() => ({ scope, id: guests.find((g) => g.PIN && g.Nama)?.ID ?? '' }))
+  const [sampleId, setSampleId] = useState(() => guests.find((g) => g.PIN && g.Nama)?.ID ?? '')
   const [render, setRender] = useState<DraftRender | null>(null)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const area = useRef<HTMLTextAreaElement>(null)
@@ -78,9 +75,8 @@ export function TemplateEditor({
   const rendered = useRef<string | null>(null)
   const dirty = FIELDS.some((k) => draft[k] !== template[k])
 
-  const sampleId = pick.scope === scope ? pick.id : ''
   const sample = guests.find((g) => g.ID === sampleId) ?? null
-  const sampleKey = `${scope}\u0000${sample?.ID ?? ''}`
+  const sampleKey = sample?.ID ?? ''
   const key = `${draft.Isi_Pesan}\u0000${sampleKey}`
   const switching = !!render && render.sample !== sampleKey
 
@@ -295,7 +291,7 @@ export function TemplateEditor({
               size="sm"
               className="w-44"
               value={sampleId}
-              onChange={(e) => setPick({ scope, id: e.target.value })}
+              onChange={(e) => setSampleId(e.target.value)}
             >
               <NativeSelectOption value="">Tamu contoh (dummy)</NativeSelectOption>
               {guests
