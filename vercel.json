@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    { "source": "/events/:slug/:pin(\\d+)", "destination": "/events/:slug/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
