@@ -656,10 +656,6 @@ describe('handlers (in-memory sheet)', () => {
     expect(created.ID).toMatch(UUID)
     expect(created.PIN).toMatch(PIN_PATTERN)
     expect(created.Link_Undangan).toBe(`https://undangan.by.me/dimas-rara/${created.PIN}`)
-    // With the admin app's origin, the link is that app's own invitation page (like copyLink).
-    const fromApp = send('GET', `${E}/guests/${created.ID}`, { token, origin: 'https://app.example.com' }).data
-    expect(fromApp.Link_Undangan).toBe(`https://app.example.com/events/dimas-rara/${created.PIN}`)
-    expect(send('GET', `${E}/guests/${created.ID}`, { token, origin: 'javascript:alert(1)' }).data.Link_Undangan).toBe(created.Link_Undangan)
     const row = map.get('02_Tamu')!.objects().at(-1)!
     expect(row).toMatchObject({ ID: created.ID, Event: EVENT_ID, No: 6, PIN: created.PIN, Link_Undangan: created.Link_Undangan })
 

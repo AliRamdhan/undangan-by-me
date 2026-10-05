@@ -1,4 +1,3 @@
-import { appOrigin } from '@/core/domain/link'
 import { buildContext, inspectTemplate, type RenderResult } from '@/core/domain/template'
 import type { Guest, Meta } from '@/core/domain/types'
 
@@ -123,5 +122,5 @@ export const DEMO_DUMMY: Guest = { ...blank, Nama: 'Nama Tamu', PIN: '000000' }
 /** A template body rendered locally against the demo event and guest `guestId` (`null` = the dummy). */
 export function renderDemo(body: string, guestId: string | null): Promise<RenderResult> {
   const g = DEMO_GUESTS.find((x) => x.ID === guestId) ?? DEMO_DUMMY
-  return Promise.resolve(inspectTemplate(body, buildContext(g, DEMO_META, appOrigin())))
+  return Promise.resolve(inspectTemplate(body, buildContext(g, DEMO_META)))
 }
