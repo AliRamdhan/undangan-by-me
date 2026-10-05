@@ -7,6 +7,11 @@ export function linkUndangan(domain: string, slug: string, pin: string): string 
   return `${base.replace(/\/+$/, '')}/${slug}/${pin}`
 }
 
+/** This app's origin (`window.location.origin`), or '' outside a browser. */
+export function appOrigin(): string {
+  return typeof window === 'undefined' ? '' : window.location.origin
+}
+
 /** This app's own invitation page for one guest: `{origin}/events/{slug}/{PIN}`. */
 export function linkLocal(origin: string, slug: string, pin: string): string {
   if (!pin || !slug) return ''

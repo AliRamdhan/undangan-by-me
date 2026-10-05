@@ -1,4 +1,5 @@
 import { ApiError } from '@/core/api/types'
+import { appOrigin } from '@/core/domain/link'
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 
@@ -19,6 +20,7 @@ interface Envelope<T> {
  * and cannot read request headers, so:
  * - GET sends params and the token in the query string;
  * - everything else is a POST whose JSON body carries `_method` and `token`.
+ * Both also carry `origin`, so the server builds `{{link}}` on this app's own domain.
  */
 export class RestClient {
   private readonly base: string
@@ -37,12 +39,12 @@ export class RestClient {
     url.searchParams.set('path', path.replace(/^\/+/, ''))
     let init: RequestInit
     if (method === 'GET') {
-      for (const [k, v] of Object.entries({ ...opts.query, token: this.token })) {
+      for (const [k, v] of Object.entries({ ...opts.query, token: this.token, origin: appOrigin() })) {
         if (v !== undefined && v !== null && v !== '') url.searchParams.set(k, String(v))
       }
       init = { method: 'GET', redirect: 'follow' }
     } else {
-      const body = { v: 1, ...(method === 'POST' ? {} : { _method: method }), ...(this.token ? { token: this.token } : {}), ...opts.body }
+      const body = { v: 1, ...(method === 'POST' ? {} : { _method: method }), ...(this.token ? { token: this.token } : {}), ...(appOrigin() ? { origin: appOrigin() } : {}), ...opts.body }
       init = {
         method: 'POST',
         // text/plain keeps this a "simple" request: Apps Script cannot answer
