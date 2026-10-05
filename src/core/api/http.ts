@@ -35,14 +35,16 @@ export class RestClient {
     if (!this.base) throw new ApiError('NETWORK', 'URL Apps Script belum diatur — isi VITE_APPS_SCRIPT_URL di .env lalu build/jalankan ulang.')
     const url = new URL(this.base)
     url.searchParams.set('path', path.replace(/^\/+/, ''))
+    // The server falls back to `{origin}/events/{slug}/{PIN}` for {{link}} when an event has no domain.
+    const origin = globalThis.location?.origin ?? ''
     let init: RequestInit
     if (method === 'GET') {
-      for (const [k, v] of Object.entries({ ...opts.query, token: this.token })) {
+      for (const [k, v] of Object.entries({ ...opts.query, token: this.token, origin })) {
         if (v !== undefined && v !== null && v !== '') url.searchParams.set(k, String(v))
       }
       init = { method: 'GET', redirect: 'follow' }
     } else {
-      const body = { v: 1, ...(method === 'POST' ? {} : { _method: method }), ...(this.token ? { token: this.token } : {}), ...opts.body }
+      const body = { v: 1, ...(method === 'POST' ? {} : { _method: method }), ...(this.token ? { token: this.token } : {}), ...(origin ? { origin } : {}), ...opts.body }
       init = {
         method: 'POST',
         // text/plain keeps this a "simple" request: Apps Script cannot answer

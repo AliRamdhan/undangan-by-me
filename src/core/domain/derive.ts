@@ -1,4 +1,4 @@
-import { linkUndangan } from '@/core/domain/link'
+import { linkTamu } from '@/core/domain/link'
 import { hpValid, phoneCounts } from '@/core/domain/phone'
 import type { EventInfo, Guest } from '@/core/domain/types'
 
@@ -12,6 +12,6 @@ export function applyFormulas(guests: readonly Guest[], event: EventInfo): Guest
     ...g,
     No: i + 1,
     HP_Valid: hpValid(g.HP, counts),
-    Link_Undangan: linkUndangan(event.domain, event.slug, g.PIN),
+    Link_Undangan: linkTamu(event.domain, event.slug, g.PIN),
   }))
 }

@@ -1,4 +1,4 @@
-import { linkUndangan } from '@/core/domain/link'
+import { linkTamu } from '@/core/domain/link'
 import type { Guest, Meta, Session, Template, TemplateTipe } from '@/core/domain/types'
 
 // Mirror of renderTemplate_() for the mock adapter only. With the Apps Script
@@ -173,7 +173,7 @@ export function buildContext(g: Guest, meta: Meta): RenderContext {
     'tamu.rsvp_s2': String(g.RSVP_S2),
     'tamu.meja': g.Meja,
     'tamu.note_unik': g.Note_Unik,
-    link: linkUndangan(event.domain, event.slug, g.PIN),
+    link: linkTamu(event.domain, event.slug, g.PIN),
     greet: pickGreeting(g.PIN, meta.greetings),
     'event.pria': event.couple.pria.panggilan,
     'event.wanita': event.couple.wanita.panggilan,

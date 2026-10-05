@@ -23,7 +23,7 @@ import type { Guest, Template } from '@/core/domain/types'
  * add an in-memory SpreadsheetApp.
  */
 
-const GAS_DIR = fileURLToPath(new URL('../../../../apps-script/', import.meta.url))
+const GAS_DIR = fileURLToPath(new URL('../../../apps-script/', import.meta.url))
 
 const sha256Hex = (s: string) => createHash('sha256').update(s, 'utf8').digest('hex')
 
