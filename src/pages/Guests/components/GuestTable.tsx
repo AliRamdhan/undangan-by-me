@@ -1,4 +1,4 @@
-import { ArrowDown01Icon, ArrowUp01Icon, LinkSquare02Icon, Settings02Icon } from '@hugeicons/core-free-icons'
+import { ArrowDown01Icon, ArrowUp01Icon, Copy01Icon, LinkSquare02Icon, Settings02Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import type { ReactNode } from 'react'
 import { toast } from 'sonner'
@@ -65,6 +65,17 @@ async function copyLink(slug: string, pin: string) {
   }
 }
 
+/** Copies the same message Link_WA opens — for sharing outside WhatsApp. */
+async function copyMessage(text: string) {
+  if (!text.trim()) return toast.error('Pesan belum dibuat — jalankan Generate Link dulu')
+  try {
+    await navigator.clipboard.writeText(text)
+    toast.success('Pesan disalin', { description: 'Tempel di medsos lain' })
+  } catch {
+    toast.error('Tidak bisa menyalin — izin clipboard ditolak')
+  }
+}
+
 function renderCell(g: Guest, col: Column, onOpen: (g: Guest) => void, slug: string): ReactNode {
   const v = g[col.key]
   switch (col.key) {
@@ -72,14 +83,25 @@ function renderCell(g: Guest, col: Column, onOpen: (g: Guest) => void, slug: str
     //   return <span className="text-ink-3 tabular-nums">{g.No}</span>
     case 'PIN':
       return g.PIN ? (
-        <button
-          type="button"
-          onClick={() => copyLink(slug, g.PIN)}
-          title="Klik untuk menyalin link undangan"
-          className="cursor-pointer font-mono hover:text-primary"
-        >
-          {g.PIN}
-        </button>
+        <span className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => copyLink(slug, g.PIN)}
+            title="Klik untuk menyalin link undangan"
+            className="cursor-pointer font-mono hover:text-primary"
+          >
+            {g.PIN}
+          </button>
+          <button
+            type="button"
+            onClick={() => copyMessage(g.Preview_Pesan)}
+            title={g.Preview_Pesan ? 'Salin pesan undangan (untuk medsos selain WA)' : 'Pesan belum dibuat — jalankan Generate Link'}
+            aria-label="Salin pesan undangan"
+            className={`shrink-0 cursor-pointer hover:text-primary ${g.Preview_Pesan ? 'text-ink-2' : 'text-ink-3 opacity-50'}`}
+          >
+            <HugeiconsIcon icon={Copy01Icon} strokeWidth={2} className="size-3.5" />
+          </button>
+        </span>
       ) : (
         <span className="text-ink-3 italic">kosong</span>
       )
