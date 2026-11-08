@@ -373,23 +373,69 @@ function publicEvent_(ev) {
  * GET invitation ?id= | ?slug=, &pin= → {event, guest}. Public (no token).
  * `guest` is `{gelar, nama}` or null when the PIN is empty or unknown.
  */
-function handleInvitation_(ctx) {
-  const q = ctx.query || {};
-  let id = str_(q.id).trim();
-  const slug = str_(q.slug).trim();
+/** The event a public request names: `id` (01_Event.ID) first, else `slug`. */
+function publicEventOf_(params) {
+  let id = str_(params.id).trim();
+  const slug = str_(params.slug).trim();
   if (!id && slug) {
     const row = readTable_(SHEETS.event).rows.find(function (r) { return str_(r.Slug) === slug; });
     id = row ? str_(row.ID) : '';
   }
   if (!id) throw new ApiError_('NOT_FOUND', 'Event tidak ditemukan');
-  const ev = loadEvent_(id);
+  return loadEvent_(id);
+}
 
+const guestName_ = function (r) {
+  return [str_(r.Gelar), str_(r.Nama)].filter(function (s) { return s; }).join(' ');
+};
+
+/** Wishes anyone may read: the guest's title + name and the message, nothing else. */
+function publicWishes_(eventId, tamuRows) {
+  return tamuRows
+    .filter(function (r) { return str_(r.Event) === eventId && str_(r.Pesan_Tamu).trim(); })
+    .slice(-WISH_LIST_LIMIT)
+    .map(function (r) { return { nama: guestName_(r), pesan: str_(r.Pesan_Tamu) }; });
+}
+
+function handleInvitation_(ctx) {
+  const q = ctx.query || {};
+  const ev = publicEventOf_(q);
+  const rows = readTable_(SHEETS.tamu).rows;
   const pin = str_(q.pin).trim();
-  const g = pin
-    ? readTable_(SHEETS.tamu).rows.find(function (r) { return str_(r.Event) === ev.id && str_(r.PIN) === pin; })
-    : null;
+  const g = pin ? rows.find(function (r) { return str_(r.Event) === ev.id && str_(r.PIN) === pin; }) : null;
   return {
     event: publicEvent_(ev.meta.event),
-    guest: g ? { gelar: str_(g.Gelar), nama: str_(g.Nama) } : null,
+    guest: g ? { gelar: str_(g.Gelar), nama: str_(g.Nama), pesan: str_(g.Pesan_Tamu) } : null,
+    wishes: publicWishes_(ev.id, rows),
   };
+}
+
+/**
+ * POST /wishes {id|slug, pin, pesan} → {wish}. Public: the PIN is the guest's
+ * key (one wish per guest; sending again replaces it). Kept as plain text so a
+ * message starting with = is never run as a formula.
+ */
+function handleWish_(ctx) {
+  const b = ctx.body || {};
+  const ev = publicEventOf_(b);
+  const pin = str_(b.pin).trim();
+  if (!pin) throw new ApiError_('VALIDATION', 'Buka undangan dari link pribadi Anda untuk mengirim ucapan');
+  // Control characters out (newlines stay); then trim.
+  const pesan = str_(b.pesan).replace(/[\u0000-\u0009\u000B\u000C\u000E-\u001F\u007F]/g, '').trim();
+  if (!pesan) throw new ApiError_('VALIDATION', 'Ucapan tidak boleh kosong');
+  if (pesan.length > WISH_MAX_LENGTH) throw new ApiError_('VALIDATION', 'Ucapan maksimal ' + WISH_MAX_LENGTH + ' karakter');
+
+  const table = readTable_(SHEETS.tamu);
+  const mine = table.rows.filter(function (r) { return str_(r.Event) === ev.id && str_(r.PIN) === pin; });
+  if (!mine.length) throw new ApiError_('NOT_FOUND', 'Tamu tidak ditemukan — buka undangan dari link pribadi Anda');
+  if (mine.length > 1) throw new ApiError_('DUPLICATE_PIN', 'PIN ini dipakai lebih dari satu tamu — hubungi penyelenggara');
+
+  const cache = CacheService.getScriptCache();
+  const key = 'wish:' + ev.id + ':' + pin;
+  const sent = Number(cache.get(key)) || 0;
+  if (sent >= WISH_MAX_PER_HOUR) throw new ApiError_('RATE_LIMIT', 'Terlalu sering mengirim ucapan. Coba lagi nanti.');
+  cache.put(key, String(sent + 1), 3600);
+
+  writeFields_(table.sheet, table.headers, mine[0]._row, { Pesan_Tamu: pesan }, ['Pesan_Tamu']);
+  return { wish: { nama: guestName_(mine[0]), pesan: pesan } };
 }

@@ -136,3 +136,9 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const LOGIN_MAX_FAILURES = 5;
 const LOGIN_LOCK_SECONDS = 15 * 60;
 const LOCK_WAIT_MS = 20000;
+
+/** Guest wishes (ucapan) from the public page, stored in 02_Tamu.Pesan_Tamu. */
+const WISH_MAX_LENGTH = 500;
+const WISH_MAX_PER_HOUR = 5;
+/** The invitation read returns at most this many wishes. */
+const WISH_LIST_LIMIT = 200;

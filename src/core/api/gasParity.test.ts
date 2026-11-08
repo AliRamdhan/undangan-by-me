@@ -161,6 +161,7 @@ describe('01_Http.gs + 02_Router.gs', () => {
     })
     expect(match('GET', 'health')).toMatchObject({ handler: 'handleHealth_', opts: { auth: false } })
     expect(match('GET', 'invitation')).toMatchObject({ handler: 'handleInvitation_', opts: { auth: false } })
+    expect(match('POST', 'wishes')).toMatchObject({ handler: 'handleWish_', opts: { auth: false, lock: true } })
     expect(match('POST', 'event/x/guests/bulk-delete')).toMatchObject({ handler: 'handleBulkDeleteGuests_' })
     expect(match('PATCH', 'event/x/guests/g2')).toMatchObject({ handler: 'handlePatchGuest_', params: { id: 'g2' } })
     expect(match('POST', 'event/x/render/draft')).toMatchObject({ handler: 'handleRenderDraft_' })
@@ -608,13 +609,45 @@ describe('handlers (in-memory sheet)', () => {
     expect(ev.couple.pria).toEqual({ panggilan: expect.any(String), lengkap: expect.any(String), ortu: expect.any(String) })
     expect(ev.sesi[0]).not.toHaveProperty('id')
 
-    expect(send('GET', 'invitation', { slug: SEED_META.event.slug }).data).toEqual({ event: ev, guest: null })
+    expect(send('GET', 'invitation', { slug: SEED_META.event.slug }).data).toEqual({ event: ev, guest: null, wishes: res.data.wishes })
     expect(send('GET', 'invitation', { id: EVENT_ID, pin: 'nope' }).data.guest).toBeNull()
     // A PIN of another event's guest does not resolve here.
     expect(send('GET', 'invitation', { id: EVENT_ID, pin: SEED_GUESTS[3].PIN }).data.guest).toBeNull()
     expect(send('GET', 'invitation', { id: 'nope' }).code).toBe('NOT_FOUND')
     expect(send('GET', 'invitation', { slug: 'nope' }).code).toBe('NOT_FOUND')
     expect(send('GET', 'invitation').code).toBe('NOT_FOUND')
+  })
+
+  it('takes a guest wish by PIN and lists only name + message on the invitation', () => {
+    const { send } = setup()
+    const [g0, g1] = SEED_GUESTS
+    const nama = (g: Guest) => [g.Gelar, g.Nama].filter(Boolean).join(' ')
+    const wishesOf = (g: Guest, list: { nama: string }[]) => list.filter((w) => w.nama === nama(g))
+
+    // Control characters are dropped and the text trimmed; a leading = stays plain text.
+    expect(send('POST', 'wishes', { id: EVENT_ID, pin: g0.PIN, pesan: '  =Selamat!\u0007 ' })).toMatchObject({
+      ok: true,
+      data: { wish: { nama: nama(g0), pesan: '=Selamat!' } },
+    })
+    // By slug too; sending again replaces the guest's one wish.
+    send('POST', 'wishes', { slug: SEED_META.event.slug, pin: g0.PIN, pesan: 'Bahagia selalu\nya!' })
+    const inv = send('GET', 'invitation', { id: EVENT_ID, pin: g0.PIN }).data
+    expect(inv.guest.pesan).toBe('Bahagia selalu\nya!')
+    expect(wishesOf(g0, inv.wishes)).toEqual([{ nama: nama(g0), pesan: 'Bahagia selalu\nya!' }])
+    for (const w of inv.wishes) expect(Object.keys(w).sort()).toEqual(['nama', 'pesan'])
+
+    expect(send('POST', 'wishes', { id: EVENT_ID, pesan: 'x' }).code).toBe('VALIDATION')
+    expect(send('POST', 'wishes', { id: EVENT_ID, pin: g0.PIN, pesan: ' \u0007 ' }).code).toBe('VALIDATION')
+    expect(send('POST', 'wishes', { id: EVENT_ID, pin: g0.PIN, pesan: 'a'.repeat(501) }).code).toBe('VALIDATION')
+    expect(send('POST', 'wishes', { id: EVENT_ID, pin: 'nope', pesan: 'x' }).code).toBe('NOT_FOUND')
+    // Another event's guest cannot write here.
+    expect(send('POST', 'wishes', { id: EVENT_ID, pin: SEED_GUESTS[3].PIN, pesan: 'x' }).code).toBe('NOT_FOUND')
+    expect(send('POST', 'wishes', { slug: 'nope', pin: g0.PIN, pesan: 'x' }).code).toBe('NOT_FOUND')
+
+    // At most 5 per guest per hour.
+    for (let i = 0; i < 5; i++) expect(send('POST', 'wishes', { id: EVENT_ID, pin: g1.PIN, pesan: `ke-${i}` }).ok).toBe(true)
+    expect(send('POST', 'wishes', { id: EVENT_ID, pin: g1.PIN, pesan: 'lagi' }).code).toBe('RATE_LIMIT')
+    expect(wishesOf(g1, send('GET', 'invitation', { id: EVENT_ID }).data.wishes)).toEqual([{ nama: nama(g1), pesan: 'ke-4' }])
   })
 
   it('changes a password and revokes the other sessions', () => {

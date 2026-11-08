@@ -308,10 +308,22 @@
         <div id="venue-list" class="mt-8 border-b border-ink/15"></div>
       </section>
 
-      <!-- 7. Gift -->
+      <!-- 7. Gallery -->
+      <section id="gallery" class="px-6 py-20 sm:px-10 md:px-14">
+        <div class="flex items-baseline justify-between text-[10px] font-normal uppercase tracking-[0.35em]" data-aos="fade">
+          <p><span class="text-terra">05</span> <span class="text-ink/30">—</span> Galeri</p>
+          <p class="text-muted">Moments</p>
+        </div>
+        <span class="mt-3 block h-px origin-left bg-ink/15" data-aos="rule" data-aos-duration="1200"></span>
+
+        <h2 class="mt-12 font-display text-[2.4rem] leading-tight" data-aos="fade-up">Potret Kami</h2>
+        <div id="gallery-grid" class="mt-8 grid grid-cols-2 gap-3 sm:gap-4"></div>
+      </section>
+
+      <!-- 8. Gift -->
       <section id="gift" class="px-6 py-20 sm:px-10 md:px-14">
         <div class="flex items-baseline justify-between text-[10px] font-normal uppercase tracking-[0.35em]" data-aos="fade">
-          <p><span class="text-terra">05</span> <span class="text-ink/30">—</span> Tanda Kasih</p>
+          <p><span class="text-terra">06</span> <span class="text-ink/30">—</span> Tanda Kasih</p>
           <p class="text-muted">Wedding Gift</p>
         </div>
         <span class="mt-3 block h-px origin-left bg-ink/15" data-aos="rule" data-aos-duration="1200"></span>
@@ -343,19 +355,29 @@
         </figure>
       </section>
 
-      <!-- 8. Gallery -->
-      <section id="gallery" class="px-6 py-20 sm:px-10 md:px-14">
+      <!-- 9. Wishes -->
+      <section id="wishes" class="px-6 py-20 sm:px-10 md:px-14">
         <div class="flex items-baseline justify-between text-[10px] font-normal uppercase tracking-[0.35em]" data-aos="fade">
-          <p><span class="text-terra">06</span> <span class="text-ink/30">—</span> Galeri</p>
-          <p class="text-muted">Moments</p>
+          <p><span class="text-terra">07</span> <span class="text-ink/30">—</span> Ucapan</p>
+          <p class="text-muted">Wishes</p>
         </div>
         <span class="mt-3 block h-px origin-left bg-ink/15" data-aos="rule" data-aos-duration="1200"></span>
 
-        <h2 class="mt-12 font-display text-[2.4rem] leading-tight" data-aos="fade-up">Potret Kami</h2>
-        <div id="gallery-grid" class="mt-8 grid grid-cols-2 gap-3 sm:gap-4"></div>
+        <h2 class="mt-12 font-display text-[2.4rem] leading-tight" data-aos="fade-up">Ucapan &amp; Doa</h2>
+        <p class="mt-5 max-w-md text-sm leading-relaxed text-muted" data-aos="fade-up" data-aos-delay="100">Tinggalkan doa dan ucapan untuk kami. Setiap kata akan kami simpan.</p>
+        <form id="wish-form" class="mt-10 max-w-md" hidden>
+          <p class="text-[10px] font-normal uppercase tracking-[0.35em] text-muted">Dari <span id="wish-name" class="ml-1 normal-case tracking-normal text-ink"></span></p>
+          <label for="wish-text" class="sr-only">Ucapan dan doa</label>
+          <textarea id="wish-text" rows="4" maxlength="500" required placeholder="Tulis ucapan dan doa…" class="mt-3 block w-full resize-none border-0 border-b border-ink/30 bg-transparent px-0 py-3 text-sm font-light leading-relaxed placeholder:text-ink/35 focus:border-terra focus:outline-none focus:ring-0"></textarea>
+          <button id="wish-send" type="submit" class="mt-6 border border-ink px-8 py-3 text-[10px] font-normal uppercase tracking-[0.35em] transition-colors hover:bg-ink hover:text-paper disabled:opacity-50">Kirim Ucapan</button>
+        </form>
+        <p id="wish-locked" class="mt-10 max-w-md border-l border-terra pl-4 text-sm text-muted" hidden>Buka undangan dari link pribadi Anda untuk mengirim ucapan.</p>
+        <p class="mt-14 text-[10px] font-normal uppercase tracking-[0.35em] text-muted"><span id="wish-count">0</span> Ucapan</p>
+        <div id="wish-list" class="mt-4 max-h-[30rem] divide-y divide-ink/10 overflow-y-auto border-y border-ink/10 [scrollbar-width:thin]" aria-live="polite"></div>
+        <p id="wish-empty" class="mt-6 text-sm text-muted" hidden>Belum ada ucapan. Jadilah yang pertama.</p>
       </section>
 
-      <!-- 9. Footer -->
+      <!-- 10. Footer -->
       <footer class="px-6 pb-28 pt-20 text-center sm:px-10 md:px-14">
         <span class="mx-auto block h-14 w-px bg-ink/25" data-aos="rule-y" data-aos-duration="1200"></span>
         <p class="mx-auto mt-10 max-w-sm text-sm leading-relaxed text-muted" data-aos="fade-up">
@@ -388,6 +410,12 @@
       </article>
     </template>
 
+    <template id="tpl-wish">
+      <article class="py-5">
+        <p class="font-display text-lg" data-f="nama"></p>
+        <p class="mt-1 text-sm font-light leading-relaxed text-ink/75" data-f="pesan"></p>
+      </article>
+    </template>
     <template id="tpl-venue">
       <article class="grid gap-4 border-t border-ink/15 py-8 text-left sm:grid-cols-[12rem_1fr] sm:gap-8">
         <p class="pt-1 text-[9px] font-normal uppercase tracking-[0.35em] text-muted" data-f="$judul"></p>

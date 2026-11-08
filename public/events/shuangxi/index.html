@@ -390,7 +390,15 @@
         <div id="venue-list" class="mt-8 space-y-5"></div>
       </section>
 
-      <!-- 8. Gift: angpao -->
+      <!-- 8. Gallery -->
+      <section id="gallery" class="fret-y relative overflow-hidden bg-merah bg-coin px-6 py-24 text-center text-krem">
+        <p class="pl-[0.45em] font-display text-[11px] font-bold tracking-[0.45em] text-emas-muda" data-aos="fade-up">OUR MOMENTS</p>
+        <h2 class="mt-2 font-display text-3xl text-emas" data-aos="fade-up" data-aos-delay="100">Galeri Bahagia</h2>
+        <svg class="mx-auto mt-4 h-6 w-48 text-emas" data-aos="unfold" data-aos-duration="1200" aria-hidden="true"><use href="#yun-divider" /></svg>
+        <div id="gallery-grid" class="mt-8 grid grid-cols-3 gap-2.5"></div>
+      </section>
+
+      <!-- 9. Gift: angpao -->
       <section id="gift" class="fret-y relative overflow-hidden bg-merah-tua bg-coin px-6 py-24 text-center text-krem">
         <p class="pl-[0.45em] font-display text-[11px] font-bold tracking-[0.45em] text-emas-muda" data-aos="fade-up">ANGPAO</p>
         <h2 class="mt-2 font-display text-3xl text-gold" data-aos="fade-up" data-aos-delay="100">Tanda Kasih</h2>
@@ -441,15 +449,25 @@
         </figure>
       </section>
 
-      <!-- 9. Gallery -->
-      <section id="gallery" class="bg-krem bg-coin-cream px-6 py-20 text-center">
-        <p class="pl-[0.45em] font-display text-[11px] font-bold tracking-[0.45em] text-emas-tua" data-aos="fade-up">OUR MOMENTS</p>
-        <h2 class="mt-2 font-display text-3xl text-merah" data-aos="fade-up" data-aos-delay="100">Galeri Bahagia</h2>
+      <!-- 10. Wishes -->
+      <section id="wishes" class="bg-krem bg-coin-cream px-6 py-20 text-center">
+        <p class="pl-[0.45em] font-display text-[11px] font-bold tracking-[0.45em] text-emas-tua" data-aos="fade-up">BEST WISHES</p>
+        <h2 class="mt-2 font-display text-3xl text-merah" data-aos="fade-up" data-aos-delay="100">Ucapan &amp; Doa</h2>
         <svg class="mx-auto mt-4 h-6 w-48 text-emas" data-aos="unfold" data-aos-duration="1200" aria-hidden="true"><use href="#yun-divider" /></svg>
-        <div id="gallery-grid" class="mt-8 grid grid-cols-3 gap-2.5"></div>
+        <p class="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-tinta/80" data-aos="fade-up">Kirimkan doa dan ucapan bahagia untuk kedua mempelai.</p>
+        <form id="wish-form" class="mx-auto mt-8 max-w-sm rounded-2xl border-2 border-emas/60 bg-white/80 p-5 text-left shadow-lg shadow-merah/10" hidden>
+          <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-emas-tua">Dari <span id="wish-name" class="ml-1 font-display normal-case tracking-normal text-merah"></span></p>
+          <label for="wish-text" class="sr-only">Ucapan dan doa</label>
+          <textarea id="wish-text" rows="4" maxlength="500" required placeholder="Tulis ucapan dan doa…" class="mt-3 block w-full resize-none rounded-xl border border-emas/50 bg-krem px-4 py-3 text-sm leading-relaxed text-tinta placeholder:text-tinta/40 focus:border-merah focus:outline-none"></textarea>
+          <button id="wish-send" type="submit" class="mt-4 w-full rounded-full bg-merah px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-emas-muda shadow-md ring-1 ring-emas transition hover:bg-merah-terang disabled:opacity-50">Kirim Ucapan</button>
+        </form>
+        <p id="wish-locked" class="mx-auto mt-8 max-w-sm rounded-2xl border border-emas/50 bg-white/70 px-5 py-4 text-sm text-tinta/80" hidden>Buka undangan dari link pribadi Anda untuk mengirim ucapan.</p>
+        <p class="mt-10 text-[11px] font-bold uppercase tracking-[0.3em] text-emas-tua"><span id="wish-count">0</span> Ucapan</p>
+        <div id="wish-list" class="mx-auto mt-4 flex max-h-[30rem] max-w-sm flex-col gap-3 overflow-y-auto pr-1 text-left [scrollbar-color:rgb(212_162_76/0.6)_transparent] [scrollbar-width:thin]" aria-live="polite"></div>
+        <p id="wish-empty" class="mt-6 text-sm italic text-tinta/60" hidden>Belum ada ucapan. Jadilah yang pertama.</p>
       </section>
 
-      <!-- 10. Closing -->
+      <!-- 11. Closing -->
       <footer class="fret-y relative overflow-hidden bg-merah bg-coin px-8 pb-28 pt-32 text-center text-krem">
         <svg class="lantern pointer-events-none absolute left-[8%] top-0 h-28 w-14" style="--sd: 3.1s; --sdl: -0.6s" aria-hidden="true"><use href="#lantern" /></svg>
         <svg class="lantern pointer-events-none absolute right-[8%] top-0 h-32 w-16" style="--sd: 3.5s" aria-hidden="true"><use href="#lantern" /></svg>
@@ -493,6 +511,12 @@
       </article>
     </template>
 
+    <template id="tpl-wish">
+      <article class="rounded-xl border-l-4 border-merah bg-white/85 px-5 py-4 shadow-sm ring-1 ring-emas/40">
+        <p class="font-display text-sm font-bold text-merah" data-f="nama"></p>
+        <p class="mt-1 text-sm leading-relaxed text-tinta/85" data-f="pesan"></p>
+      </article>
+    </template>
     <template id="tpl-venue">
       <article class="relative rounded-2xl border-2 border-emas bg-white/85 px-6 py-7 shadow-lg shadow-merah/10 outline-1 outline-offset-[-9px] outline-emas/50">
         <span class="mx-auto grid h-11 w-11 place-items-center rounded-full bg-merah text-emas-muda ring-2 ring-emas ring-offset-2 ring-offset-white" aria-hidden="true">

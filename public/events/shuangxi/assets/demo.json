@@ -5,25 +5,56 @@
     "bahasa": "id",
     "timezone": "WIB",
     "couple": {
-      "pria": { "panggilan": "Wilson", "lengkap": "Wilson Tanoto", "ortu": "Bapak Hartono Tanoto & Ibu Susan Lim" },
-      "wanita": { "panggilan": "Angeline", "lengkap": "Angeline Kurniawan", "ortu": "Bapak Budi Kurniawan & Ibu Lily Chandra" },
+      "pria": {
+        "panggilan": "Wilson",
+        "lengkap": "Wilson Tanoto",
+        "ortu": "Bapak Hartono Tanoto & Ibu Susan Lim"
+      },
+      "wanita": {
+        "panggilan": "Angeline",
+        "lengkap": "Angeline Kurniawan",
+        "ortu": "Bapak Budi Kurniawan & Ibu Lily Chandra"
+      },
       "hashtag": "#WilsonAngelineSangjit"
     },
     "tanggal_utama": "2027-08-08",
     "sesi": [
       {
-        "kode": "S1", "label": "Sangjit", "tanggal": "2027-08-08", "mulai": "10:00", "selesai": "13:00",
-        "tempat": "Kediaman Keluarga Kurniawan", "alamat": "Jl. Pluit Karang Indah Timur No. 18, Penjaringan, Jakarta Utara",
-        "maps": "https://maps.google.com/?q=Pluit+Karang+Indah+Jakarta", "dress_code": "Merah & Emas", "live_stream": ""
+        "kode": "S1",
+        "label": "Sangjit",
+        "tanggal": "2027-08-08",
+        "mulai": "10:00",
+        "selesai": "13:00",
+        "tempat": "Kediaman Keluarga Kurniawan",
+        "alamat": "Jl. Pluit Karang Indah Timur No. 18, Penjaringan, Jakarta Utara",
+        "maps": "https://maps.google.com/?q=Pluit+Karang+Indah+Jakarta",
+        "dress_code": "Merah & Emas",
+        "live_stream": ""
       },
       {
-        "kode": "S2", "label": "Makan Malam Keluarga", "tanggal": "2027-08-08", "mulai": "18:00", "selesai": "21:00",
-        "tempat": "Restoran Imperial Treasure", "alamat": "Jl. M.H. Thamrin No. 1, Jakarta Pusat",
-        "maps": "https://maps.google.com/?q=Imperial+Treasure+Jakarta", "dress_code": "Merah & Emas", "live_stream": ""
+        "kode": "S2",
+        "label": "Makan Malam Keluarga",
+        "tanggal": "2027-08-08",
+        "mulai": "18:00",
+        "selesai": "21:00",
+        "tempat": "Restoran Imperial Treasure",
+        "alamat": "Jl. M.H. Thamrin No. 1, Jakarta Pusat",
+        "maps": "https://maps.google.com/?q=Imperial+Treasure+Jakarta",
+        "dress_code": "Merah & Emas",
+        "live_stream": ""
       }
     ],
-    "gift": { "bank": "BCA", "atas_nama": "Angeline Kurniawan", "norek": "8888 1234 56", "qris": "" },
-    "media": { "musik": "assets/demo/musik.mp3", "judul_musik": "月亮代表我的心 — Instrumental", "cover": "" },
+    "gift": {
+      "bank": "BCA",
+      "atas_nama": "Angeline Kurniawan",
+      "norek": "8888 1234 56",
+      "qris": ""
+    },
+    "media": {
+      "musik": "assets/demo/musik.mp3",
+      "judul_musik": "月亮代表我的心 — Instrumental",
+      "cover": ""
+    },
     "gallery": [
       "assets/demo/gallery-1.webp",
       "assets/demo/gallery-2.webp",
@@ -33,5 +64,23 @@
       "assets/demo/gallery-6.webp"
     ]
   },
-  "guest": null
+  "guest": null,
+  "wishes": [
+    {
+      "nama": "Keluarga Besar Tanoto",
+      "pesan": "恭喜恭喜！Selamat atas Sangjit Wilson & Angeline. Semoga kedua keluarga semakin erat dan penuh berkah."
+    },
+    {
+      "nama": "Ibu Lily Wijaya",
+      "pesan": "百年好合 — semoga rukun dan bahagia selamanya, panjang umur dan banyak rezeki."
+    },
+    {
+      "nama": "Sdr. Hendra Kusuma",
+      "pesan": "Congrats Wilson! Lancar sampai hari H ya, ditunggu angpaonya 😄"
+    },
+    {
+      "nama": "Sdri. Melissa Chandra",
+      "pesan": "Angeline cantik sekali! Semoga semua persiapan lancar dan penuh sukacita."
+    }
+  ]
 }

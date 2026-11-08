@@ -5,25 +5,56 @@
     "bahasa": "id",
     "timezone": "WIB",
     "couple": {
-      "pria": { "panggilan": "Raka", "lengkap": "Raka Aditya Pratama", "ortu": "Bapak Suryo Pratama & Ibu Dewi Lestari" },
-      "wanita": { "panggilan": "Nadia", "lengkap": "Nadia Putri Maharani", "ortu": "Bapak Agus Santoso & Ibu Ratna Sari" },
+      "pria": {
+        "panggilan": "Raka",
+        "lengkap": "Raka Aditya Pratama",
+        "ortu": "Bapak Suryo Pratama & Ibu Dewi Lestari"
+      },
+      "wanita": {
+        "panggilan": "Nadia",
+        "lengkap": "Nadia Putri Maharani",
+        "ortu": "Bapak Agus Santoso & Ibu Ratna Sari"
+      },
       "hashtag": "#RakaNadiaBlooming"
     },
     "tanggal_utama": "2027-04-24",
     "sesi": [
       {
-        "kode": "S1", "label": "Akad / Pemberkatan", "tanggal": "2027-04-24", "mulai": "09:00", "selesai": "10:30",
-        "tempat": "The Garden, Kebun Raya Bogor", "alamat": "Jl. Ir. H. Juanda No. 13, Bogor",
-        "maps": "https://maps.google.com/?q=Kebun+Raya+Bogor", "dress_code": "Pastel", "live_stream": ""
+        "kode": "S1",
+        "label": "Akad / Pemberkatan",
+        "tanggal": "2027-04-24",
+        "mulai": "09:00",
+        "selesai": "10:30",
+        "tempat": "The Garden, Kebun Raya Bogor",
+        "alamat": "Jl. Ir. H. Juanda No. 13, Bogor",
+        "maps": "https://maps.google.com/?q=Kebun+Raya+Bogor",
+        "dress_code": "Pastel",
+        "live_stream": ""
       },
       {
-        "kode": "S2", "label": "Resepsi", "tanggal": "2027-04-24", "mulai": "11:00", "selesai": "14:00",
-        "tempat": "The Garden, Kebun Raya Bogor", "alamat": "Jl. Ir. H. Juanda No. 13, Bogor",
-        "maps": "https://maps.google.com/?q=Kebun+Raya+Bogor", "dress_code": "Pastel", "live_stream": ""
+        "kode": "S2",
+        "label": "Resepsi",
+        "tanggal": "2027-04-24",
+        "mulai": "11:00",
+        "selesai": "14:00",
+        "tempat": "The Garden, Kebun Raya Bogor",
+        "alamat": "Jl. Ir. H. Juanda No. 13, Bogor",
+        "maps": "https://maps.google.com/?q=Kebun+Raya+Bogor",
+        "dress_code": "Pastel",
+        "live_stream": ""
       }
     ],
-    "gift": { "bank": "Mandiri", "atas_nama": "Nadia Putri Maharani", "norek": "1370 0123 4567", "qris": "" },
-    "media": { "musik": "assets/demo/musik.mp3", "judul_musik": "A Thousand Years — Piano", "cover": "" },
+    "gift": {
+      "bank": "Mandiri",
+      "atas_nama": "Nadia Putri Maharani",
+      "norek": "1370 0123 4567",
+      "qris": ""
+    },
+    "media": {
+      "musik": "assets/demo/musik.mp3",
+      "judul_musik": "A Thousand Years — Piano",
+      "cover": ""
+    },
     "gallery": [
       "assets/demo/gallery-1.webp",
       "assets/demo/gallery-2.webp",
@@ -33,5 +64,23 @@
       "assets/demo/gallery-6.webp"
     ]
   },
-  "guest": null
+  "guest": null,
+  "wishes": [
+    {
+      "nama": "Ibu Sri Rahayu",
+      "pesan": "Selamat menempuh hidup baru, Nadia & Raka. Semoga menjadi keluarga yang sakinah, penuh cinta dan kasih sayang."
+    },
+    {
+      "nama": "Bapak Hendro Wibowo",
+      "pesan": "Semoga pernikahan kalian selalu bermekaran seperti taman bunga, dirawat dengan sabar dan syukur."
+    },
+    {
+      "nama": "Sdri. Putri Ayu",
+      "pesan": "Nadiaaa, happy wedding! Terharu lihat kalian akhirnya sampai di hari ini 🌸"
+    },
+    {
+      "nama": "Sdr. Dimas Prakoso",
+      "pesan": "Selamat Raka! Semoga langgeng sampai kakek nenek."
+    }
+  ]
 }

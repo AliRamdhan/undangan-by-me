@@ -380,8 +380,16 @@
         <div id="venue-list" class="mx-auto mt-12 max-w-md space-y-14"></div>
       </section>
 
-      <!-- 9. Gift -->
-      <section id="gift" class="relative border-t border-gold/10 px-8 py-20 lg:py-24 text-center lg:px-12">
+      <!-- 9. Gallery -->
+      <section id="gallery" class="relative border-t border-gold/10 px-6 py-20 lg:py-24 text-center lg:px-12">
+        <p class="font-serif text-xl italic text-gold" data-aos="fade-up">Captured Moments</p>
+        <h2 class="mt-2 font-display text-3xl tracking-[0.18em] text-ivory" data-aos="fade-up" data-aos-delay="100">GALERI</h2>
+        <svg class="mx-auto mt-5 h-4 w-40 text-gold" data-aos="rule" data-aos-delay="200" aria-hidden="true"><use href="#i-rule" /></svg>
+        <div id="gallery-grid" class="mx-auto mt-12 grid max-w-md grid-cols-2 gap-2.5"></div>
+      </section>
+
+      <!-- 10. Gift -->
+      <section id="gift" class="relative border-t border-gold/10 bg-charcoal-2 px-8 py-20 lg:py-24 text-center lg:px-12">
         <p class="font-serif text-xl italic text-gold" data-aos="fade-up">Wedding Gift</p>
         <h2 class="mt-2 font-display text-3xl tracking-[0.18em] text-ivory" data-aos="fade-up" data-aos-delay="100">TANDA KASIH</h2>
         <svg class="mx-auto mt-5 h-4 w-40 text-gold" data-aos="rule" data-aos-delay="200" aria-hidden="true"><use href="#i-rule" /></svg>
@@ -434,15 +442,25 @@
         </figure>
       </section>
 
-      <!-- 10. Gallery -->
-      <section id="gallery" class="relative border-t border-gold/10 bg-charcoal-2 px-6 py-20 lg:py-24 text-center lg:px-12">
-        <p class="font-serif text-xl italic text-gold" data-aos="fade-up">Captured Moments</p>
-        <h2 class="mt-2 font-display text-3xl tracking-[0.18em] text-ivory" data-aos="fade-up" data-aos-delay="100">GALERI</h2>
+      <!-- 11. Wishes -->
+      <section id="wishes" class="relative border-t border-gold/10 px-8 py-20 lg:py-24 text-center lg:px-12">
+        <p class="font-serif text-xl italic text-gold" data-aos="fade-up">Wishes &amp; Prayers</p>
+        <h2 class="mt-2 font-display text-3xl tracking-[0.18em] text-ivory" data-aos="fade-up" data-aos-delay="100">UCAPAN &amp; DOA</h2>
         <svg class="mx-auto mt-5 h-4 w-40 text-gold" data-aos="rule" data-aos-delay="200" aria-hidden="true"><use href="#i-rule" /></svg>
-        <div id="gallery-grid" class="mx-auto mt-12 grid max-w-md grid-cols-2 gap-2.5"></div>
+        <p class="mx-auto mt-8 max-w-sm text-sm leading-relaxed text-ivory/70" data-aos="fade-up">Kirimkan doa dan ucapan terbaik Anda untuk kami.</p>
+        <form id="wish-form" class="mx-auto mt-10 max-w-sm text-left" hidden>
+          <p class="text-[10px] font-medium uppercase tracking-[0.3em] text-ivory/50">Dari <span id="wish-name" class="ml-1 font-display normal-case tracking-[0.12em] text-gold-light"></span></p>
+          <label for="wish-text" class="sr-only">Ucapan dan doa</label>
+          <textarea id="wish-text" rows="4" maxlength="500" required placeholder="Tulis ucapan dan doa…" class="mt-3 block w-full resize-none border border-gold/30 bg-charcoal-2 px-4 py-3 text-sm leading-relaxed text-ivory placeholder:text-ivory/35 focus:border-gold focus:outline-none"></textarea>
+          <button id="wish-send" type="submit" class="mt-4 w-full border border-gold px-7 py-3.5 text-[11px] font-medium uppercase tracking-[0.3em] text-gold transition hover:bg-gold hover:text-charcoal disabled:opacity-50">Kirim Ucapan</button>
+        </form>
+        <p id="wish-locked" class="mx-auto mt-10 max-w-sm border border-gold/20 px-5 py-4 text-xs leading-relaxed text-ivory/60" hidden>Buka undangan dari link pribadi Anda untuk mengirim ucapan.</p>
+        <p class="mt-12 text-[10px] font-medium uppercase tracking-[0.3em] text-ivory/50"><span id="wish-count">0</span> Ucapan</p>
+        <div id="wish-list" class="mx-auto mt-4 flex max-h-[30rem] max-w-sm flex-col gap-3 overflow-y-auto pr-1 text-left [scrollbar-color:rgb(201_169_110/0.4)_transparent] [scrollbar-width:thin]" aria-live="polite"></div>
+        <p id="wish-empty" class="mt-6 font-serif text-lg italic text-ivory/50" hidden>Belum ada ucapan. Jadilah yang pertama.</p>
       </section>
 
-      <!-- 11. Closing -->
+      <!-- 12. Closing -->
       <footer class="relative overflow-hidden border-t border-gold/10 px-8 pb-24 pt-28 text-center lg:px-12">
         <img src="assets/hero-1.webp" alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover opacity-30" />
         <div class="absolute inset-0 bg-linear-to-b from-charcoal via-charcoal/80 to-charcoal"></div>
@@ -492,6 +510,12 @@
       </article>
     </template>
 
+    <template id="tpl-wish">
+      <article class="border border-gold/20 bg-charcoal-2 px-5 py-4">
+        <p class="font-display text-sm tracking-[0.12em] text-gold-light" data-f="nama"></p>
+        <p class="mt-2 text-sm leading-relaxed text-ivory/80" data-f="pesan"></p>
+      </article>
+    </template>
     <template id="tpl-venue">
       <article>
         <div class="mx-auto flex h-11 w-11 rotate-45 items-center justify-center border border-gold/60">

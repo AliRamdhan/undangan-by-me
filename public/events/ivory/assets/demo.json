@@ -5,25 +5,56 @@
     "bahasa": "id",
     "timezone": "WIB",
     "couple": {
-      "pria": { "panggilan": "Bima", "lengkap": "Bima Arya Nugroho", "ortu": "Bapak Teguh Nugroho & Ibu Sri Wahyuni" },
-      "wanita": { "panggilan": "Sekar", "lengkap": "Sekar Ayu Larasati", "ortu": "Bapak Bambang Hadi & Ibu Endah Kusuma" },
+      "pria": {
+        "panggilan": "Bima",
+        "lengkap": "Bima Arya Nugroho",
+        "ortu": "Bapak Teguh Nugroho & Ibu Sri Wahyuni"
+      },
+      "wanita": {
+        "panggilan": "Sekar",
+        "lengkap": "Sekar Ayu Larasati",
+        "ortu": "Bapak Bambang Hadi & Ibu Endah Kusuma"
+      },
       "hashtag": "#BimaSekarSelamanya"
     },
     "tanggal_utama": "2027-06-12",
     "sesi": [
       {
-        "kode": "S1", "label": "Akad Nikah", "tanggal": "2027-06-12", "mulai": "08:00", "selesai": "09:30",
-        "tempat": "Rumah Kayu Kemang", "alamat": "Jl. Kemang Raya No. 45, Jakarta Selatan",
-        "maps": "https://maps.google.com/?q=Kemang+Raya+Jakarta", "dress_code": "Putih & Krem", "live_stream": ""
+        "kode": "S1",
+        "label": "Akad Nikah",
+        "tanggal": "2027-06-12",
+        "mulai": "08:00",
+        "selesai": "09:30",
+        "tempat": "Rumah Kayu Kemang",
+        "alamat": "Jl. Kemang Raya No. 45, Jakarta Selatan",
+        "maps": "https://maps.google.com/?q=Kemang+Raya+Jakarta",
+        "dress_code": "Putih & Krem",
+        "live_stream": ""
       },
       {
-        "kode": "S2", "label": "Resepsi", "tanggal": "2027-06-12", "mulai": "11:00", "selesai": "13:00",
-        "tempat": "Hutan Kota by Plataran", "alamat": "Jl. Jend. Gatot Subroto, Senayan, Jakarta",
-        "maps": "https://maps.google.com/?q=Hutan+Kota+by+Plataran", "dress_code": "Earth Tone", "live_stream": "https://youtube.com/@contoh"
+        "kode": "S2",
+        "label": "Resepsi",
+        "tanggal": "2027-06-12",
+        "mulai": "11:00",
+        "selesai": "13:00",
+        "tempat": "Hutan Kota by Plataran",
+        "alamat": "Jl. Jend. Gatot Subroto, Senayan, Jakarta",
+        "maps": "https://maps.google.com/?q=Hutan+Kota+by+Plataran",
+        "dress_code": "Earth Tone",
+        "live_stream": "https://youtube.com/@contoh"
       }
     ],
-    "gift": { "bank": "BNI", "atas_nama": "Sekar Ayu Larasati", "norek": "0987 6543 21", "qris": "" },
-    "media": { "musik": "assets/demo/musik.mp3", "judul_musik": "Can't Help Falling in Love — Acoustic", "cover": "" },
+    "gift": {
+      "bank": "BNI",
+      "atas_nama": "Sekar Ayu Larasati",
+      "norek": "0987 6543 21",
+      "qris": ""
+    },
+    "media": {
+      "musik": "assets/demo/musik.mp3",
+      "judul_musik": "Can't Help Falling in Love — Acoustic",
+      "cover": ""
+    },
     "gallery": [
       "assets/demo/gallery-1.webp",
       "assets/demo/gallery-2.webp",
@@ -33,5 +64,23 @@
       "assets/demo/gallery-6.webp"
     ]
   },
-  "guest": null
+  "guest": null,
+  "wishes": [
+    {
+      "nama": "Bapak Agus Salim",
+      "pesan": "Selamat untuk Sekar & Bima. Semoga selalu saling menjaga dalam suka maupun duka."
+    },
+    {
+      "nama": "Ibu Ratih Kusuma",
+      "pesan": "Barakallahu lakuma. Semoga bahagia dunia dan akhirat."
+    },
+    {
+      "nama": "Sdr. Yoga Pratama",
+      "pesan": "Dari satu rak buku ke satu rumah. Selamat, kalian berdua!"
+    },
+    {
+      "nama": "Sdri. Laras Ayuningtyas",
+      "pesan": "Sekar, selamat ya! Doa terbaik untuk kalian berdua."
+    }
+  ]
 }

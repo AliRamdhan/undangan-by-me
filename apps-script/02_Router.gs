@@ -25,6 +25,8 @@ const ROUTES = [
   ['GET', 'health', 'handleHealth_', { auth: false }],
   // Public: the invitation page reads its event (by ID or slug) and the guest (by PIN).
   ['GET', 'invitation', 'handleInvitation_', { auth: false }],
+  // Public: a guest (by PIN) leaves a wish on the invitation page.
+  ['POST', 'wishes', 'handleWish_', { auth: false, lock: true }],
 
   ['POST', 'auth/login', 'handleLogin_', { auth: false, lock: true }],
   ['POST', 'auth/logout', 'handleLogout_', { lock: true }],

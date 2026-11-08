@@ -160,6 +160,23 @@ async function load(eventId, slug, pin) {
   return env.data
 }
 
+// A guest's wish (POST /wishes). text/plain keeps it a simple request: Apps Script has no CORS preflight.
+async function sendWish(eventId, slug, pin, pesan) {
+  if (!CONFIG.API_URL) throw new Error('NO_API_URL')
+  const url = new URL(CONFIG.API_URL)
+  url.searchParams.set('path', 'wishes')
+  const by = eventId ? { id: eventId } : { slug }
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ v: 1, ...by, pin, pesan }),
+    redirect: 'follow',
+  })
+  const env = await res.json()
+  if (!env.ok) throw new Error(env.message || env.code)
+  return env.data.wish
+}
+
 // Portfolio preview (?demo=1): bundled sample data, never the API.
 async function loadDemo() {
   const res = await fetch('assets/demo.json', { cache: 'no-cache' })
@@ -393,6 +410,58 @@ function setupMusic(src) {
   setupMusic.ready = true
 }
 
+// ---------- wishes ----------
+
+// Wishes wall + form. Only pages with a #wishes section use it. A guest needs their
+// PIN link to write (one wish each, sending again replaces it); in demo mode a
+// wish is only added on this page.
+function setupWishes({ guest, wishes }, { eventId, slug, pin, demo, params }) {
+  if (!$('#wishes')) return
+  const items = [...(wishes || [])]
+  const list = $('#wish-list')
+  const draw = () => {
+    // Newest first.
+    list.replaceChildren(...items.map((w) => fill(clone('tpl-wish'), w)).reverse())
+    $('#wish-empty').hidden = items.length > 0
+    const count = $('#wish-count')
+    if (count) put(count, items.length)
+  }
+  draw()
+
+  const form = $('#wish-form')
+  const canSend = demo || Boolean(guest && pin && CONFIG.API_URL)
+  form.hidden = !canSend
+  $('#wish-locked').hidden = canSend
+  if (!canSend) return
+
+  const name = guest ? [guest.gelar, guest.nama].filter(Boolean).join(' ') : params.get('to') || 'Tamu Undangan'
+  put($('#wish-name'), name)
+  const text = $('#wish-text')
+  if (guest?.pesan) text.value = guest.pesan
+  // The guest's earlier wish is replaced, not duplicated.
+  let own = guest?.pesan ? items.findIndex((w) => w.nama === name && w.pesan === guest.pesan) : -1
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const pesan = text.value.trim()
+    if (!pesan) return toast('Tulis ucapan terlebih dahulu')
+    const btn = $('#wish-send')
+    btn.disabled = true
+    try {
+      const wish = demo ? { nama: name, pesan } : await sendWish(eventId, slug, pin, pesan)
+      if (own >= 0) items.splice(own, 1)
+      items.push(wish)
+      own = items.length - 1
+      draw()
+      toast('Terima kasih atas ucapannya')
+    } catch (err) {
+      toast(err.message === 'NO_API_URL' ? 'Ucapan belum bisa dikirim' : err.message)
+    } finally {
+      btn.disabled = false
+    }
+  })
+}
+
 // ---------- interactions ----------
 
 function openInvitation() {
@@ -438,8 +507,11 @@ async function init() {
   const btn = $('#open-btn')
   try {
     const { event: eventId, slug } = document.body.dataset
-    const data = params.has('demo') ? await loadDemo() : await load(eventId, slug, pinFromUrl(params))
+    const demo = params.has('demo')
+    const pin = pinFromUrl(params)
+    const data = demo ? await loadDemo() : await load(eventId, slug, pin)
     render(data, params)
+    setupWishes(data, { eventId, slug, pin, demo, params })
     await coverReady()
     btn.disabled = false
     btn.addEventListener('click', openInvitation, { once: true })
