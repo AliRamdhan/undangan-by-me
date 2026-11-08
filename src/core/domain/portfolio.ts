@@ -18,7 +18,8 @@ export const PORTFOLIO_CATEGORIES = [
 
 export type PortfolioCategoryId = (typeof PORTFOLIO_CATEGORIES)[number]['id']
 export type PortfolioCategory = (typeof PORTFOLIO_CATEGORIES)[number]
-export type PortfolioFilter = PortfolioCategoryId | 'all'
+/** Selected categories; empty means all. */
+export type PortfolioFilter = readonly PortfolioCategoryId[]
 
 export interface PortfolioItem {
   /** Folder under public/events/ — also the demo URL. */
@@ -44,11 +45,13 @@ export const demoUrl = (slug: string) => `/events/${encodeURIComponent(slug)}/?d
 /** Full-page screenshot used as the card image. */
 export const thumbUrl = (slug: string) => `/events/${encodeURIComponent(slug)}/assets/portfolio.jpg`
 
-const CATEGORY_IDS = new Set<string>(PORTFOLIO_CATEGORIES.map((c) => c.id))
-
-/** A `?kategori=` value → a valid filter; anything unknown shows all. */
-export function parseFilter(value: string | null): PortfolioFilter {
-  return value && CATEGORY_IDS.has(value) ? (value as PortfolioCategoryId) : 'all'
+/**
+ * Repeated `?kategori=` values → a valid filter: unknown ids and duplicates are
+ * dropped, the rest kept in display order. Nothing valid means all.
+ */
+export function parseFilter(values: readonly string[]): PortfolioCategoryId[] {
+  const picked = new Set(values)
+  return PORTFOLIO_CATEGORIES.filter((c) => picked.has(c.id)).map((c) => c.id)
 }
 
 /** Categories that have at least one item, in display order — no chip ever filters to nothing. */
@@ -57,8 +60,9 @@ export function usedCategories(items: readonly PortfolioItem[]): PortfolioCatego
   return PORTFOLIO_CATEGORIES.filter((c) => used.has(c.id))
 }
 
+/** Items in any of the selected categories; an empty filter keeps everything. */
 export function filterPortfolio(items: readonly PortfolioItem[], filter: PortfolioFilter): PortfolioItem[] {
-  return filter === 'all' ? [...items] : items.filter((i) => i.categories.includes(filter))
+  return filter.length === 0 ? [...items] : items.filter((i) => i.categories.some((c) => filter.includes(c)))
 }
 
 export const categoryLabel = (id: PortfolioCategoryId) => PORTFOLIO_CATEGORIES.find((c) => c.id === id)!.label

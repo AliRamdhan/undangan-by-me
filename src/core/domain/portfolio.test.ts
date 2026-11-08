@@ -20,20 +20,22 @@ const items: PortfolioItem[] = [
 ]
 
 describe('portfolio filters', () => {
-  it('filters by category, "all" keeps everything', () => {
-    expect(filterPortfolio(items, 'all').map((i) => i.slug)).toEqual(['a', 'b'])
-    expect(filterPortfolio(items, 'split').map((i) => i.slug)).toEqual(['b'])
-    expect(filterPortfolio(items, 'sangjit')).toEqual([])
+  it('filters by any selected category, empty keeps everything', () => {
+    expect(filterPortfolio(items, []).map((i) => i.slug)).toEqual(['a', 'b'])
+    expect(filterPortfolio(items, ['split']).map((i) => i.slug)).toEqual(['b'])
+    expect(filterPortfolio(items, ['split', 'minimal']).map((i) => i.slug)).toEqual(['a', 'b'])
+    expect(filterPortfolio(items, ['sangjit'])).toEqual([])
   })
 
   it('offers only categories that have items, in display order', () => {
     expect(usedCategories(items).map((c) => c.id)).toEqual(['split', 'minimal'])
   })
 
-  it('reads ?kategori=, falling back to all', () => {
-    expect(parseFilter('sangjit')).toBe('sangjit')
-    expect(parseFilter(null)).toBe('all')
-    expect(parseFilter('bogus')).toBe('all')
+  it('reads repeated ?kategori=, keeping known ids once in display order', () => {
+    expect(parseFilter(['sangjit'])).toEqual(['sangjit'])
+    expect(parseFilter(['sangjit', 'split', 'sangjit'])).toEqual(['split', 'sangjit'])
+    expect(parseFilter([])).toEqual([])
+    expect(parseFilter(['bogus'])).toEqual([])
   })
 
   it('builds demo and thumbnail URLs', () => {
