@@ -1,4 +1,5 @@
 import { Link, NavLink, Outlet } from 'react-router'
+import { Logo } from '@/components/Logo'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { UserMenu } from '@/components/UserMenu'
 import { buttonVariants } from '@/components/ui/button'
@@ -17,9 +18,7 @@ export function AppLayout() {
       <header className="sticky top-0 z-40 border-b bg-card/95 backdrop-blur">
         <div className="mx-auto flex max-w-[1600px] items-center gap-x-6 gap-y-2 px-4 py-2.5 sm:px-6">
           <Link to={homePath} className="flex min-w-0 items-center gap-2.5">
-            <span aria-hidden className="text-xl">
-              📨
-            </span>
+            <Logo className="size-7" />
             <div className="min-w-0">
               <p className="text-[15px] leading-tight font-semibold">Undangan</p>
               <p className="truncate text-xs text-ink-3">

@@ -18,12 +18,12 @@ const OPTIONS = [
 ] as const
 
 /** Light / dark / system switch; next-themes persists the choice in localStorage. */
-export function ThemeToggle() {
+export function ThemeToggle({ className }: { className?: string }) {
   const { theme = 'system', setTheme } = useTheme()
   const current = OPTIONS.find((o) => o.value === theme) ?? OPTIONS[2]
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger render={<Button variant="ghost" size="icon" aria-label={`Tema: ${current.label}`} />}>
+      <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className={className} aria-label={`Tema: ${current.label}`} />}>
         <HugeiconsIcon icon={current.icon} strokeWidth={2} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-40">
