@@ -165,7 +165,7 @@ function PublicFooter() {
         ))}
       </div>
       <div className="border-t">
-        <p className="mx-auto max-w-6xl px-4 py-5 text-xs text-muted-foreground sm:px-6">© {new Date().getFullYear()} Undangan · by.me</p>
+        <p className="mx-auto max-w-6xl px-4 py-5 text-xs text-muted-foreground sm:px-6">© {new Date().getFullYear()} Undangan.byme</p>
       </div>
     </footer>
   )

@@ -46,7 +46,7 @@ export function Login() {
 
   return (
     <div className="grid min-h-dvh lg:grid-cols-2">
-      <title>Masuk · Undangan</title>
+      <title>Masuk · Undangan.byme</title>
       <BrandPanel />
 
       <div className="relative flex flex-col px-4 py-6 sm:px-8">

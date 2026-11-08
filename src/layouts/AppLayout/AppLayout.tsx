@@ -20,7 +20,7 @@ export function AppLayout() {
           <Link to={homePath} className="flex min-w-0 items-center gap-2.5">
             <Logo className="size-7" />
             <div className="min-w-0">
-              <p className="text-[15px] leading-tight font-semibold">Undangan</p>
+              <p className="text-[15px] leading-tight font-semibold">Undangan.byme</p>
               <p className="truncate text-xs text-ink-3">
                 {isSuperAdmin ? 'Super admin' : 'Klien'}
               </p>

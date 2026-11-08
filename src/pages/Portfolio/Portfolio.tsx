@@ -26,7 +26,7 @@ export function Portfolio() {
 
   return (
     <>
-      <title>Portfolio · Undangan</title>
+      <title>Portfolio · Undangan.byme</title>
       <section aria-labelledby="hero-title" className="relative isolate overflow-hidden">
         <GridBackdrop />
         <div className="mx-auto max-w-3xl px-4 pt-14 pb-12 text-center sm:px-6 sm:pt-20 sm:pb-16">

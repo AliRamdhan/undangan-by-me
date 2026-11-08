@@ -94,7 +94,7 @@ export function Landing() {
 
   return (
     <>
-      <title>Undangan · Undangan digital & manajemen tamu</title>
+      <title>Undangan.byme · Undangan digital & manajemen tamu</title>
 
       {/* Hero */}
       <section className="relative isolate overflow-hidden">

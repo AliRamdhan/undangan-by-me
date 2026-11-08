@@ -16,7 +16,7 @@ export function Brand({ to = PATHS.root, className }: { to?: string; className?:
       <span aria-hidden className="grid size-9 place-items-center rounded-lg bg-primary-soft text-primary">
         <Logo className="size-6" />
       </span>
-      Undangan
+      Undangan.byme
     </Link>
   )
 }
