@@ -2,11 +2,13 @@
 export const PATHS = {
   root: '/',
   login: '/login',
+  /** Signed-in entry: sends each role to its start page. */
+  admin: '/admin',
   events: '/admin/events',
   newEvent: '/admin/events/new',
   users: '/admin/users',
   templates: '/admin/templates',
-  /** Public design catalogue (no login). */
+  /** Public design catalogue (no login); `/` is the public landing page. */
   portfolio: '/portfolio',
 } as const
 

@@ -8,7 +8,7 @@ export function RequireSuperAdmin() {
   return <Outlet />
 }
 
-/** `/` — each role's start page. A component, since a loader cannot read the session. */
+/** `/admin` (and after login) — each role's start page. A component, since a loader cannot read the session. */
 export function HomeRedirect() {
   const { homePath } = useAuth()
   return <Navigate to={homePath} replace />

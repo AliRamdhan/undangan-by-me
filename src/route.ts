@@ -2,10 +2,12 @@ import { createBrowserRouter, redirect } from 'react-router'
 import { HomeRedirect, RequireAuth, RequireSuperAdmin } from '@/core/auth'
 import { AppLayout } from '@/layouts/AppLayout'
 import { EventLayout } from '@/layouts/EventLayout'
+import { PublicLayout } from '@/layouts/PublicLayout'
 import { Dashboard } from '@/pages/Dashboard'
 import { EventCreatePage, EventPage } from '@/pages/Event'
 import { Events } from '@/pages/Events'
 import { Guests } from '@/pages/Guests'
+import { Landing } from '@/pages/Landing'
 import { Login } from '@/pages/Login'
 import { MasterTemplates } from '@/pages/MasterTemplates'
 import { NotFound } from '@/pages/NotFound'
@@ -16,15 +18,21 @@ import { eventPaths, PATHS } from '@/route.paths'
 
 export const router = createBrowserRouter([
   { path: PATHS.login, Component: Login },
-  { path: PATHS.portfolio, Component: Portfolio },
+  {
+    // The public site: landing page and design catalogue, no login.
+    Component: PublicLayout,
+    children: [
+      { path: PATHS.root, Component: Landing },
+      { path: PATHS.portfolio, Component: Portfolio },
+    ],
+  },
   {
     Component: RequireAuth,
     children: [
       {
-        path: PATHS.root,
         Component: AppLayout,
         children: [
-          { index: true, Component: HomeRedirect },
+          { path: PATHS.admin, Component: HomeRedirect },
           {
             // A CLIENT only ever sees its own event; these send it back there.
             Component: RequireSuperAdmin,
