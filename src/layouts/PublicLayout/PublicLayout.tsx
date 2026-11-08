@@ -15,6 +15,7 @@ import { cta } from './cta'
 const NAV = [
   { label: 'Fitur', to: '/#fitur' },
   { label: 'Cara kerja', to: '/#cara-kerja' },
+  { label: 'Harga', to: '/#harga' },
   { label: 'Portfolio', to: PATHS.portfolio },
 ] as const
 

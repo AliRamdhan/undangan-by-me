@@ -15,6 +15,19 @@ import { GridBackdrop } from '@/components/GridBackdrop'
 import { PhoneMockup } from '@/components/PhoneMockup'
 import { useAuth } from '@/core/auth'
 import { PORTFOLIO, usedCategories } from '@/core/domain/portfolio'
+import {
+  formatRupiah,
+  formatRupiahK,
+  MARKET_RANGE,
+  orderLink,
+  orderNumber,
+  PLAN_CORE,
+  PRICING_INCLUDED,
+  PRICING_PLANS,
+  savingPct,
+  startingPrice,
+  type PricingPlan,
+} from '@/core/domain/pricing'
 import { cta } from '@/layouts/PublicLayout'
 import { PortfolioCard } from '@/pages/Portfolio/components/PortfolioCard'
 import { PATHS } from '@/route.paths'
@@ -22,11 +35,13 @@ import { PATHS } from '@/route.paths'
 const CATEGORY_COUNT = usedCategories(PORTFOLIO).length
 const [LEFT, CENTER, RIGHT] = [PORTFOLIO[0], PORTFOLIO[1], PORTFOLIO[2]]
 const SHOWCASE = PORTFOLIO.slice(0, 3)
+const ORDER_NUMBER = orderNumber(import.meta.env.VITE_ORDER_WHATSAPP)
+const STARTING_PRICE = startingPrice(PRICING_PLANS)
 
 const HIGHLIGHTS = ['Link WhatsApp per tamu', 'Import CSV & Excel', 'Ucapan tamu langsung di undangan']
 
 const STATS = [
-  { value: String(PORTFOLIO.length), label: 'desain siap pakai' },
+  { value: 'Revisi bebas', label: 'desain fully custom' },
   { value: String(CATEGORY_COUNT), label: 'kategori desain' },
   { value: '1 link', label: 'personal untuk tiap tamu' },
   { value: 'CSV & Excel', label: 'import daftar tamu' },
@@ -36,8 +51,8 @@ const STATS = [
 const FEATURES: { icon: IconSvgElement; title: string; body: string }[] = [
   {
     icon: PaintBoardIcon,
-    title: 'Desain siap pakai',
-    body: `${PORTFOLIO.length} desain untuk pernikahan, sangjit, dan acara keluarga. Coba demonya sebelum memilih.`,
+    title: 'Desain fully custom',
+    body: 'Setiap undangan dirancang khusus mengikuti tema, warna, dan gaya acara Anda. Revisi bebas sampai puas.',
   },
   {
     icon: WhatsappIcon,
@@ -62,14 +77,14 @@ const FEATURES: { icon: IconSvgElement; title: string; body: string }[] = [
   {
     icon: Analytics01Icon,
     title: 'Dasbor & ekspor',
-    body: 'Pantau jumlah tamu dan undangan yang tersampaikan, lalu ekspor daftar tamu ke Excel.',
+    body: 'Pantau jumlah tamu dan kelengkapan datanya, lalu ekspor daftar tamu ke Excel.',
   },
 ]
 
 const STEPS = [
   { title: 'Pilih desain', body: 'Jelajahi portfolio, buka demonya, dan pilih yang paling cocok dengan acara Anda.' },
   { title: 'Isi acara & tamu', body: 'Lengkapi detail acara, lalu import daftar tamu dari CSV atau Excel.' },
-  { title: 'Kirim & pantau', body: 'Kirim link personal lewat WhatsApp dan pantau semuanya dari dasbor.' },
+  { title: 'Kirim & kelola', body: 'Kirim link personal lewat WhatsApp Anda dan kelola daftar tamu dari dasbor.' },
 ]
 
 /** Public landing page at `/`. CTAs lead to the portfolio and the login. */
@@ -97,7 +112,7 @@ export function Landing() {
               </span>
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-base text-pretty text-muted-foreground sm:text-lg lg:mx-0">
-              Pilih desain siap pakai, import daftar tamu dari Excel, lalu kirim link undangan personal ke setiap tamu lewat WhatsApp. Semua
+              Desain fully custom dengan revisi bebas, import daftar tamu dari Excel, lalu kirim link undangan personal ke setiap tamu lewat WhatsApp. Semua
               dari satu dasbor.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
@@ -195,6 +210,52 @@ export function Landing() {
         </div>
       </section>
 
+      {/* Pricing */}
+      <section id="harga" className="scroll-mt-20 border-y bg-card/40">
+        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-24">
+          <SectionHeading eyebrow="Harga" title="Desain fully custom, revisi bebas" />
+
+          {/* Market anchor */}
+          <div className="mx-auto mt-10 max-w-2xl text-center">
+            <p className="text-sm text-muted-foreground sm:text-base">Biasanya bikin undangan digital di vendor lain:</p>
+            <p className="mt-2 text-2xl font-semibold tracking-tight text-muted-foreground/50 sm:text-4xl">
+              <s>{formatRupiahK(MARKET_RANGE.min)}</s> – <s>{formatRupiahK(MARKET_RANGE.max)}</s>
+            </p>
+            <div aria-hidden className="mx-auto my-6 h-0.5 w-16 rounded-full bg-border" />
+            <p className="text-sm font-medium sm:text-base">Di sini? Mulai dari:</p>
+            <p className="mt-1 text-6xl font-semibold tracking-tight text-primary tabular-nums sm:text-7xl">{formatRupiahK(STARTING_PRICE)}</p>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Sekali bayar, hemat hingga {savingPct(STARTING_PRICE, MARKET_RANGE.max)}% dibanding vendor lain.
+            </p>
+          </div>
+
+          <div className="mx-auto mt-12 grid max-w-4xl items-start gap-4 md:grid-cols-2">
+            {PRICING_PLANS.map((plan) => (
+              <PlanCard key={plan.id} plan={plan} />
+            ))}
+          </div>
+          <ul className="mx-auto mt-6 flex max-w-4xl flex-wrap justify-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
+            {PRICING_INCLUDED.map((item) => (
+              <li key={item} className="flex items-center gap-1">
+                <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2} className="size-3.5 text-primary" />
+                {item}
+              </li>
+            ))}
+          </ul>
+          {/* <div className="mx-auto mt-12 max-w-2xl rounded-2xl border bg-background p-6">
+            <h3 className="text-base font-semibold">Add-on</h3>
+            <dl className="mt-4 divide-y text-sm">
+              {PRICING_ADDONS.map((a) => (
+                <div key={a.name} className="flex items-baseline justify-between gap-4 py-2.5">
+                  <dt className="text-muted-foreground">{a.name}</dt>
+                  <dd className="shrink-0 font-medium tabular-nums">{a.price}</dd>
+                </div>
+              ))}
+            </dl>
+          </div> */}
+        </div>
+      </section>
+
       {/* Closing CTA */}
       <section className="mx-auto max-w-6xl px-4 pb-20 sm:px-6 sm:pb-24">
         <div className="relative isolate overflow-hidden rounded-3xl bg-primary px-6 py-14 text-center text-primary-foreground sm:px-12 sm:py-16">
@@ -228,6 +289,63 @@ function SectionHeading({ eyebrow, title, body, align = 'center' }: { eyebrow: s
       <p className="text-sm font-semibold text-primary">{eyebrow}</p>
       <h2 className="mt-2 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">{title}</h2>
       {body && <p className="mt-3 text-pretty text-muted-foreground">{body}</p>}
+    </div>
+  )
+}
+
+const PLAN_NAME = Object.fromEntries(PRICING_PLANS.map((p) => [p.id, p.name]))
+
+/** One package: starting price, inclusions, and the WhatsApp order button (portfolio when no order number is set). */
+function PlanCard({ plan }: { plan: PricingPlan }) {
+  const href = orderLink(plan, ORDER_NUMBER)
+  const variant = plan.featured ? 'default' : 'outline'
+
+  return (
+    <div className={cn('flex h-full flex-col rounded-2xl border bg-background p-6', plan.featured && 'border-primary shadow-lg ring-1 ring-primary')}>
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="text-lg font-semibold">{plan.name}</h3>
+        {plan.featured && <span className="rounded-full bg-primary px-2.5 py-0.5 text-xs font-medium text-primary-foreground">Rekomendasi</span>}
+      </div>
+      <p className="mt-1.5 text-sm text-pretty text-muted-foreground">{plan.tagline}</p>
+
+      <div className="mt-6">
+        <p className="text-sm text-muted-foreground">Mulai dari</p>
+        <p className="text-3xl font-semibold tracking-tight tabular-nums">{formatRupiah(plan.price)}</p>
+        <p className="mt-1 text-xs text-muted-foreground">Sekali bayar</p>
+      </div>
+
+      <ul className="mt-6 flex flex-col gap-2 rounded-xl bg-primary-soft p-3 text-sm font-medium text-primary">
+        {PLAN_CORE.map((c) => (
+          <li key={c} className="flex gap-2">
+            <HugeiconsIcon icon={PaintBoardIcon} strokeWidth={2} className="mt-0.5 size-4 shrink-0" />
+            <span className="text-pretty">{c}</span>
+          </li>
+        ))}
+      </ul>
+
+      <ul className="mt-5 flex flex-1 flex-col gap-2.5 text-sm">
+        {plan.includesPrevious && <li className="font-medium">Semua di {PLAN_NAME[plan.includesPrevious]}, plus:</li>}
+        {plan.features.map((f) => (
+          <li key={f} className="flex gap-2">
+            <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2} className="mt-0.5 size-4 shrink-0 text-primary" />
+            <span className="text-pretty">{f}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-8">
+        {href ? (
+          <a href={href} target="_blank" rel="noopener noreferrer" className={cn(cta(variant, 'lg'), 'w-full')}>
+            <HugeiconsIcon icon={WhatsappIcon} strokeWidth={2} data-icon="inline-start" />
+            Pesan via WhatsApp
+          </a>
+        ) : (
+          <Link to={PATHS.portfolio} className={cn(cta(variant, 'lg'), 'w-full')}>
+            Pilih desain
+            <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} data-icon="inline-end" />
+          </Link>
+        )}
+      </div>
     </div>
   )
 }
