@@ -1,0 +1,40 @@
+{
+  "event": {
+    "slug": "fidaeno",
+    "tipe": "PERNIKAHAN",
+    "bahasa": "id",
+    "timezone": "WIB",
+    "couple": {
+      "pria": { "panggilan": "Eno", "lengkap": "Hendro Tri Suseno, S.S.", "ortu": "Bapak Mintro S. Miharjo & Ibu Metih" },
+      "wanita": { "panggilan": "Fida", "lengkap": "Firda Aulia, S.S.", "ortu": "Bapak Ahmad Rizki & Ibu Rahmawati" },
+      "hashtag": "#FidaEnoBersatu"
+    },
+    "tanggal_utama": "2027-05-15",
+    "sesi": [
+      {
+        "kode": "S1", "label": "Akad Nikah", "tanggal": "2027-05-15", "mulai": "09:00", "selesai": "",
+        "tempat": "", "alamat": "Jl. Masjid Raya RT 03 RW 06 No. 38, Larangan Selatan, Tangerang",
+        "maps": "https://maps.app.goo.gl/6JcDw9zS62NNYCoY7", "dress_code": "", "live_stream": ""
+      },
+      {
+        "kode": "S2", "label": "Resepsi", "tanggal": "2027-05-15", "mulai": "11:00", "selesai": "18:00",
+        "tempat": "", "alamat": "Jl. Masjid Raya RT 03 RW 06 No. 38, Larangan Selatan, Tangerang",
+        "maps": "https://maps.app.goo.gl/6JcDw9zS62NNYCoY7", "dress_code": "", "live_stream": ""
+      }
+    ],
+    "gift": { "bank": "SeaBank", "atas_nama": "Firda Aulia", "norek": "1234 5678 9012", "qris": "" },
+    "media": { "musik": "assets/media/musik-musinouo.mp3", "judul_musik": "Kita Usahakan Rumah Itu", "cover": "" },
+    "gallery": [
+      "assets/media/gallery-mutftkqg.webp",
+      "assets/media/gallery-mutftkq7.webp",
+      "assets/media/gallery-mutftkqp.webp",
+      "assets/media/gallery-mutftkqz.webp",
+      "assets/media/gallery-mutftkr7.webp",
+      "assets/media/gallery-muvalhvl.webp",
+      "assets/media/gallery-muvalhvu.webp",
+      "assets/media/gallery-muvalhww.webp",
+      "assets/media/gallery-muvalhy1.webp"
+    ]
+  },
+  "guest": null
+}

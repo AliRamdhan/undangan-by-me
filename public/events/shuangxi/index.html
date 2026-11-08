@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sangjit Angeline & Wilson</title>
+    <link rel="icon" type="image/png" href="assets/favicon/favicon-96x96.png?v=3" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.svg?v=3" />
+    <link rel="shortcut icon" href="assets/favicon/favicon.ico?v=3" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png?v=3" />
+    <link rel="manifest" href="assets/favicon/site.webmanifest?v=3" />
+    <meta name="description" content="Undangan Sangjit digital" />
+    <meta name="theme-color" content="#8b0d14" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:ital,wght@0,300;0,400;0,700;1,400&family=Ma+Shan+Zheng&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Files in public/ skip Vite, so Tailwind runs in the browser. -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-merah: #8b0d14;
+        --color-merah-terang: #b3141c;
+        --color-merah-tua: #5c0a0f;
+        --color-emas: #d4a24c;
+        --color-emas-muda: #f3d58a;
+        --color-emas-tua: #9a6b1f;
+        --color-krem: #fff6e5;
+        --color-tinta: #3a0a0d;
+        --font-han: "Ma Shan Zheng", "STKaiti", "KaiTi", serif;
+        --font-display: "Cinzel", Georgia, serif;
+        --font-sans: "Lato", ui-sans-serif, system-ui, sans-serif;
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Deferred scripts run in order, so AOS is ready before script.js. -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
+    <script src="../config.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+
+  <!-- When copying this template for a new event, change data-event (01_Event.ID; admin URL /admin/events/{ID}) and data-slug (fallback). -->
+  <body data-event="" data-slug="shuangxi" class="locked loading bg-merah-tua bg-coin font-sans text-tinta antialiased">
+    <!-- Ornament sprite: lantern, auspicious-cloud (xiangyun) corner and divider. Not display:none, so the gradients render. -->
+    <svg class="absolute h-0 w-0 overflow-hidden" aria-hidden="true" focusable="false">
+      <defs>
+        <radialGradient id="lg-red" cx="42%" cy="38%" r="70%">
+          <stop offset="0" stop-color="#f25a3c" />
+          <stop offset=".45" stop-color="#c8161f" />
+          <stop offset="1" stop-color="#7a0a10" />
+        </radialGradient>
+        <radialGradient id="lg-glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stop-color="#ffd98a" stop-opacity=".75" />
+          <stop offset="1" stop-color="#ffd98a" stop-opacity="0" />
+        </radialGradient>
+        <linearGradient id="lg-gold" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#fbe7ae" />
+          <stop offset=".55" stop-color="#d4a24c" />
+          <stop offset="1" stop-color="#a8782a" />
+        </linearGradient>
+      </defs>
+      <symbol id="lantern" viewBox="0 0 64 132">
+        <path d="M32 0 V17" stroke="#d4a24c" stroke-width="1.4" />
+        <circle cx="32" cy="17" r="2.6" fill="#f3d58a" />
+        <rect x="20" y="19" width="24" height="7" rx="2" fill="url(#lg-gold)" />
+        <ellipse cx="32" cy="52" rx="29" ry="27" fill="url(#lg-red)" />
+        <ellipse class="lantern-glow" cx="32" cy="50" rx="20" ry="20" fill="url(#lg-glow)" />
+        <g fill="none" stroke="#6e080d" stroke-opacity=".55" stroke-width="1.1">
+          <ellipse cx="32" cy="52" rx="20" ry="27" />
+          <ellipse cx="32" cy="52" rx="9" ry="27" />
+        </g>
+        <text x="32" y="60" text-anchor="middle" font-family="'Ma Shan Zheng', serif" font-size="21" fill="#f3d58a">囍</text>
+        <rect x="20" y="77" width="24" height="7" rx="2" fill="url(#lg-gold)" />
+        <path d="M32 84 V91" stroke="#d4a24c" stroke-width="1.4" />
+        <circle cx="32" cy="93" r="3" fill="#f3d58a" />
+        <path d="M27.5 96 H36.5 L40 128 Q32 131 24 128 Z" fill="url(#lg-gold)" />
+        <path d="M29 99 V127 M32 99 V129 M35 99 V127" stroke="#a8782a" stroke-width=".7" />
+      </symbol>
+      <symbol id="yun-corner" viewBox="0 0 80 80">
+        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 77 V24 C3 12 12 3 24 3 H77" stroke-width="1.6" />
+          <path d="M9 64 V28 C9 17 17 9 28 9 H64" stroke-width=".9" />
+          <path d="M18 52 C15 36 26 25 39 28 C49 30 50 43 42 46 C36 48 33 41 38 38" stroke-width="1.8" />
+          <path d="M39 28 C41 18 53 14 61 20 C67 25 64 33 58 33 C54 33 53 28 57 27" stroke-width="1.8" />
+          <path d="M18 52 C20 60 28 62 32 57" stroke-width="1.8" />
+          <circle cx="72" cy="15" r="1.7" fill="currentColor" stroke="none" />
+          <circle cx="15" cy="72" r="1.7" fill="currentColor" stroke="none" />
+        </g>
+      </symbol>
+      <symbol id="yun-divider" viewBox="0 0 240 32">
+        <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M8 19 H80 M160 19 H232" />
+          <path d="M80 19 C88 19 91 8 100 8 C108 8 110 20 103 21 C98 22 97 15 101 14" />
+          <path d="M160 19 C152 19 149 8 140 8 C132 8 130 20 137 21 C142 22 143 15 139 14" />
+          <path d="M103 21 C109 29 131 29 137 21" />
+          <path d="M108 12 C110 3 130 3 132 12" />
+          <path d="M114 13 C115 8 125 8 126 13 C126 17 120 18 120 14" />
+        </g>
+        <g fill="currentColor">
+          <circle cx="5" cy="19" r="2.2" />
+          <circle cx="235" cy="19" r="2.2" />
+          <path d="M40 19 l3 -3 3 3 -3 3z M194 19 l3 -3 3 3 -3 3z" />
+        </g>
+      </symbol>
+    </svg>
+
+    <!-- 0. Loader: plain CSS (style.css) so it paints before Tailwind compiles; hidden by script.js once data is ready -->
+    <div id="loader" role="status" aria-live="polite">
+      <span class="loader-xi" aria-hidden="true">囍</span>
+      <p class="loader-title">SANGJIT</p>
+      <p class="loader-text">Memuat undangan<span class="loader-dots" aria-hidden="true"><i>.</i><i>.</i><i>.</i></span></p>
+    </div>
+
+    <!-- 1. Greeting modal (cover) -->
+    <div
+      id="greeting"
+      class="fixed inset-0 z-50 overflow-hidden bg-merah-tua bg-coin"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="greeting-title"
+    >
+      <div class="relative mx-auto flex h-full max-w-[500px] flex-col items-center overflow-hidden bg-merah bg-coin px-10 pb-14 pt-12 text-center text-krem shadow-2xl shadow-black/60">
+        <!-- Gold double frame with cloud corners -->
+        <div class="pointer-events-none absolute inset-3 rounded-[10px] border-[5px] border-double border-emas/80"></div>
+        <svg class="pointer-events-none absolute left-4 top-4 h-14 w-14 text-emas" aria-hidden="true"><use href="#yun-corner" /></svg>
+        <svg class="pointer-events-none absolute right-4 top-4 h-14 w-14 -scale-x-100 text-emas" aria-hidden="true"><use href="#yun-corner" /></svg>
+        <svg class="pointer-events-none absolute bottom-4 left-4 h-14 w-14 -scale-y-100 text-emas" aria-hidden="true"><use href="#yun-corner" /></svg>
+        <svg class="pointer-events-none absolute bottom-4 right-4 h-14 w-14 -scale-x-100 -scale-y-100 text-emas" aria-hidden="true"><use href="#yun-corner" /></svg>
+        <!-- Lanterns -->
+        <svg class="lantern pointer-events-none absolute left-[17%] top-0 h-32 w-16" style="--sd: 3.3s" aria-hidden="true"><use href="#lantern" /></svg>
+        <svg class="lantern pointer-events-none absolute right-[17%] top-0 h-28 w-14" style="--sd: 2.8s; --sdl: -1.1s" aria-hidden="true"><use href="#lantern" /></svg>
+
+        <p class="cover-in cover-zoom font-han text-[4.25rem] leading-none text-gold" style="--d: 0.1s" aria-hidden="true">囍</p>
+        <p class="cover-in mt-3 pl-[0.55em] font-display text-base font-bold tracking-[0.55em] text-emas-muda" style="--d: 0.3s">SANGJIT</p>
+        <p class="cover-in mt-1 text-xs italic tracking-wider text-krem/80" style="--d: 0.4s">The Engagement of</p>
+        <h1 id="greeting-title" class="cover-in mt-2 font-display text-[2rem] leading-tight text-gold" style="--d: 0.55s">
+          <span data-bind="couple.wanita.panggilan"></span> &amp; <span data-bind="couple.pria.panggilan"></span>
+        </h1>
+
+        <div class="cover-in cover-zoom relative mt-6 flex min-h-0 w-full flex-1 items-center justify-center" style="--d: 0.8s">
+          <div class="aspect-[3/4] h-full max-h-[420px] max-w-[80%] rounded-t-full border-2 border-emas p-1.5 outline-1 outline-offset-4 outline-emas/60">
+            <img
+              src="assets/cover.webp"
+              data-src="media.cover"
+              alt="Foto mempelai"
+              class="h-full w-full rounded-t-full object-cover"
+            />
+          </div>
+        </div>
+
+        <p class="cover-in mt-7 text-[11px] uppercase tracking-[0.25em] text-krem/75" style="--d: 1s">Kepada Yth. Bapak/Ibu/Saudara/i</p>
+        <p id="guest-name" class="cover-in mt-1.5 max-w-full truncate font-display text-xl font-bold text-emas-muda" style="--d: 1.1s">Tamu Undangan</p>
+        <button
+          id="open-btn"
+          type="button"
+          disabled
+          style="--d: 1.3s"
+          class="cover-in bg-gold shine mt-5 inline-flex shrink-0 items-center gap-2 rounded-full px-7 py-3 text-sm font-bold uppercase tracking-[0.2em] text-merah shadow-xl shadow-black/30 ring-1 ring-emas-muda transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emas-muda disabled:opacity-60"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" />
+          </svg>
+          <span>Buka Undangan</span>
+        </button>
+        <p id="load-error" hidden class="mt-4 text-sm text-krem">
+          Undangan gagal dimuat.
+          <button type="button" class="font-bold text-emas-muda underline" onclick="location.reload()">Muat ulang</button>
+        </p>
+      </div>
+    </div>
+
+    <main class="mx-auto max-w-[500px] overflow-hidden bg-krem shadow-2xl shadow-black/60 sm:border-x-4 sm:border-double sm:border-emas/70">
+      <!-- 2. Hero -->
+      <header id="home" class="fret-y relative flex min-h-svh flex-col items-center justify-center overflow-hidden bg-merah bg-coin px-8 pb-20 pt-28 text-center text-krem">
+        <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_42%,rgb(243_213_138/0.2),transparent_62%)]" aria-hidden="true"></div>
+        <svg class="lantern pointer-events-none absolute left-[7%] top-0 h-36 w-[72px]" style="--sd: 3.4s" aria-hidden="true"><use href="#lantern" /></svg>
+        <svg class="lantern pointer-events-none absolute right-[7%] top-0 h-32 w-16" style="--sd: 2.9s; --sdl: -1.3s" aria-hidden="true"><use href="#lantern" /></svg>
+        <svg class="pointer-events-none absolute bottom-9 left-3 h-14 w-14 -scale-y-100 text-emas/80" aria-hidden="true"><use href="#yun-corner" /></svg>
+        <svg class="pointer-events-none absolute bottom-9 right-3 h-14 w-14 -scale-x-100 -scale-y-100 text-emas/80" aria-hidden="true"><use href="#yun-corner" /></svg>
+
+        <p class="relative pl-[0.55em] font-display text-sm font-bold tracking-[0.55em] text-emas-muda" data-aos="fade-down" data-aos-delay="300" data-aos-anchor="#home">SANGJIT</p>
+        <p class="relative mt-1 text-xs italic tracking-wider text-krem/80" data-aos="fade-down" data-aos-delay="350" data-aos-anchor="#home">The Engagement of</p>
+        <h2 class="relative mt-4 font-display text-[2.6rem] leading-[1.05] text-gold" data-aos="zoom-in" data-aos-delay="450" data-aos-anchor="#home">
+          <span class="block" data-bind="couple.wanita.panggilan"></span>
+          <span class="my-1 block text-2xl">&amp;</span>
+          <span class="block" data-bind="couple.pria.panggilan"></span>
+        </h2>
+
+        <div class="relative mt-9 w-[62%]" data-aos="zoom-in-up" data-aos-delay="600" data-aos-anchor="#home">
+          <div class="rounded-t-full border-2 border-emas p-[7px] outline-1 outline-offset-[5px] outline-emas/60">
+            <img src="assets/header.webp" alt="Foto mempelai" class="aspect-[4/5] w-full rounded-t-full object-cover" />
+          </div>
+          <div class="seal-pulse absolute -bottom-7 left-1/2 -ml-7 grid h-14 w-14 place-items-center rounded-full bg-gold text-merah shadow-lg ring-4 ring-merah">
+            <span class="font-han text-[2rem] leading-none" aria-hidden="true">囍</span>
+          </div>
+        </div>
+
+        <div class="relative mt-12 flex items-center gap-3 text-emas-muda" data-aos="fade-up" data-aos-delay="750" data-aos-anchor="#home">
+          <span class="h-px w-10 bg-emas/70"></span>
+          <p class="pl-[0.3em] font-display text-xl tracking-[0.3em]" data-bind="$tanggalTitik"></p>
+          <span class="h-px w-10 bg-emas/70"></span>
+        </div>
+
+        <!-- Music player -->
+        <div id="player" data-aos="fade-up" data-aos-delay="900" data-aos-offset="0" class="relative mt-8 flex w-full max-w-[330px] items-center gap-3 rounded-xl border border-emas/70 bg-merah-tua/60 p-2.5 text-left shadow-lg shadow-black/30">
+          <img src="assets/cover.webp" alt="" class="h-12 w-12 shrink-0 rounded-lg object-cover ring-1 ring-emas" />
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-sm font-bold text-krem" data-bind="media.judul_musik"></p>
+            <div class="mt-2 h-1 overflow-hidden rounded bg-emas/25"><div id="progress" class="h-full w-0 bg-emas-muda"></div></div>
+            <div class="mt-1 flex justify-between text-[10px] text-krem/70"><span id="t-cur"><b>0</b>:<b>00</b></span><span id="t-dur"><b>0</b>:<b>00</b></span></div>
+          </div>
+          <button
+            id="player-toggle"
+            type="button"
+            aria-label="Putar musik"
+            class="bg-gold flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-merah shadow ring-1 ring-emas-muda"
+          >
+            <svg data-icon="play" class="ml-0.5 h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z" /></svg>
+            <svg data-icon="pause" hidden class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z" /></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- 3. Verse: 天作之合 -->
+      <section id="verse" class="bg-krem bg-coin-cream px-8 py-20 text-center">
+        <svg class="mx-auto h-8 w-60 text-emas" data-aos="unfold" data-aos-duration="1200" aria-hidden="true"><use href="#yun-divider" /></svg>
+        <p class="mt-8 font-han text-[4.2rem] leading-none text-merah-terang" lang="zh" data-aos="zoom-in" data-aos-delay="150">天作之合</p>
+        <p class="mt-4 pl-[0.5em] font-display text-xs font-bold tracking-[0.5em] text-emas-tua" data-aos="fade-up" data-aos-delay="250">TIĀN ZUÒ ZHĪ HÉ</p>
+        <p class="mt-6 text-lg italic text-merah" data-aos="fade-up" data-aos-delay="350">“Pasangan yang ditakdirkan langit.”</p>
+        <p class="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-tinta/80" data-aos="fade-up" data-aos-delay="450">
+          Ungkapan kuno ini dipakai untuk dua insan yang dipertemukan bukan oleh kebetulan, melainkan oleh restu Langit.
+          Seperti benang merah yang tak kasatmata, jodoh telah mengikat kami sejak awal, dan kini kami menyatukannya
+          dengan restu kedua keluarga.
+        </p>
+        <svg class="mx-auto mt-10 h-8 w-60 text-emas" data-aos="unfold" data-aos-duration="1200" aria-hidden="true"><use href="#yun-divider" /></svg>
+      </section>
+
+      <!-- 4. Couple -->
+      <section id="couple" class="fret-y relative overflow-hidden bg-merah bg-coin px-6 py-24 text-center text-krem">
+        <p class="pl-[0.45em] font-display text-[11px] font-bold tracking-[0.45em] text-emas-muda" data-aos="fade-up">THE COUPLE</p>
+        <h2 class="mt-2 font-display text-3xl text-gold" data-aos="fade-up" data-aos-delay="100">Kedua Mempelai</h2>
+        <p class="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-krem/85" data-aos="fade-up" data-aos-delay="200">
+          Dengan penuh sukacita dan atas restu kedua keluarga, kami mengundang Bapak/Ibu/Saudara/i ke acara Sangjit kami:
+        </p>
+
+        <div id="couple-pair" class="relative mt-10 grid grid-cols-2 gap-6">
+          <div data-aos="fade-right" data-aos-delay="200">
+            <div class="octagon bg-gold p-[2px]">
+              <div class="octagon bg-merah p-[5px]">
+                <div class="octagon bg-emas p-[1.5px]">
+                  <img src="assets/pria.webp" alt="Mempelai pria" class="octagon aspect-[3/4] w-full object-cover object-[50%_25%]" />
+                </div>
+              </div>
+            </div>
+            <h3 class="mt-5 font-display text-lg font-bold leading-snug text-gold" data-bind="couple.pria.lengkap"></h3>
+            <p class="mt-2 text-xs leading-relaxed text-krem/80" data-bind="$ortuPria"></p>
+          </div>
+
+          <div data-aos="fade-left" data-aos-delay="400">
+            <div class="octagon bg-gold p-[2px]">
+              <div class="octagon bg-merah p-[5px]">
+                <div class="octagon bg-emas p-[1.5px]">
+                  <img src="assets/wanita.webp" alt="Mempelai wanita" class="octagon aspect-[3/4] w-full object-cover object-[50%_25%]" />
+                </div>
+              </div>
+            </div>
+            <h3 class="mt-5 font-display text-lg font-bold leading-snug text-gold" data-bind="couple.wanita.lengkap"></h3>
+            <p class="mt-2 text-xs leading-relaxed text-krem/80" data-bind="$ortuWanita"></p>
+          </div>
+
+          <div class="seal-pulse absolute left-1/2 top-[28%] -ml-6 grid h-12 w-12 place-items-center rounded-full bg-gold text-merah shadow-lg ring-4 ring-merah" data-aos="zoom-in" data-aos-delay="600">
+            <span class="font-han text-2xl leading-none" aria-hidden="true">囍</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Save the date + countdown -->
+      <section id="countdown" class="bg-krem bg-coin-cream px-6 py-20 text-center">
+        <p class="font-han text-5xl leading-none text-merah-terang" lang="zh" data-aos="zoom-in">吉日</p>
+        <h2 class="mt-3 font-display text-3xl text-merah" data-aos="fade-up" data-aos-delay="100">Save the Date</h2>
+        <p class="mt-2 text-sm text-tinta/70" data-aos="fade-up" data-aos-delay="200">Hari baik yang telah dipilih kedua keluarga</p>
+
+        <div class="mx-auto mt-9 max-w-[340px]" data-aos="fade-up" data-aos-delay="300">
+          <div class="bg-gold inline-flex items-center gap-2 rounded-t-lg px-5 py-1.5 font-display text-sm font-bold text-merah">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 11h18" />
+            </svg>
+            <span data-bind="$bulan"></span>
+          </div>
+          <div id="cal-strip" class="grid grid-cols-3 overflow-hidden rounded-xl border-2 border-emas bg-merah bg-coin text-center shadow-xl shadow-merah/30 outline-1 outline-offset-4 outline-emas/60">
+            <!-- filled by script.js -->
+          </div>
+        </div>
+
+        <p class="mt-7 pl-[0.3em] font-display text-lg tracking-[0.3em] text-merah" data-bind="$tanggalTitik" data-aos="fade"></p>
+
+        <div id="cd" class="mt-8 flex items-start justify-center gap-2.5 text-center">
+          <div class="w-[70px] rounded-lg border border-emas bg-merah bg-coin py-3 shadow-md shadow-merah/25" data-aos="zoom-in" data-aos-delay="0"><b class="block font-display text-3xl font-bold text-emas-muda" data-cd="d">00</b><span class="text-[10px] font-bold uppercase tracking-widest text-krem/85">Hari</span></div>
+          <div class="w-[70px] rounded-lg border border-emas bg-merah bg-coin py-3 shadow-md shadow-merah/25" data-aos="zoom-in" data-aos-delay="120"><b class="block font-display text-3xl font-bold text-emas-muda" data-cd="h">00</b><span class="text-[10px] font-bold uppercase tracking-widest text-krem/85">Jam</span></div>
+          <div class="w-[70px] rounded-lg border border-emas bg-merah bg-coin py-3 shadow-md shadow-merah/25" data-aos="zoom-in" data-aos-delay="240"><b class="block font-display text-3xl font-bold text-emas-muda" data-cd="m">00</b><span class="text-[10px] font-bold uppercase tracking-widest text-krem/85">Menit</span></div>
+          <div class="w-[70px] rounded-lg border border-emas bg-merah bg-coin py-3 shadow-md shadow-merah/25" data-aos="zoom-in" data-aos-delay="360"><b class="block font-display text-3xl font-bold text-emas-muda" data-cd="s">00</b><span class="text-[10px] font-bold uppercase tracking-widest text-krem/85">Detik</span></div>
+        </div>
+        <p id="cd-done" hidden class="mt-6 text-center text-sm font-bold text-merah">Hari bahagia telah tiba. Terima kasih atas doa restunya.</p>
+        <div class="mt-8" data-aos="fade-up">
+          <a
+            id="cal-link"
+            target="_blank"
+            rel="noopener"
+            class="bg-gold shine inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-xs font-bold uppercase tracking-[0.18em] text-merah shadow-lg shadow-merah/25 ring-1 ring-emas transition hover:brightness-110"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 11h18" />
+            </svg>
+            Simpan ke Kalender
+          </a>
+        </div>
+      </section>
+
+      <!-- 6. Our story -->
+      <section id="story" class="fret-y relative overflow-hidden bg-merah bg-coin px-7 py-24 text-center text-krem">
+        <p class="pl-[0.45em] font-display text-[11px] font-bold tracking-[0.45em] text-emas-muda" data-aos="fade-up">OUR STORY</p>
+        <h2 class="mt-2 font-display text-3xl text-gold" data-aos="fade-up" data-aos-delay="100">Kisah Kami</h2>
+
+        <div class="relative mx-auto mt-9 w-[74%]" data-aos="zoom-out">
+          <div class="border-2 border-emas p-[7px] outline-1 outline-offset-[5px] outline-emas/60">
+            <img src="assets/story.webp" alt="" class="aspect-[4/5] w-full object-cover" />
+          </div>
+          <svg class="pointer-events-none absolute -left-4 -top-4 h-12 w-12 text-emas-muda" aria-hidden="true"><use href="#yun-corner" /></svg>
+          <svg class="pointer-events-none absolute -right-4 -top-4 h-12 w-12 -scale-x-100 text-emas-muda" aria-hidden="true"><use href="#yun-corner" /></svg>
+          <svg class="pointer-events-none absolute -bottom-4 -left-4 h-12 w-12 -scale-y-100 text-emas-muda" aria-hidden="true"><use href="#yun-corner" /></svg>
+          <svg class="pointer-events-none absolute -bottom-4 -right-4 h-12 w-12 -scale-x-100 -scale-y-100 text-emas-muda" aria-hidden="true"><use href="#yun-corner" /></svg>
+        </div>
+
+        <div class="relative mx-auto mt-12 max-w-sm text-left">
+          <span class="absolute bottom-4 left-[15px] top-4 w-px bg-linear-to-b from-emas/0 via-emas/70 to-emas/0" aria-hidden="true"></span>
+          <ol class="space-y-7">
+            <li class="relative pl-12" data-aos="fade-up">
+              <span class="absolute left-0 top-0 grid h-8 w-8 place-items-center rounded-full border border-emas bg-merah-tua text-emas-muda" aria-hidden="true">
+                <svg class="h-2.5 w-2.5" viewBox="0 0 12 12"><path d="M6 0 12 6 6 12 0 6z" fill="currentColor" /></svg>
+              </span>
+              <p class="font-display text-sm font-bold tracking-widest text-emas-muda"><b class="font-bold">2019</b> · Kue Keranjang</p>
+              <p class="mt-1.5 text-sm leading-relaxed text-krem/85">
+                Kami pertama kali bertemu di open house Imlek seorang sahabat. Angeline sibuk membagikan kue keranjang,
+                Wilson sibuk mencari alasan untuk terus membantu.
+              </p>
+            </li>
+            <li class="relative pl-12" data-aos="fade-up">
+              <span class="absolute left-0 top-0 grid h-8 w-8 place-items-center rounded-full border border-emas bg-merah-tua text-emas-muda" aria-hidden="true">
+                <svg class="h-2.5 w-2.5" viewBox="0 0 12 12"><path d="M6 0 12 6 6 12 0 6z" fill="currentColor" /></svg>
+              </span>
+              <p class="font-display text-sm font-bold tracking-widest text-emas-muda"><b class="font-bold">2021</b> · Secangkir Teh</p>
+              <p class="mt-1.5 text-sm leading-relaxed text-krem/85">
+                Kencan pertama kami di sebuah kedai teh kecil di Glodok. Dari secangkir teh melati, obrolan kami tak pernah
+                benar-benar selesai.
+              </p>
+            </li>
+            <li class="relative pl-12" data-aos="fade-up">
+              <span class="absolute left-0 top-0 grid h-8 w-8 place-items-center rounded-full border border-emas bg-merah-tua text-emas-muda" aria-hidden="true">
+                <svg class="h-2.5 w-2.5" viewBox="0 0 12 12"><path d="M6 0 12 6 6 12 0 6z" fill="currentColor" /></svg>
+              </span>
+              <p class="font-display text-sm font-bold tracking-widest text-emas-muda"><b class="font-bold">2026</b> · Di Bawah Lampion</p>
+              <p class="mt-1.5 text-sm leading-relaxed text-krem/85">
+                Pada malam Cap Go Meh, di bawah ratusan lampion merah, Wilson akhirnya bertanya. Angeline menjawab “ya”
+                bahkan sebelum pertanyaannya selesai.
+              </p>
+            </li>
+            <li class="relative pl-12" data-aos="fade-up">
+              <span class="bg-gold absolute left-0 top-0 grid h-8 w-8 place-items-center rounded-full font-han text-lg leading-none text-merah ring-2 ring-merah-tua" aria-hidden="true">囍</span>
+              <p class="font-display text-sm font-bold tracking-widest text-emas-muda"><b class="font-bold">2027</b> · Sangjit</p>
+              <p class="mt-1.5 text-sm leading-relaxed text-krem/85">
+                Kini, dengan restu kedua keluarga, kami melangkah ke babak berikutnya. Sampai jumpa di hari Sangjit kami.
+              </p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- 7. Sessions & venues -->
+      <section id="location" class="relative bg-krem bg-coin-cream px-6 pb-20 pt-32 text-center">
+        <div class="absolute left-1/2 top-0 -ml-6" data-aos="fade-down">
+          <svg class="lantern h-24 w-12" style="--sd: 3s" aria-hidden="true"><use href="#lantern" /></svg>
+        </div>
+        <p class="pl-[0.45em] font-display text-[11px] font-bold tracking-[0.45em] text-emas-tua" data-aos="fade-up">THE CELEBRATION</p>
+        <h2 class="mt-2 font-display text-3xl text-merah" data-aos="fade-up" data-aos-delay="100">Waktu &amp; Tempat</h2>
+        <svg class="mx-auto mt-4 h-6 w-48 text-emas" data-aos="unfold" data-aos-duration="1200" aria-hidden="true"><use href="#yun-divider" /></svg>
+        <div id="session-list" class="mt-10 space-y-5"></div>
+        <div id="venue-list" class="mt-8 space-y-5"></div>
+      </section>
+
+      <!-- 8. Gift: angpao -->
+      <section id="gift" class="fret-y relative overflow-hidden bg-merah-tua bg-coin px-6 py-24 text-center text-krem">
+        <p class="pl-[0.45em] font-display text-[11px] font-bold tracking-[0.45em] text-emas-muda" data-aos="fade-up">ANGPAO</p>
+        <h2 class="mt-2 font-display text-3xl text-gold" data-aos="fade-up" data-aos-delay="100">Tanda Kasih</h2>
+        <p class="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-krem/85" data-aos="fade-up" data-aos-delay="200">
+          Doa restu Anda adalah hadiah terindah bagi kami. Namun apabila Bapak/Ibu/Saudara/i ingin memberikan tanda kasih,
+          angpao dapat dikirim melalui rekening berikut.
+        </p>
+
+        <div
+          id="envelope"
+          class="angpao relative mx-auto mt-10 w-full max-w-[280px] overflow-hidden rounded-[18px] shadow-2xl shadow-black/50 ring-1 ring-emas/70"
+          data-aos="angpao"
+          data-aos-duration="1100"
+          data-aos-easing="ease-out-back"
+        >
+          <div class="bg-coin pointer-events-none absolute inset-0"></div>
+          <div class="pointer-events-none absolute inset-2.5 rounded-xl border border-emas/70"></div>
+          <!-- Flap -->
+          <svg class="absolute inset-x-0 top-0 h-[130px] w-full" viewBox="0 0 280 130" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 0 H280 V60 Q140 150 0 60 Z" fill="#8b0d14" />
+            <path d="M0 60 Q140 150 280 60" fill="none" stroke="#d4a24c" stroke-width="2" />
+            <path d="M0 69 Q140 159 280 69" fill="none" stroke="#d4a24c" stroke-opacity=".45" stroke-width="1" />
+          </svg>
+          <!-- Seal -->
+          <div class="bg-gold absolute left-1/2 top-[72px] -ml-[34px] grid h-[68px] w-[68px] place-items-center rounded-full text-merah shadow-lg shadow-black/40 ring-4 ring-merah">
+            <span class="font-han text-[2.5rem] leading-none" aria-hidden="true">囍</span>
+          </div>
+          <div class="relative px-7 pb-9 pt-[172px]">
+            <p class="pl-[0.2em] font-display text-2xl font-bold tracking-[0.2em] text-gold" data-bind="gift.bank"></p>
+            <p class="mt-3 font-display text-[1.35rem] tracking-[0.1em] text-krem" data-bind="gift.norek"></p>
+            <p class="mt-1 text-xs text-krem/80">a.n. <span class="font-bold" data-bind="gift.atas_nama"></span></p>
+            <button
+              id="copy-btn"
+              type="button"
+              class="bg-gold shine mt-6 inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-xs font-bold uppercase tracking-[0.2em] text-merah shadow-lg shadow-black/30 ring-1 ring-emas-muda transition hover:brightness-110"
+            >
+              <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="9" y="9" width="12" height="12" rx="2" /><path d="M5 15V5a2 2 0 0 1 2-2h10" />
+              </svg>
+              Salin Nomor
+            </button>
+          </div>
+        </div>
+
+        <figure id="qris-wrap" class="mt-10">
+          <img id="qris" alt="QRIS" data-aos="zoom-in" class="mx-auto w-52 rounded-2xl border-2 border-emas bg-white p-3 shadow-lg" loading="lazy" />
+          <figcaption class="mt-3 text-xs text-krem/80">Scan QRIS untuk mengirim angpao</figcaption>
+        </figure>
+      </section>
+
+      <!-- 9. Gallery -->
+      <section id="gallery" class="bg-krem bg-coin-cream px-6 py-20 text-center">
+        <p class="pl-[0.45em] font-display text-[11px] font-bold tracking-[0.45em] text-emas-tua" data-aos="fade-up">OUR MOMENTS</p>
+        <h2 class="mt-2 font-display text-3xl text-merah" data-aos="fade-up" data-aos-delay="100">Galeri Bahagia</h2>
+        <svg class="mx-auto mt-4 h-6 w-48 text-emas" data-aos="unfold" data-aos-duration="1200" aria-hidden="true"><use href="#yun-divider" /></svg>
+        <div id="gallery-grid" class="mt-8 grid grid-cols-3 gap-2.5"></div>
+      </section>
+
+      <!-- 10. Closing -->
+      <footer class="fret-y relative overflow-hidden bg-merah bg-coin px-8 pb-28 pt-32 text-center text-krem">
+        <svg class="lantern pointer-events-none absolute left-[8%] top-0 h-28 w-14" style="--sd: 3.1s; --sdl: -0.6s" aria-hidden="true"><use href="#lantern" /></svg>
+        <svg class="lantern pointer-events-none absolute right-[8%] top-0 h-32 w-16" style="--sd: 3.5s" aria-hidden="true"><use href="#lantern" /></svg>
+        <svg class="pointer-events-none absolute bottom-9 left-3 h-14 w-14 -scale-y-100 text-emas/80" aria-hidden="true"><use href="#yun-corner" /></svg>
+        <svg class="pointer-events-none absolute bottom-9 right-3 h-14 w-14 -scale-x-100 -scale-y-100 text-emas/80" aria-hidden="true"><use href="#yun-corner" /></svg>
+
+        <div class="mx-auto grid h-36 w-36 place-items-center rounded-full border-2 border-emas bg-merah-tua/40 outline-1 outline-offset-[6px] outline-emas/50" data-aos="zoom-in">
+          <span class="font-han text-[5.5rem] leading-none text-gold" aria-hidden="true">囍</span>
+        </div>
+        <p class="mx-auto mt-10 max-w-sm text-sm leading-relaxed text-krem/85" data-aos="fade-up" data-aos-delay="150">
+          Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan
+          memberikan doa restu.
+        </p>
+        <p class="mt-5 text-sm text-krem/85" data-aos="fade-up" data-aos-delay="250">Terima kasih · <span class="font-han text-lg text-emas-muda" lang="zh">谢谢</span></p>
+        <p class="mt-8 text-sm" data-aos="fade-up">Kami yang berbahagia,</p>
+        <p class="mt-3 font-display text-3xl leading-tight text-gold" data-aos="zoom-in" data-aos-delay="150">
+          <span data-bind="couple.wanita.panggilan"></span> &amp; <span data-bind="couple.pria.panggilan"></span>
+        </p>
+        <p class="mt-3 text-sm font-bold tracking-wider text-emas-muda" data-bind="couple.hashtag" data-aos="fade" data-aos-delay="400"></p>
+        <p class="mt-14 text-[11px] text-krem/50">Undangan digital · by.me</p>
+      </footer>
+    </main>
+
+    <!-- List item templates, filled by script.js -->
+    <template id="tpl-session">
+      <article class="relative overflow-hidden rounded-2xl border-2 border-emas bg-merah bg-coin px-6 py-7 text-krem shadow-xl shadow-merah/25 outline-1 outline-offset-[-9px] outline-emas/50">
+        <svg class="pointer-events-none absolute left-2 top-2 h-9 w-9 text-emas/80" aria-hidden="true"><use href="#yun-corner" /></svg>
+        <svg class="pointer-events-none absolute right-2 top-2 h-9 w-9 -scale-x-100 text-emas/80" aria-hidden="true"><use href="#yun-corner" /></svg>
+        <svg class="pointer-events-none absolute bottom-2 left-2 h-9 w-9 -scale-y-100 text-emas/80" aria-hidden="true"><use href="#yun-corner" /></svg>
+        <svg class="pointer-events-none absolute bottom-2 right-2 h-9 w-9 -scale-x-100 -scale-y-100 text-emas/80" aria-hidden="true"><use href="#yun-corner" /></svg>
+        <h3 class="font-display text-2xl font-bold leading-tight text-gold" data-f="label"></h3>
+        <svg class="mx-auto mt-2 h-4 w-28 text-emas/80" aria-hidden="true"><use href="#yun-divider" /></svg>
+        <p class="mt-3 text-sm font-bold" data-f="$tanggal"></p>
+        <p class="mt-1 inline-flex items-center gap-1.5 text-sm text-krem/90">
+          <svg class="h-4 w-4 text-emas-muda" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
+          </svg>
+          <span data-f="$jam"></span>
+        </p>
+        <p class="mt-3 text-xs text-krem/80" data-opt="dress_code">Dress code: <span class="font-bold text-emas-muda" data-f="dress_code"></span></p>
+      </article>
+    </template>
+
+    <template id="tpl-venue">
+      <article class="relative rounded-2xl border-2 border-emas bg-white/85 px-6 py-7 shadow-lg shadow-merah/10 outline-1 outline-offset-[-9px] outline-emas/50">
+        <span class="mx-auto grid h-11 w-11 place-items-center rounded-full bg-merah text-emas-muda ring-2 ring-emas ring-offset-2 ring-offset-white" aria-hidden="true">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z" /><circle cx="12" cy="9" r="2.5" />
+          </svg>
+        </span>
+        <h3 class="mt-3 font-display text-xl font-bold leading-snug text-merah" data-f="$judul"></h3>
+        <p class="mt-2 text-sm font-bold text-tinta" data-opt="tempat" data-f="tempat"></p>
+        <p class="mx-auto mt-1 max-w-xs text-sm leading-relaxed text-tinta/75" data-f="alamat"></p>
+        <div class="mt-5 flex flex-wrap justify-center gap-2">
+          <a
+            data-href="maps"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-1.5 rounded-full border border-emas bg-merah px-5 py-2 text-xs font-bold uppercase tracking-wider text-emas-muda shadow transition hover:bg-merah-terang"
+          >
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z" /><circle cx="12" cy="9" r="2.5" />
+            </svg>
+            Buka Peta
+          </a>
+          <a
+            data-href="live_stream"
+            target="_blank"
+            rel="noopener"
+            class="inline-block rounded-full border border-merah px-5 py-2 text-xs font-bold uppercase tracking-wider text-merah"
+            >Live Streaming</a
+          >
+        </div>
+      </article>
+    </template>
+
+    <!-- Gallery lightbox -->
+    <div
+      id="lightbox"
+      hidden
+      class="fixed inset-0 z-50 flex items-center justify-center bg-tinta/95"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Galeri foto"
+    >
+      <img id="lightbox-img" alt="" class="max-h-[85vh] max-w-[92vw] rounded-lg border-2 border-emas object-contain" />
+      <button id="lb-close" type="button" aria-label="Tutup" class="absolute right-4 top-4 p-2 text-3xl leading-none text-emas-muda">&times;</button>
+      <button id="lb-prev" type="button" aria-label="Sebelumnya" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 text-4xl text-emas-muda">&lsaquo;</button>
+      <button id="lb-next" type="button" aria-label="Berikutnya" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 text-4xl text-emas-muda">&rsaquo;</button>
+      <p id="lb-count" class="absolute bottom-5 font-display text-sm text-emas-muda/90"></p>
+    </div>
+
+    <!-- Music -->
+    <audio id="music" loop preload="none"></audio>
+    <button
+      id="music-btn"
+      hidden
+      type="button"
+      aria-label="Putar/jeda musik"
+      class="bg-gold fixed bottom-5 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full text-merah shadow-lg shadow-black/40 ring-2 ring-merah"
+    >
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" />
+      </svg>
+    </button>
+
+    <div
+      id="toast"
+      hidden
+      role="status"
+      class="fixed bottom-20 left-1/2 z-50 -translate-x-1/2 rounded-full bg-tinta/90 px-5 py-2 text-sm text-emas-muda ring-1 ring-emas/60"
+    ></div>
+  </body>
+</html>

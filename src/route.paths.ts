@@ -6,6 +6,8 @@ export const PATHS = {
   newEvent: '/admin/events/new',
   users: '/admin/users',
   templates: '/admin/templates',
+  /** Public design catalogue (no login). */
+  portfolio: '/portfolio',
 } as const
 
 /** The pages of one event, all under `/admin/events/:eventId` (01_Event.ID, not the slug). */

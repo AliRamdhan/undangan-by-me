@@ -1,0 +1,322 @@
+/* What Tailwind utilities don't cover. Colors mirror the @theme tokens in index.html. */
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.locked {
+  overflow: hidden;
+}
+
+/* ---------- patterns ---------- */
+
+/* Interlocking coins (古钱纹): gold on red, faint red on cream */
+.bg-coin {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cg fill='none' stroke='%23d4a24c' stroke-opacity='.17' stroke-width='1'%3E%3Ccircle cx='22' cy='22' r='22'/%3E%3Ccircle cx='0' cy='0' r='22'/%3E%3Ccircle cx='44' cy='0' r='22'/%3E%3Ccircle cx='0' cy='44' r='22'/%3E%3Ccircle cx='44' cy='44' r='22'/%3E%3Crect x='19' y='19' width='6' height='6' transform='rotate(45 22 22)'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 44px 44px;
+}
+.bg-coin-cream {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cg fill='none' stroke='%23b3141c' stroke-opacity='.07' stroke-width='1'%3E%3Ccircle cx='22' cy='22' r='22'/%3E%3Ccircle cx='0' cy='0' r='22'/%3E%3Ccircle cx='44' cy='0' r='22'/%3E%3Ccircle cx='0' cy='44' r='22'/%3E%3Ccircle cx='44' cy='44' r='22'/%3E%3Crect x='19' y='19' width='6' height='6' transform='rotate(45 22 22)'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 44px 44px;
+}
+
+/* Key-fret band (回纹) along the top and bottom edge of the red sections */
+.fret-y {
+  position: relative;
+}
+.fret-y::before,
+.fret-y::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 14px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='14' viewBox='0 0 28 14'%3E%3Cg fill='none' stroke='%23d4a24c' stroke-width='1.4' stroke-linecap='square'%3E%3Cpath d='M0 13 H28 M0 1 H28'/%3E%3Cpath d='M4 13 V4 H16 V10 H8 V7 H12'/%3E%3Cpath d='M18 1 V10 H24 V4 H20' stroke-opacity='.55'/%3E%3C/g%3E%3C/svg%3E")
+    left center / 28px 14px repeat-x;
+  pointer-events: none;
+}
+.fret-y::before {
+  top: 12px;
+}
+.fret-y::after {
+  bottom: 12px;
+  transform: scaleY(-1);
+}
+
+/* Gold foil text */
+.text-gold {
+  background: linear-gradient(180deg, #fbe7ae 0%, #f3d58a 30%, #d4a24c 62%, #b07f2e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.bg-gold {
+  background: linear-gradient(135deg, #fbe7ae 0%, #f3d58a 30%, #d4a24c 70%, #b88633 100%);
+}
+
+/* Octagon window (八角窗) for the couple portraits; 45° cuts on a 3:4 box */
+.octagon {
+  clip-path: polygon(30% 0, 70% 0, 100% 22.5%, 100% 77.5%, 70% 100%, 30% 100%, 0 77.5%, 0 22.5%);
+}
+
+/* Angpao (red envelope): brighter red with a soft sheen */
+.angpao {
+  background:
+    radial-gradient(120% 70% at 50% 0%, rgb(255 255 255 / 0.1), transparent 60%),
+    linear-gradient(180deg, #c8161f 0%, #b3141c 45%, #8b0d14 100%);
+}
+
+/* ---------- loader ---------- */
+
+/* Loader covers the greeting until data and the cover photo are ready */
+#loader {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  background: linear-gradient(to right, #5c0a0f calc(50% - 15.625rem), #8b0d14 0 calc(50% + 15.625rem), #5c0a0f 0);
+  text-align: center;
+  transition:
+    opacity 0.6s ease,
+    visibility 0.6s;
+}
+#loader.done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-xi {
+  font-family: "Ma Shan Zheng", "Songti SC", "STKaiti", serif;
+  font-size: 4.5rem;
+  line-height: 1;
+  color: #f3d58a;
+  text-shadow: 0 6px 18px rgb(0 0 0 / 0.35);
+  animation: seal-pulse 1.8s ease-in-out infinite;
+}
+.loader-title {
+  margin: 0.9rem 0 0;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.35em;
+  line-height: 1.2;
+  color: #f3d58a;
+}
+.loader-text {
+  margin: 0.25rem 0 0;
+  font-family: "Lato", ui-sans-serif, system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #fff6e5;
+  opacity: 0.8;
+}
+.loader-dots i {
+  font-style: normal;
+  animation: dot 1.2s ease-in-out infinite both;
+}
+.loader-dots i:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.loader-dots i:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes dot {
+  0%,
+  80%,
+  100% {
+    opacity: 0.2;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+/* ---------- cover ---------- */
+
+/* Hold the cover's entrance until the loader fades, so it isn't spent unseen */
+body.loading .cover-in,
+body.loading .lantern {
+  animation-play-state: paused;
+}
+
+/* Greeting modal cross-fades into the page when opened */
+#greeting {
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s ease;
+}
+#greeting.closing {
+  opacity: 0;
+  transform: scale(1.04);
+  pointer-events: none;
+}
+
+/* Greeting content stages in on load; --d sets each element's delay */
+.cover-in {
+  animation: cover-in 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0s) both;
+}
+.cover-zoom {
+  animation-name: cover-zoom;
+}
+@keyframes cover-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@keyframes cover-zoom {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+}
+
+/* ---------- ornaments ---------- */
+
+/* Lanterns sway from their string; vary --sd / --sdl for a natural rhythm */
+.lantern {
+  transform-origin: 50% 0;
+  animation: swing var(--sd, 3.2s) ease-in-out var(--sdl, 0s) infinite alternate;
+  filter: drop-shadow(0 8px 10px rgb(0 0 0 / 0.3));
+}
+@keyframes swing {
+  from {
+    transform: rotate(-6deg);
+  }
+  to {
+    transform: rotate(6deg);
+  }
+}
+/* Warm glow inside the lantern body */
+.lantern-glow {
+  animation: glow 2.4s ease-in-out infinite alternate;
+}
+@keyframes glow {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* The wedding-day seal on the calendar strip, and the big 囍 medallions */
+.seal-glow {
+  animation: seal-glow 2.4s ease-in-out infinite;
+}
+@keyframes seal-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(243 213 138 / 0.55);
+  }
+  50% {
+    box-shadow: 0 0 18px 4px rgb(243 213 138 / 0.45);
+  }
+}
+.seal-pulse {
+  animation: seal-pulse 3s ease-in-out infinite;
+}
+@keyframes seal-pulse {
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+/* Light sweep across gold buttons */
+.shine {
+  position: relative;
+  overflow: hidden;
+}
+.shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.55) 50%, transparent 70%);
+  transform: translateX(-120%);
+  animation: shine 3.6s ease-in-out 1.5s infinite;
+  pointer-events: none;
+}
+@keyframes shine {
+  0% {
+    transform: translateX(-120%);
+  }
+  35%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+/* ---------- custom AOS animations (AOS sets .aos-animate once an element scrolls in) ---------- */
+
+/* AOS slides fades 100px by default; shorter feels gentler on a phone */
+[data-aos="fade-up"] {
+  transform: translate3d(0, 40px, 0);
+}
+[data-aos="fade-down"] {
+  transform: translate3d(0, -40px, 0);
+}
+[data-aos="fade-right"] {
+  transform: translate3d(-48px, 0, 0);
+}
+[data-aos="fade-left"] {
+  transform: translate3d(48px, 0, 0);
+}
+
+/* Cloud divider unfolds from the centre */
+[data-aos="unfold"] {
+  clip-path: inset(0 50% 0 50%);
+  transition-property: clip-path;
+}
+[data-aos="unfold"].aos-animate {
+  clip-path: inset(0);
+}
+
+/* Angpao rises and settles */
+[data-aos="angpao"] {
+  opacity: 0;
+  transform: translateY(60px) rotate(-4deg);
+  transition-property: opacity, transform;
+}
+[data-aos="angpao"].aos-animate {
+  opacity: 1;
+  transform: none;
+}
+
+#music-btn.playing svg {
+  animation: spin 4s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  #greeting,
+  #loader {
+    transition: none;
+  }
+  .loader-xi,
+  .loader-dots i,
+  .cover-in,
+  .lantern,
+  .lantern-glow,
+  .seal-glow,
+  .seal-pulse,
+  .shine::after,
+  #music-btn.playing svg {
+    animation: none;
+  }
+}

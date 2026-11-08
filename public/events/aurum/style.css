@@ -1,0 +1,316 @@
+/* What Tailwind utilities don't cover. Colors mirror the @theme tokens in index.html. */
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.locked {
+  overflow: hidden;
+}
+
+/* Loader covers the greeting until data and the cover photo are ready */
+#loader {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 50% 40%, #1f1c17 0, #0f0f10 65%);
+  text-align: center;
+  transition:
+    opacity 0.6s ease,
+    visibility 0.6s;
+}
+#loader.done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 2.5rem;
+  font-style: italic;
+  line-height: 1;
+  color: #e6d3a3;
+}
+.loader-mark::before,
+.loader-mark::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+.loader-mark::before {
+  border: 1px solid rgb(201 169 110 / 0.22);
+}
+.loader-mark::after {
+  border: 1px solid transparent;
+  border-top-color: #c9a96e;
+  animation: spin 1.4s linear infinite;
+}
+.loader-title {
+  margin: 1.5rem 0 0;
+  padding-left: 0.45em;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: #e6d3a3;
+}
+.loader-text {
+  margin: 0.6rem 0 0;
+  font-family: "Jost", ui-sans-serif, system-ui, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgb(245 241 232 / 0.5);
+}
+.loader-dots i {
+  font-style: normal;
+  animation: dot 1.2s ease-in-out infinite both;
+}
+.loader-dots i:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.loader-dots i:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes dot {
+  0%,
+  80%,
+  100% {
+    opacity: 0.2;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+/* Hold the cover's entrance until the loader fades, so it isn't spent unseen */
+body.loading .cover-in,
+body.loading .cover-frame {
+  animation-play-state: paused;
+}
+
+/* Greeting cover cross-fades into the page when opened */
+#greeting {
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s ease;
+}
+#greeting.closing {
+  opacity: 0;
+  transform: scale(1.04);
+  pointer-events: none;
+}
+
+/* Greeting content stages in on load; --d sets each element's delay */
+.cover-in {
+  animation: cover-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0s) both;
+}
+.cover-zoom {
+  animation-name: cover-zoom;
+}
+@keyframes cover-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+@keyframes cover-zoom {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+/* The gold frame opens out from the centre */
+.cover-frame {
+  animation: frame-open 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.1s both;
+}
+@keyframes frame-open {
+  from {
+    clip-path: inset(50% 50% 50% 50%);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Hero slideshow: three photos cross-fade with a slow Ken Burns zoom (24s loop, 8s each).
+   It waits behind the cover (body.locked), so the first photo is the one seen on opening. */
+.slide {
+  opacity: 0;
+  animation: slide 24s linear infinite both;
+  will-change: opacity, transform;
+}
+.slide:nth-child(1) {
+  animation-delay: -1.5s;
+}
+.slide:nth-child(2) {
+  animation-delay: 6.5s;
+}
+.slide:nth-child(3) {
+  animation-delay: 14.5s;
+}
+@keyframes slide {
+  0% {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+  6% {
+    opacity: 1;
+  }
+  33.33% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 0;
+    transform: scale(1.14);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.14);
+  }
+}
+
+/* Hero text rises in as the cover fades */
+.hero-in {
+  animation: hero-in 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0s) both;
+}
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(4px);
+  }
+}
+body.locked .slide,
+body.locked .hero-in {
+  animation-play-state: paused;
+}
+
+/* Scroll cue: a gold thread running down */
+.scroll-cue {
+  transform-origin: top;
+  animation: cue 2.2s ease-in-out infinite;
+}
+@keyframes cue {
+  0% {
+    transform: scaleY(0);
+    opacity: 1;
+  }
+  60% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 0;
+  }
+}
+
+/* The wedding day on the calendar strip glows softly */
+.cal-ring {
+  animation: glow 2.8s ease-in-out infinite;
+}
+@keyframes glow {
+  50% {
+    box-shadow: 0 0 18px rgb(201 169 110 / 0.45);
+  }
+}
+
+/* Faint art-deco lattice behind alternate sections */
+.deco-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36' fill='none' stroke='%23c9a96e' stroke-opacity='.07'%3E%3Cpath d='M18 0L36 18L18 36L0 18Z'/%3E%3Cpath d='M18 9L27 18L18 27L9 18Z'/%3E%3C/svg%3E");
+  background-size: 36px 36px;
+}
+
+/* Light sweeping across the gift card */
+.card-sheen {
+  background: linear-gradient(115deg, transparent 35%, rgb(230 211 163 / 0.14) 48%, transparent 60%);
+  background-size: 250% 100%;
+  animation: sheen 6s ease-in-out infinite;
+}
+@keyframes sheen {
+  0% {
+    background-position: 130% 0;
+  }
+  45%,
+  100% {
+    background-position: -40% 0;
+  }
+}
+
+/* Custom AOS animations. AOS sets .aos-animate once an element scrolls in. */
+
+/* AOS slides fades 100px by default; shorter feels gentler on a phone */
+[data-aos="fade-up"] {
+  transform: translate3d(0, 36px, 0);
+}
+[data-aos="fade-down"] {
+  transform: translate3d(0, -36px, 0);
+}
+[data-aos="fade-right"] {
+  transform: translate3d(-40px, 0, 0);
+}
+[data-aos="fade-left"] {
+  transform: translate3d(40px, 0, 0);
+}
+
+/* Gold rule draws out from its centre diamond */
+[data-aos="rule"] {
+  clip-path: inset(0 50% 0 50%);
+  transition-property: clip-path;
+}
+[data-aos="rule"].aos-animate {
+  clip-path: inset(0 0 0 0);
+}
+
+#music-btn.playing svg {
+  animation: spin 4s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  #greeting,
+  #loader {
+    transition: none;
+  }
+  .loader-mark::after,
+  .loader-dots i,
+  .cover-in,
+  .cover-frame,
+  .hero-in,
+  .scroll-cue,
+  .cal-ring,
+  .card-sheen,
+  #music-btn.playing svg {
+    animation: none;
+  }
+  /* No slideshow: hold the first photo */
+  .slide {
+    animation: none;
+  }
+  .slide:first-child {
+    opacity: 1;
+  }
+}

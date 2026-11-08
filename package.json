@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "sample:xlsx": "node scripts/make-sample-xlsx.mjs"
+    "sample:xlsx": "node scripts/make-sample-xlsx.mjs",
+    "portfolio:thumbs": "node scripts/portfolio-thumbs.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -44,6 +45,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.6",
     "globals": "^17.12.0",
+    "playwright-core": "1.64.1",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.69.0",

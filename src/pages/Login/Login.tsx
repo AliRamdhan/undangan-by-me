@@ -1,7 +1,7 @@
 import { Alert02Icon, Login01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useState } from 'react'
-import { Navigate, useLocation, useNavigate } from 'react-router'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router'
 import { toast } from 'sonner'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { Button } from '@/components/ui/button'
@@ -88,7 +88,9 @@ export function Login() {
 
         </CardContent>
       </Card>
-
+      <Link to={PATHS.portfolio} className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
+        Lihat portfolio desain
+      </Link>
     </div>
   )
 }

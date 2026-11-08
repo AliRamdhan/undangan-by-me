@@ -1,0 +1,37 @@
+{
+  "event": {
+    "slug": "aurum",
+    "tipe": "PERNIKAHAN",
+    "bahasa": "id",
+    "timezone": "WIB",
+    "couple": {
+      "pria": { "panggilan": "Adrian", "lengkap": "Adrian Wijaya", "ortu": "Bapak Hendra Wijaya & Ibu Lisa Tan" },
+      "wanita": { "panggilan": "Clarissa", "lengkap": "Clarissa Halim", "ortu": "Bapak Robert Halim & Ibu Maria Gunawan" },
+      "hashtag": "#AdrianClarissaForever"
+    },
+    "tanggal_utama": "2027-03-20",
+    "sesi": [
+      {
+        "kode": "S1", "label": "Holy Matrimony", "tanggal": "2027-03-20", "mulai": "10:00", "selesai": "11:30",
+        "tempat": "Gereja Katedral Jakarta", "alamat": "Jl. Katedral No. 7B, Pasar Baru, Jakarta Pusat",
+        "maps": "https://maps.google.com/?q=Gereja+Katedral+Jakarta", "dress_code": "Black Tie", "live_stream": ""
+      },
+      {
+        "kode": "S2", "label": "Reception", "tanggal": "2027-03-20", "mulai": "18:30", "selesai": "21:30",
+        "tempat": "The Ritz-Carlton Pacific Place", "alamat": "Jl. Jend. Sudirman Kav. 52-53, Jakarta Selatan",
+        "maps": "https://maps.google.com/?q=Ritz-Carlton+Pacific+Place", "dress_code": "Black Tie", "live_stream": ""
+      }
+    ],
+    "gift": { "bank": "BCA", "atas_nama": "Clarissa Halim", "norek": "1234 5678 90", "qris": "" },
+    "media": { "musik": "assets/demo/musik.mp3", "judul_musik": "Perfect — Instrumental", "cover": "" },
+    "gallery": [
+      "assets/demo/gallery-1.webp",
+      "assets/demo/gallery-2.webp",
+      "assets/demo/gallery-3.webp",
+      "assets/demo/gallery-4.webp",
+      "assets/demo/gallery-5.webp",
+      "assets/demo/gallery-6.webp"
+    ]
+  },
+  "guest": null
+}

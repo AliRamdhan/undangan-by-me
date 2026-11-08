@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Wedding of Nadia & Raka</title>
+    <link rel="icon" type="image/png" href="assets/favicon/favicon-96x96.png?v=3" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.svg?v=3" />
+    <link rel="shortcut icon" href="assets/favicon/favicon.ico?v=3" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png?v=3" />
+    <link rel="manifest" href="assets/favicon/site.webmanifest?v=3" />
+    <meta name="description" content="Undangan pernikahan digital" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@400;500;600&family=Pinyon+Script&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Files in public/ skip Vite, so Tailwind runs in the browser. -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-ivory: #fbf8f3;
+        --color-mist: #edf1f5;
+        --color-petal: #f8eeeb;
+        --color-dusty: #7d93ad;
+        --color-dusty-dark: #4f6480;
+        --color-blush: #e8c5c1;
+        --color-rose: #d9a29c;
+        --color-sage: #9aab8f;
+        --color-sage-dark: #6d7f62;
+        --color-gold: #b9975b;
+        --color-ink: #3e4756;
+        --font-script: "Pinyon Script", cursive;
+        --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
+        --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Deferred scripts run in order, so AOS is ready before script.js. -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
+    <script src="../config.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+
+  <!-- When copying this template for a new event, change data-event (01_Event.ID; admin URL /admin/events/{ID}) and data-slug (fallback). -->
+  <body data-event="" data-slug="bloom" class="locked loading bloom-backdrop font-serif text-ink antialiased lining-nums">
+    <!--
+      Botanical sprite: every flower on the page is a <use> of these groups, drawn around (0,0).
+      Fills follow `color` (currentColor); translucent layered petals give the watercolour look.
+    -->
+    <svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+      <defs>
+        <path id="p-petal" d="M0 0 C -17 -5 -27 -24 -16 -38 C -11 -44 -6 -39 0 -44 C 6 -39 11 -44 16 -38 C 27 -24 17 -5 0 0 Z" />
+        <path id="p-round" d="M0 0 C -12 -6 -14 -26 0 -30 C 14 -26 12 -6 0 0 Z" />
+        <path id="p-leaf" d="M0 0 C 6 -7 18 -9 28 -4 C 18 2 7 3 0 0 Z" />
+        <path id="p-broad" d="M0 0 C -16 -4 -22 -20 -12 -27 C -5 -31 5 -31 12 -27 C 22 -20 16 -4 0 0 Z" />
+        <!-- Soft blur for the watercolour washes behind each arrangement -->
+        <filter id="f-wash" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="9" /></filter>
+        <filter id="f-wash-sm" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4" /></filter>
+
+        <!-- Large leaf with a midrib: from (0,0) towards +x -->
+        <g id="g-leaf">
+          <path d="M0 0 C 12 -13 36 -15 54 -3 C 36 7 13 8 0 0 Z" fill="currentColor" fill-opacity=".38" stroke="currentColor" stroke-opacity=".7" stroke-width=".8" />
+          <path d="M2 0 C 18 -4 34 -5 50 -3" fill="none" stroke="currentColor" stroke-opacity=".7" stroke-width=".8" />
+        </g>
+
+        <!-- Peony: three rings of wavy petals -->
+        <g id="g-peony">
+          <g fill="currentColor" stroke="currentColor" stroke-width=".8" stroke-opacity=".5">
+            <g fill-opacity=".3">
+              <use href="#p-petal" /><use href="#p-petal" transform="rotate(51)" /><use href="#p-petal" transform="rotate(103)" />
+              <use href="#p-petal" transform="rotate(154)" /><use href="#p-petal" transform="rotate(206)" />
+              <use href="#p-petal" transform="rotate(257)" /><use href="#p-petal" transform="rotate(309)" />
+            </g>
+            <g fill-opacity=".4" transform="rotate(26) scale(.74)">
+              <use href="#p-petal" /><use href="#p-petal" transform="rotate(60)" /><use href="#p-petal" transform="rotate(120)" />
+              <use href="#p-petal" transform="rotate(180)" /><use href="#p-petal" transform="rotate(240)" /><use href="#p-petal" transform="rotate(300)" />
+            </g>
+            <g fill-opacity=".58" transform="rotate(10) scale(.47)">
+              <use href="#p-petal" /><use href="#p-petal" transform="rotate(72)" /><use href="#p-petal" transform="rotate(144)" />
+              <use href="#p-petal" transform="rotate(216)" /><use href="#p-petal" transform="rotate(288)" />
+            </g>
+          </g>
+          <g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+            <path d="M-9 -1 C -9 -11 9 -11 9 -1" />
+            <path d="M-5 4 C -11 -4 -2 -12 5 -6" />
+            <path d="M-13 5 C -8 13 8 13 13 5" />
+          </g>
+          <g fill="#b9975b"><circle cx="-2" cy="-3" r="1.5" /><circle cx="3" cy="-1" r="1.2" /><circle cx="0" cy="2.5" r="1.1" /></g>
+        </g>
+
+        <!-- Garden rose: two rings of broad petals around a spiral heart -->
+        <g id="g-rose">
+          <g fill="currentColor" stroke="currentColor" stroke-width=".8" stroke-opacity=".55">
+            <g fill-opacity=".28">
+              <use href="#p-broad" /><use href="#p-broad" transform="rotate(72)" /><use href="#p-broad" transform="rotate(144)" />
+              <use href="#p-broad" transform="rotate(216)" /><use href="#p-broad" transform="rotate(288)" />
+            </g>
+            <g fill-opacity=".4" transform="rotate(36) scale(.7)">
+              <use href="#p-broad" /><use href="#p-broad" transform="rotate(72)" /><use href="#p-broad" transform="rotate(144)" />
+              <use href="#p-broad" transform="rotate(216)" /><use href="#p-broad" transform="rotate(288)" />
+            </g>
+            <circle r="11" fill-opacity=".5" />
+          </g>
+          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.3" d="M0 -1 C 3 -2 4 -5 1 -6 C -4 -7 -6 -2 -3 2 C 0 6 7 6 9 1 C 11 -5 7 -10 1 -11 C -7 -12 -12 -6 -11 1 C -10 8 -4 12 3 12" />
+        </g>
+
+        <!-- Eight-petal blossom with an ivory heart (holds a number) -->
+        <g id="g-blossom">
+          <g fill="currentColor" stroke="currentColor" stroke-width="1" stroke-opacity=".45">
+            <g fill-opacity=".5" transform="scale(1.55)">
+              <use href="#p-round" /><use href="#p-round" transform="rotate(45)" /><use href="#p-round" transform="rotate(90)" /><use href="#p-round" transform="rotate(135)" />
+              <use href="#p-round" transform="rotate(180)" /><use href="#p-round" transform="rotate(225)" /><use href="#p-round" transform="rotate(270)" /><use href="#p-round" transform="rotate(315)" />
+            </g>
+            <g fill-opacity=".75" transform="rotate(22.5) scale(1.25)">
+              <use href="#p-round" /><use href="#p-round" transform="rotate(45)" /><use href="#p-round" transform="rotate(90)" /><use href="#p-round" transform="rotate(135)" />
+              <use href="#p-round" transform="rotate(180)" /><use href="#p-round" transform="rotate(225)" /><use href="#p-round" transform="rotate(270)" /><use href="#p-round" transform="rotate(315)" />
+            </g>
+          </g>
+          <circle r="24" fill="#fbf8f3" stroke="#b9975b" stroke-width="1.2" />
+          <circle r="20" fill="none" stroke="#b9975b" stroke-width=".7" stroke-dasharray="1.5 3" />
+        </g>
+
+        <!-- Forget-me-not -->
+        <g id="g-fleur">
+          <g fill="currentColor" fill-opacity=".72" stroke="currentColor" stroke-opacity=".5" stroke-width=".6">
+            <circle cy="-6" r="5" /><circle cx="5.7" cy="-1.9" r="5" /><circle cx="3.5" cy="4.9" r="5" /><circle cx="-3.5" cy="4.9" r="5" /><circle cx="-5.7" cy="-1.9" r="5" />
+          </g>
+          <circle r="2.3" fill="#b9975b" />
+        </g>
+
+        <!-- Silver-dollar eucalyptus: stem from (0,0) towards +x -->
+        <g id="g-euca">
+          <path d="M0 0 C 30 -2 70 -10 120 -26" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+          <path d="M14 -1.3 L13 -6 M30 -3.5 L31 1 M46.5 -6.5 L45 -11 M65 -10.5 L66 -6 M84 -15.5 L82 -20 M105 -21.4 L107 -17" fill="none" stroke="currentColor" stroke-width=".9" />
+          <g fill="currentColor" fill-opacity=".42" stroke="currentColor" stroke-opacity=".7" stroke-width=".8">
+            <ellipse cx="12.5" cy="-11" rx="7.5" ry="6.2" transform="rotate(-20 12.5 -11)" />
+            <ellipse cx="31.5" cy="7" rx="7.5" ry="6.2" transform="rotate(15 31.5 7)" />
+            <ellipse cx="44" cy="-16.5" rx="7" ry="5.8" transform="rotate(-25 44 -16.5)" />
+            <ellipse cx="67" cy="-.5" rx="6.8" ry="5.6" transform="rotate(10 67 -.5)" />
+            <ellipse cx="81" cy="-25" rx="6.2" ry="5.2" transform="rotate(-30 81 -25)" />
+            <ellipse cx="108" cy="-12.5" rx="5.4" ry="4.6" transform="rotate(5 108 -12.5)" />
+            <ellipse cx="123" cy="-30" rx="4" ry="3.4" transform="rotate(-30 123 -30)" />
+          </g>
+        </g>
+
+        <!-- Willow-leaf sprig: stem from (0,0) towards +x -->
+        <g id="g-sprig">
+          <path d="M0 0 C 34 -4 76 -12 124 -30" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" />
+          <g fill="currentColor" fill-opacity=".45" stroke="currentColor" stroke-opacity=".7" stroke-width=".7">
+            <use href="#p-leaf" transform="translate(14 -1.6) rotate(-48)" />
+            <use href="#p-leaf" transform="translate(30 -4) rotate(30)" />
+            <use href="#p-leaf" transform="translate(48 -7.5) rotate(-52) scale(.95)" />
+            <use href="#p-leaf" transform="translate(66 -12) rotate(26) scale(.92)" />
+            <use href="#p-leaf" transform="translate(86 -18.5) rotate(-56) scale(.85)" />
+            <use href="#p-leaf" transform="translate(105 -24) rotate(20) scale(.78)" />
+            <use href="#p-leaf" transform="translate(122 -29.5) rotate(-22) scale(.7)" />
+          </g>
+        </g>
+
+        <!-- Rosebud on a short stem, pointing up -->
+        <g id="g-bud">
+          <path d="M0 0 C -2 -10 -2 -18 0 -26" fill="none" stroke="#9aab8f" stroke-width="1.1" />
+          <path d="M0 -24 C -8 -28 -8 -40 0 -46 C 8 -40 8 -28 0 -24 Z" fill="currentColor" fill-opacity=".55" stroke="currentColor" stroke-opacity=".7" stroke-width=".8" />
+          <path d="M0 -24 C -6 -27 -9 -32 -8 -38 C -4 -33 -2 -30 0 -27 C 2 -30 4 -33 8 -38 C 9 -32 6 -27 0 -24 Z" fill="#9aab8f" fill-opacity=".85" />
+        </g>
+
+        <!-- Corner arrangement anchored at the top-left of a 240×240 box -->
+        <g id="g-corner">
+          <g filter="url(#f-wash)">
+            <ellipse cx="54" cy="50" rx="52" ry="44" fill="#e8c5c1" fill-opacity=".6" />
+            <ellipse cx="126" cy="34" rx="30" ry="24" fill="#7d93ad" fill-opacity=".28" />
+            <ellipse cx="34" cy="124" rx="26" ry="30" fill="#e8c5c1" fill-opacity=".5" />
+          </g>
+          <use href="#g-sprig" transform="translate(60 42) rotate(14) scale(1.2)" color="#7d93ad" />
+          <use href="#g-sprig" transform="matrix(0 1 1 0 0 0) translate(60 42) rotate(14) scale(1.2)" color="#7d93ad" />
+          <use href="#g-euca" transform="translate(72 28) rotate(6) scale(1.3)" color="#9aab8f" />
+          <use href="#g-euca" transform="matrix(0 1 1 0 0 0) translate(76 24) rotate(3) scale(1.2)" color="#9aab8f" />
+          <use href="#g-leaf" transform="translate(58 56) rotate(22) scale(1.3)" color="#9aab8f" />
+          <use href="#g-leaf" transform="translate(58 56) rotate(68) scale(1.2)" color="#6d7f62" />
+          <use href="#g-bud" transform="translate(96 96) rotate(135)" color="#d9a29c" />
+          <use href="#g-bud" transform="translate(150 42) rotate(78) scale(.75)" color="#d9a29c" />
+          <use href="#g-bud" transform="translate(42 150) rotate(168) scale(.7)" color="#7d93ad" />
+          <use href="#g-rose" transform="translate(124 34) scale(1.02)" color="#7d93ad" />
+          <use href="#g-rose" transform="translate(34 124) rotate(40) scale(.9)" color="#d9a29c" />
+          <use href="#g-peony" transform="translate(54 50) rotate(-12) scale(1.14)" color="#d9a29c" />
+          <use href="#g-fleur" transform="translate(104 84) scale(.95)" color="#7d93ad" />
+          <use href="#g-fleur" transform="translate(118 70) scale(.7)" color="#7d93ad" />
+          <use href="#g-fleur" transform="translate(84 106) scale(.75)" color="#7d93ad" />
+          <use href="#g-fleur" transform="translate(166 24) scale(.6)" color="#e8c5c1" />
+          <use href="#g-fleur" transform="translate(24 166) scale(.6)" color="#e8c5c1" />
+          <g fill="#b9975b" fill-opacity=".8">
+            <circle cx="154" cy="60" r="2.2" /><circle cx="161" cy="54" r="1.6" /><circle cx="166" cy="62" r="1.9" />
+            <circle cx="58" cy="150" r="2.1" /><circle cx="52" cy="158" r="1.5" /><circle cx="62" cy="162" r="1.8" />
+            <circle cx="120" cy="100" r="1.6" /><circle cx="126" cy="92" r="1.3" />
+          </g>
+        </g>
+
+        <!-- Lighter spray for section corners, anchored top-left of a 180×130 box -->
+        <g id="g-spray">
+          <ellipse cx="38" cy="36" rx="26" ry="22" fill="#e8c5c1" fill-opacity=".5" filter="url(#f-wash)" />
+          <use href="#g-euca" transform="translate(18 22) rotate(18) scale(1.2)" color="#9aab8f" />
+          <use href="#g-sprig" transform="translate(22 28) rotate(48)" color="#7d93ad" />
+          <use href="#g-bud" transform="translate(54 44) rotate(122) scale(.8)" color="#d9a29c" />
+          <use href="#g-rose" transform="translate(28 28) scale(.9)" color="#d9a29c" />
+          <use href="#g-fleur" transform="translate(62 20) scale(.7)" color="#7d93ad" />
+          <use href="#g-fleur" transform="translate(14 62) scale(.6)" color="#7d93ad" />
+          <g fill="#b9975b" fill-opacity=".8"><circle cx="78" cy="34" r="1.8" /><circle cx="84" cy="28" r="1.3" /><circle cx="36" cy="68" r="1.6" /></g>
+        </g>
+
+        <!-- Centred cluster for the foot of an arch photo, in a 260×110 box -->
+        <g id="g-cluster">
+          <ellipse cx="130" cy="68" rx="58" ry="26" fill="#e8c5c1" fill-opacity=".55" filter="url(#f-wash)" />
+          <use href="#g-euca" transform="translate(144 66) rotate(-14) scale(.95)" color="#9aab8f" />
+          <use href="#g-euca" transform="matrix(-1 0 0 1 260 0) translate(144 66) rotate(-14) scale(.95)" color="#9aab8f" />
+          <use href="#g-sprig" transform="translate(142 74) rotate(12) scale(.85)" color="#7d93ad" />
+          <use href="#g-sprig" transform="matrix(-1 0 0 1 260 0) translate(142 74) rotate(12) scale(.85)" color="#7d93ad" />
+          <use href="#g-leaf" transform="translate(132 72) rotate(-20) scale(.75)" color="#9aab8f" />
+          <use href="#g-leaf" transform="matrix(-1 0 0 1 260 0) translate(132 72) rotate(-20) scale(.75)" color="#6d7f62" />
+          <use href="#g-rose" transform="translate(96 73) scale(.64)" color="#7d93ad" />
+          <use href="#g-rose" transform="translate(165 75) rotate(30) scale(.58)" color="#d9a29c" />
+          <use href="#g-peony" transform="translate(130 64) rotate(8) scale(.64)" color="#d9a29c" />
+          <use href="#g-fleur" transform="translate(76 64) scale(.62)" color="#e8c5c1" />
+          <use href="#g-fleur" transform="translate(187 64) scale(.62)" color="#7d93ad" />
+          <g fill="#b9975b" fill-opacity=".8"><circle cx="68" cy="76" r="1.6" /><circle cx="62" cy="69" r="1.2" /><circle cx="195" cy="77" r="1.6" /><circle cx="200" cy="70" r="1.2" /></g>
+        </g>
+
+        <!-- Section divider, in a 280×44 box -->
+        <g id="g-divider">
+          <path d="M10 22 H90 M190 22 H270" stroke="#b9975b" stroke-width=".9" />
+          <path d="M2 22 l4 -3 4 3 -4 3 z M270 22 l4 -3 4 3 -4 3 z" fill="#b9975b" />
+          <use href="#g-sprig" transform="translate(150 23) rotate(-2) scale(.46)" color="#7d93ad" />
+          <use href="#g-sprig" transform="matrix(-1 0 0 1 280 0) translate(150 23) rotate(-2) scale(.46)" color="#7d93ad" />
+          <ellipse cx="140" cy="22" rx="24" ry="7" fill="#e8c5c1" fill-opacity=".55" filter="url(#f-wash-sm)" />
+          <use href="#g-fleur" transform="translate(120 24) scale(.62)" color="#d9a29c" />
+          <use href="#g-fleur" transform="translate(160 24) scale(.62)" color="#d9a29c" />
+          <use href="#g-rose" transform="translate(140 22) scale(.55)" color="#7d93ad" />
+        </g>
+      </defs>
+    </svg>
+
+    <!-- 0. Loader: plain CSS (style.css) so it paints before Tailwind compiles; hidden by script.js once data is ready -->
+    <div id="loader" role="status" aria-live="polite">
+      <svg class="loader-bloom" viewBox="-50 -50 100 100" aria-hidden="true"><use href="#g-peony" /></svg>
+      <p class="loader-title">The Wedding</p>
+      <p class="loader-text">Memuat undangan<span class="loader-dots" aria-hidden="true"><i>.</i><i>.</i><i>.</i></span></p>
+    </div>
+
+    <!-- 1. Greeting modal -->
+    <div
+      id="greeting"
+      class="bloom-backdrop fixed inset-0 z-50 overflow-hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="greeting-title"
+    >
+      <div class="relative mx-auto flex h-full max-w-md flex-col items-center justify-center overflow-hidden bg-ivory px-8 text-center shadow-2xl">
+        <!-- Floral corners bloom in, then sway -->
+        <div class="cover-in cover-bloom pointer-events-none absolute -left-2 -top-2 w-[48%] max-w-56 origin-top-left" style="--d: 0.15s">
+          <svg class="sway block w-full origin-top-left" viewBox="0 0 240 240" aria-hidden="true"><use href="#g-corner" /></svg>
+        </div>
+        <div class="cover-in cover-bloom pointer-events-none absolute -right-2 -top-2 w-[48%] max-w-56 origin-top-right" style="--d: 0.3s">
+          <svg class="sway block w-full origin-top-right [animation-delay:-3s]" viewBox="0 0 240 240" aria-hidden="true"><use href="#g-corner" transform="matrix(-1 0 0 1 240 0)" /></svg>
+        </div>
+        <div class="cover-in cover-bloom pointer-events-none absolute -bottom-2 -left-2 w-[42%] max-w-48 origin-bottom-left" style="--d: 0.45s">
+          <svg class="sway block w-full origin-bottom-left [animation-delay:-5s]" viewBox="0 0 240 240" aria-hidden="true"><use href="#g-corner" transform="matrix(1 0 0 -1 0 240)" /></svg>
+        </div>
+        <div class="cover-in cover-bloom pointer-events-none absolute -bottom-2 -right-2 w-[42%] max-w-48 origin-bottom-right" style="--d: 0.6s">
+          <svg class="sway block w-full origin-bottom-right [animation-delay:-1.5s]" viewBox="0 0 240 240" aria-hidden="true"><use href="#g-corner" transform="rotate(180 120 120)" /></svg>
+        </div>
+
+        <p class="cover-in relative pl-[0.45em] font-sans text-[10px] font-semibold uppercase tracking-[0.45em] text-dusty" style="--d: 0.5s">The Wedding of</p>
+        <div class="cover-in cover-zoom relative mt-7 aspect-[3/4] h-[33svh] max-h-[300px] min-h-[170px]" style="--d: 0.7s">
+          <img
+            src="assets/cover.webp"
+            data-src="media.cover"
+            alt="Foto mempelai"
+            class="h-full w-full rounded-t-full object-cover shadow-lg ring-1 ring-gold/70 ring-offset-[6px] ring-offset-ivory"
+          />
+        </div>
+        <h1 id="greeting-title" class="cover-in relative mt-6 font-script text-5xl leading-tight text-dusty-dark" style="--d: 1s">
+          <span data-bind="couple.wanita.panggilan"></span> <span class="font-serif text-[0.8em] font-normal italic text-gold">&amp;</span> <span data-bind="couple.pria.panggilan"></span>
+        </h1>
+        <p class="cover-in relative mt-1 pl-[0.4em] font-sans text-[11px] tracking-[0.4em] text-dusty" style="--d: 1.15s" data-bind="$tanggalTitik"></p>
+        <p class="cover-in relative mt-6 text-base italic text-ink/70" style="--d: 1.3s">Kepada Yth. Bapak/Ibu/Saudara/i</p>
+        <p id="guest-name" class="cover-in relative mt-1 max-w-full truncate text-2xl font-semibold text-ink" style="--d: 1.45s">Tamu Undangan</p>
+        <button
+          id="open-btn"
+          type="button"
+          disabled
+          style="--d: 1.6s"
+          class="cover-in relative mt-6 inline-flex items-center gap-2.5 rounded-full bg-dusty-dark px-7 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.25em] text-ivory shadow-lg shadow-dusty-dark/25 transition hover:bg-dusty focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dusty-dark disabled:opacity-60"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3.5 7 8.5 6 8.5-6" /></svg>
+          <span>Buka Undangan</span>
+        </button>
+        <p id="load-error" hidden class="relative mt-4 text-base">
+          Undangan gagal dimuat.
+          <button type="button" class="font-semibold underline" onclick="location.reload()">Muat ulang</button>
+        </p>
+      </div>
+    </div>
+
+    <main class="relative mx-auto max-w-md overflow-hidden bg-ivory shadow-[0_0_70px_rgba(79,100,128,0.2)]">
+      <!-- 2. Hero -->
+      <header id="home" class="relative flex min-h-svh flex-col items-center justify-center px-8 pb-16 pt-28 text-center">
+        <div class="pointer-events-none absolute -left-2 -top-2 w-[45%] max-w-48" data-aos="fade" data-aos-duration="1400" data-aos-anchor="#home">
+          <svg class="sway block w-full origin-top-left" viewBox="0 0 240 240" aria-hidden="true"><use href="#g-corner" /></svg>
+        </div>
+        <div class="pointer-events-none absolute -right-2 -top-2 w-[45%] max-w-48" data-aos="fade" data-aos-duration="1400" data-aos-delay="200" data-aos-anchor="#home">
+          <svg class="sway block w-full origin-top-right [animation-delay:-3s]" viewBox="0 0 240 240" aria-hidden="true"><use href="#g-corner" transform="matrix(-1 0 0 1 240 0)" /></svg>
+        </div>
+
+        <p class="pl-[0.45em] font-sans text-[10px] font-semibold uppercase tracking-[0.45em] text-dusty" data-aos="fade-down" data-aos-delay="300">The Wedding of</p>
+        <div class="relative mt-8 w-[66%]" data-aos="zoom-in" data-aos-delay="400">
+          <img src="assets/header.webp" alt="Foto mempelai" class="aspect-[4/5] w-full rounded-t-full object-cover shadow-xl ring-1 ring-gold/70 ring-offset-[7px] ring-offset-ivory" />
+          <svg class="pointer-events-none absolute -bottom-11 left-1/2 w-[132%] -translate-x-1/2" viewBox="0 0 260 110" aria-hidden="true"><use href="#g-cluster" /></svg>
+        </div>
+        <h1 class="mt-16 font-script text-6xl leading-tight text-dusty-dark" data-aos="fade-up" data-aos-delay="550">
+          <span data-bind="couple.wanita.panggilan"></span> <span class="font-serif text-[0.8em] font-normal italic text-gold">&amp;</span> <span data-bind="couple.pria.panggilan"></span>
+        </h1>
+        <div class="mt-3 flex items-center gap-3" data-aos="fade-up" data-aos-delay="650">
+          <span class="h-px w-10 bg-gold/60"></span>
+          <p class="pl-[0.4em] font-sans text-xs tracking-[0.4em] text-dusty-dark" data-bind="$tanggalTitik"></p>
+          <span class="h-px w-10 bg-gold/60"></span>
+        </div>
+
+        <!-- Music player -->
+        <div
+          id="player"
+          data-aos="fade-up"
+          data-aos-delay="800"
+          data-aos-offset="0"
+          class="mt-10 flex w-full max-w-xs items-center gap-3 rounded-full border border-dusty/30 bg-white/80 p-2 pr-2.5 text-left shadow-[0_10px_30px_-14px_rgba(79,100,128,0.45)]"
+        >
+          <img src="assets/header.webp" alt="" class="h-12 w-12 shrink-0 rounded-full object-cover ring-1 ring-gold/60 ring-offset-2 ring-offset-white" />
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-[15px] font-semibold italic text-dusty-dark" data-bind="media.judul_musik"></p>
+            <div class="mt-1.5 h-[3px] overflow-hidden rounded-full bg-dusty/20"><div id="progress" class="h-full w-0 bg-dusty-dark"></div></div>
+            <div class="mt-1 flex justify-between font-sans text-[10px] text-dusty"><span id="t-cur"><b class="font-semibold">0</b>:<b class="font-semibold">00</b></span><span id="t-dur"><b class="font-semibold">0</b>:<b class="font-semibold">00</b></span></div>
+          </div>
+          <button
+            id="player-toggle"
+            type="button"
+            aria-label="Putar musik"
+            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-dusty-dark text-ivory shadow transition hover:bg-dusty"
+          >
+            <svg data-icon="play" class="ml-0.5 h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z" /></svg>
+            <svg data-icon="pause" hidden class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z" /></svg>
+          </button>
+        </div>
+        <p class="mt-3 text-base italic text-dusty" data-aos="fade" data-aos-delay="950" data-aos-offset="0">Putar lagu kami sambil membaca</p>
+      </header>
+
+      <!-- 3. Verse -->
+      <section id="quote" class="scallop relative bg-mist px-10 py-20 text-center [--scallop:#edf1f5]">
+        <svg class="pointer-events-none absolute -left-3 -top-2 w-32" viewBox="0 0 180 130" aria-hidden="true" data-aos="fade"><use href="#g-spray" /></svg>
+        <svg class="pointer-events-none absolute -bottom-2 -right-3 w-32" viewBox="0 0 180 130" aria-hidden="true" data-aos="fade"><use href="#g-spray" transform="rotate(180 90 65)" /></svg>
+        <svg class="mx-auto w-64" viewBox="0 0 280 44" aria-hidden="true" data-aos="fade"><use href="#g-divider" /></svg>
+        <p class="mt-6 h-10 font-serif text-7xl leading-none text-gold/70" aria-hidden="true" data-aos="fade">&ldquo;</p>
+        <blockquote class="text-[1.35rem] italic leading-relaxed text-ink" data-aos="fade-up" data-aos-delay="150">
+          Kita adalah dua tangkai yang tumbuh dari tanah yang sama — saling menopang ketika angin datang, dan mekar bersama saat
+          musimnya tiba.
+        </blockquote>
+        <p class="mt-6 pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-dusty" data-aos="fade-up" data-aos-delay="300">Puisi untuk Kita</p>
+      </section>
+
+      <!-- 4. Couple -->
+      <section id="couple" class="relative px-6 py-20 text-center">
+        <svg class="mx-auto w-64" viewBox="0 0 280 44" aria-hidden="true" data-aos="fade"><use href="#g-divider" /></svg>
+        <h2 class="mt-4 font-script text-5xl text-dusty-dark" data-aos="fade-up">Sang Mempelai</h2>
+        <p class="mx-auto mt-4 max-w-sm text-lg leading-relaxed text-pretty" data-aos="fade-up" data-aos-delay="150">
+          Dengan penuh sukacita, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dan merayakan hari pernikahan kami.
+        </p>
+
+        <div class="mt-14" data-aos="fade-up">
+          <div class="relative mx-auto w-[58%]">
+            <img src="assets/wanita.webp" alt="Mempelai wanita" class="aspect-[3/4] w-full rounded-t-full object-cover object-top shadow-lg ring-1 ring-gold/70 ring-offset-[6px] ring-offset-ivory" />
+            <svg class="pointer-events-none absolute -bottom-9 left-1/2 w-[128%] -translate-x-1/2" viewBox="0 0 260 110" aria-hidden="true"><use href="#g-cluster" /></svg>
+          </div>
+          <p class="mt-14 pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold">Mempelai Wanita</p>
+          <h3 class="mt-2 font-script text-[2.6rem] leading-tight text-dusty-dark" data-bind="couple.wanita.lengkap"></h3>
+          <p class="mx-auto mt-2 max-w-xs text-balance text-lg italic leading-snug text-ink/80" data-bind="$ortuWanita"></p>
+        </div>
+
+        <p class="my-10 font-serif text-6xl italic leading-none text-gold" data-aos="zoom-in">&amp;</p>
+
+        <div data-aos="fade-up">
+          <div class="relative mx-auto w-[58%]">
+            <img src="assets/pria.webp" alt="Mempelai pria" class="aspect-[3/4] w-full rounded-t-full object-cover object-top shadow-lg ring-1 ring-gold/70 ring-offset-[6px] ring-offset-ivory" />
+            <svg class="pointer-events-none absolute -bottom-9 left-1/2 w-[128%] -translate-x-1/2" viewBox="0 0 260 110" aria-hidden="true"><use href="#g-cluster" transform="matrix(-1 0 0 1 260 0)" /></svg>
+          </div>
+          <p class="mt-14 pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold">Mempelai Pria</p>
+          <h3 class="mt-2 font-script text-[2.6rem] leading-tight text-dusty-dark" data-bind="couple.pria.lengkap"></h3>
+          <p class="mx-auto mt-2 max-w-xs text-balance text-lg italic leading-snug text-ink/80" data-bind="$ortuPria"></p>
+        </div>
+      </section>
+
+      <!-- 5. Save the date + countdown -->
+      <section id="countdown" class="scallop relative bg-mist px-6 py-20 text-center [--scallop:#edf1f5]">
+        <svg class="pointer-events-none absolute -right-3 -top-2 w-32" viewBox="0 0 180 130" aria-hidden="true" data-aos="fade"><use href="#g-spray" transform="matrix(-1 0 0 1 180 0)" /></svg>
+        <svg class="pointer-events-none absolute -bottom-2 -left-3 w-32" viewBox="0 0 180 130" aria-hidden="true" data-aos="fade"><use href="#g-spray" transform="matrix(1 0 0 -1 0 130)" /></svg>
+
+        <h2 class="font-script text-6xl text-dusty-dark" data-aos="fade-up">Save the Date</h2>
+        <p class="mt-1 pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold" data-aos="fade-up" data-aos-delay="100">Hari Bahagia Kami</p>
+
+        <div class="mx-auto mt-8 max-w-[22rem] rounded-[1.75rem] border border-dusty/25 bg-ivory px-4 pb-3 pt-5 shadow-[0_14px_36px_-20px_rgba(79,100,128,0.5)]" data-aos="fade-up" data-aos-delay="200">
+          <div class="flex items-center justify-center gap-3">
+            <span class="h-px w-8 bg-gold/60"></span>
+            <p class="pl-[0.3em] font-sans text-[11px] font-semibold uppercase tracking-[0.3em] text-dusty-dark" data-bind="$bulan"></p>
+            <span class="h-px w-8 bg-gold/60"></span>
+          </div>
+          <div id="cal-strip" class="mt-4 grid grid-cols-3 text-center">
+            <!-- filled by script.js -->
+          </div>
+        </div>
+        <p class="mt-5 pl-[0.4em] font-sans text-xs tracking-[0.4em] text-dusty-dark" data-bind="$tanggalTitik" data-aos="fade"></p>
+
+        <p class="mt-12 text-xl italic text-dusty-dark" data-aos="fade-up">Menghitung hari menuju hari bahagia</p>
+        <div id="cd" class="mx-auto mt-5 grid max-w-[22rem] grid-cols-4 gap-2.5 text-center">
+          <div class="rounded-t-full border border-dusty/35 bg-ivory px-1 pb-3 pt-6 shadow-sm" data-aos="fade-up" data-aos-delay="0">
+            <b class="block font-serif text-[2.1rem] font-semibold leading-none text-dusty-dark" data-cd="d">00</b>
+            <span class="mt-2 block font-sans text-[9px] font-semibold uppercase tracking-[0.2em] text-dusty">Hari</span>
+          </div>
+          <div class="rounded-t-full border border-dusty/35 bg-ivory px-1 pb-3 pt-6 shadow-sm" data-aos="fade-up" data-aos-delay="120">
+            <b class="block font-serif text-[2.1rem] font-semibold leading-none text-dusty-dark" data-cd="h">00</b>
+            <span class="mt-2 block font-sans text-[9px] font-semibold uppercase tracking-[0.2em] text-dusty">Jam</span>
+          </div>
+          <div class="rounded-t-full border border-dusty/35 bg-ivory px-1 pb-3 pt-6 shadow-sm" data-aos="fade-up" data-aos-delay="240">
+            <b class="block font-serif text-[2.1rem] font-semibold leading-none text-dusty-dark" data-cd="m">00</b>
+            <span class="mt-2 block font-sans text-[9px] font-semibold uppercase tracking-[0.2em] text-dusty">Menit</span>
+          </div>
+          <div class="rounded-t-full border border-dusty/35 bg-ivory px-1 pb-3 pt-6 shadow-sm" data-aos="fade-up" data-aos-delay="360">
+            <b class="block font-serif text-[2.1rem] font-semibold leading-none text-dusty-dark" data-cd="s">00</b>
+            <span class="mt-2 block font-sans text-[9px] font-semibold uppercase tracking-[0.2em] text-dusty">Detik</span>
+          </div>
+        </div>
+        <p id="cd-done" hidden class="mt-6 text-lg italic">Acara telah berlangsung. Terima kasih atas doa dan restunya.</p>
+        <div class="mt-9" data-aos="fade-up">
+          <a
+            id="cal-link"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 rounded-full border border-dusty-dark px-6 py-2.5 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-dusty-dark transition hover:bg-dusty-dark hover:text-ivory"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 11h18" />
+            </svg>
+            Simpan ke Kalender
+          </a>
+        </div>
+      </section>
+
+      <!-- 6. Our story -->
+      <section id="story" class="relative px-6 py-20 text-center">
+        <svg class="mx-auto w-64" viewBox="0 0 280 44" aria-hidden="true" data-aos="fade"><use href="#g-divider" /></svg>
+        <h2 class="mt-4 font-script text-5xl text-dusty-dark" data-aos="fade-up">Kisah Kami</h2>
+        <p class="mt-1 pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold" data-aos="fade-up" data-aos-delay="100">Our Love Story</p>
+
+        <div class="relative mx-auto mt-10 w-[78%]" data-aos="zoom-in">
+          <img src="assets/story.webp" alt="" class="aspect-[4/5] w-full rounded-t-full object-cover shadow-lg ring-1 ring-gold/70 ring-offset-[6px] ring-offset-ivory" />
+          <svg class="pointer-events-none absolute -bottom-10 left-1/2 w-[120%] -translate-x-1/2" viewBox="0 0 260 110" aria-hidden="true"><use href="#g-cluster" /></svg>
+        </div>
+
+        <ol class="mt-16 space-y-2">
+          <li data-aos="fade-up">
+            <p class="pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold"><b class="font-semibold">2019</b></p>
+            <h3 class="mt-1 font-script text-4xl text-dusty-dark">Pertemuan Pertama</h3>
+            <p class="mx-auto mt-3 max-w-sm text-lg leading-relaxed text-pretty">
+              Sebuah kelas fotografi botani di Kebun Raya Bogor. Ia sibuk memotret anggrek, aku sibuk mencari tutup lensa yang
+              terjatuh — yang ternyata sudah ia pungut lebih dulu.
+            </p>
+          </li>
+          <li aria-hidden="true" class="flex flex-col items-center py-4">
+            <span class="h-8 w-px bg-dusty/30"></span>
+            <svg class="my-1 h-5 w-5 text-rose" viewBox="-12 -12 24 24"><use href="#g-fleur" /></svg>
+            <span class="h-8 w-px bg-dusty/30"></span>
+          </li>
+          <li data-aos="fade-up">
+            <p class="pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold"><b class="font-semibold">2021</b></p>
+            <h3 class="mt-1 font-script text-4xl text-dusty-dark">Tumbuh Bersama</h3>
+            <p class="mx-auto mt-3 max-w-sm text-lg leading-relaxed text-pretty">
+              Dari bertukar foto bunga, menjadi obrolan panjang tentang mimpi dan rumah. Jarak Jakarta–Bandung tak pernah terasa
+              jauh bagi dua orang yang sama-sama mau menunggu.
+            </p>
+          </li>
+          <li aria-hidden="true" class="flex flex-col items-center py-4">
+            <span class="h-8 w-px bg-dusty/30"></span>
+            <svg class="my-1 h-5 w-5 text-dusty" viewBox="-12 -12 24 24"><use href="#g-fleur" /></svg>
+            <span class="h-8 w-px bg-dusty/30"></span>
+          </li>
+          <li data-aos="fade-up">
+            <p class="pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold"><b class="font-semibold">2026</b></p>
+            <h3 class="mt-1 font-script text-4xl text-dusty-dark">Sebuah Janji</h3>
+            <p class="mx-auto mt-3 max-w-sm text-lg leading-relaxed text-pretty">
+              Di bawah pohon kenari tua tempat semuanya bermula, sebuah pertanyaan sederhana diajukan — dan dijawab dengan
+              senyum serta air mata bahagia.
+            </p>
+          </li>
+        </ol>
+        <p class="mx-auto mt-12 max-w-xs text-xl italic leading-relaxed text-dusty-dark" data-aos="fade-up">
+          Kini kami siap menulis bab berikutnya, bersama.
+        </p>
+      </section>
+
+      <!-- 7. Sessions & venue -->
+      <section id="location" class="scallop relative bg-petal px-6 py-20 text-center [--scallop:#f8eeeb]">
+        <svg class="pointer-events-none absolute -left-3 -top-2 w-32" viewBox="0 0 180 130" aria-hidden="true" data-aos="fade"><use href="#g-spray" /></svg>
+        <svg class="pointer-events-none absolute -right-3 -top-2 w-32" viewBox="0 0 180 130" aria-hidden="true" data-aos="fade"><use href="#g-spray" transform="matrix(-1 0 0 1 180 0)" /></svg>
+
+        <h2 class="mt-6 font-script text-5xl text-dusty-dark" data-aos="fade-up">Rangkaian Acara</h2>
+        <p class="mt-1 pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold" data-aos="fade-up" data-aos-delay="100">Waktu &amp; Tempat</p>
+        <div id="session-list" class="mt-10 grid gap-4 min-[380px]:grid-cols-2"></div>
+        <div id="venue-list" class="mt-6 space-y-6"></div>
+      </section>
+
+      <!-- 8. Gift -->
+      <section id="gift" class="relative px-6 py-20 text-center">
+        <svg class="mx-auto w-64" viewBox="0 0 280 44" aria-hidden="true" data-aos="fade"><use href="#g-divider" /></svg>
+        <h2 class="mt-4 font-script text-5xl text-dusty-dark" data-aos="fade-up">Tanda Kasih</h2>
+        <p class="mx-auto mt-4 max-w-sm text-lg leading-relaxed text-pretty" data-aos="fade-up" data-aos-delay="150">
+          Kehadiran dan doa restu Anda adalah hadiah terindah bagi kami. Namun, bila ingin memberikan tanda kasih, Anda dapat
+          mengirimkannya melalui amplop digital berikut.
+        </p>
+
+        <div id="envelope" class="relative mx-auto mt-10 w-full max-w-[340px]" data-aos="fade-up">
+          <div class="relative overflow-hidden rounded-2xl border border-dusty/30 bg-white shadow-[0_18px_44px_-22px_rgba(79,100,128,0.6)]">
+            <!-- Flap -->
+            <svg class="absolute inset-x-0 top-0 h-[104px] w-full" viewBox="0 0 340 104" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0 0 H340 V6 L178 97 Q170 102 162 97 L0 6 Z" fill="#7d93ad" />
+              <path d="M0 6 L162 97 Q170 102 178 97 L340 6" fill="none" stroke="#b9975b" stroke-width="1.4" />
+            </svg>
+            <!-- Folds on the back of the envelope -->
+            <svg class="absolute inset-x-0 bottom-0 h-16 w-full" viewBox="0 0 340 64" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0 64 L150 14 Q170 7 190 14 L340 64" fill="#edf1f5" stroke="#7d93ad" stroke-opacity=".25" />
+            </svg>
+            <!-- Wax seal -->
+            <svg class="absolute left-1/2 top-[68px] h-16 w-16 -translate-x-1/2 drop-shadow" viewBox="-30 -30 60 60" aria-hidden="true">
+              <path d="M0 -26 C 9 -27 17 -22 22 -14 C 28 -6 27 5 23 13 C 19 22 9 27 -1 26 C -11 26 -20 21 -24 12 C -28 3 -26 -8 -21 -16 C -16 -23 -8 -26 0 -26 Z" fill="#b9975b" />
+              <circle r="18" fill="none" stroke="#8f7240" stroke-width="1.2" />
+              <use href="#g-fleur" transform="scale(1.35)" color="#f3e6c8" />
+            </svg>
+            <div class="relative px-6 pb-20 pt-36">
+              <p class="pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold">Transfer Bank</p>
+              <p class="mt-1 font-script text-5xl leading-tight text-dusty-dark" data-bind="gift.bank"></p>
+              <p class="mt-2 font-serif text-[1.7rem] tracking-[0.12em] text-ink" data-bind="gift.norek"></p>
+              <p class="mt-1 text-lg italic text-ink/80">a.n. <span data-bind="gift.atas_nama"></span></p>
+              <button
+                id="copy-btn"
+                type="button"
+                class="mt-5 inline-flex items-center gap-2 rounded-full bg-dusty-dark px-5 py-2.5 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-ivory shadow-md transition hover:bg-dusty"
+              >
+                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2" /><path d="M5 15V5a2 2 0 0 1 2-2h10" /></svg>
+                Salin Nomor
+              </button>
+            </div>
+          </div>
+        </div>
+        <figure id="qris-wrap" class="mt-8">
+          <img id="qris" alt="QRIS" data-aos="zoom-in" class="mx-auto w-52 rounded-2xl border border-dusty/25 bg-white p-3 shadow-sm" loading="lazy" />
+          <figcaption class="mt-3 text-base italic">Pindai QRIS untuk mengirim hadiah</figcaption>
+        </figure>
+      </section>
+
+      <!-- 9. Gallery -->
+      <section id="gallery" class="scallop relative bg-mist px-6 py-20 text-center [--scallop:#edf1f5]">
+        <svg class="mx-auto w-64" viewBox="0 0 280 44" aria-hidden="true" data-aos="fade"><use href="#g-divider" /></svg>
+        <h2 class="mt-4 font-script text-5xl text-dusty-dark" data-aos="fade-up">Galeri Kami</h2>
+        <p class="mt-1 pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold" data-aos="fade-up" data-aos-delay="100">Momen Bahagia</p>
+        <div id="gallery-grid" class="mt-10 grid grid-cols-2 gap-x-4 gap-y-5"></div>
+      </section>
+
+      <!-- 10. Closing -->
+      <footer class="relative px-8 pb-48 pt-28 text-center">
+        <div class="pointer-events-none absolute -left-4 -top-3 w-32" data-aos="fade">
+          <svg class="sway block w-full origin-top-left" viewBox="0 0 180 130" aria-hidden="true"><use href="#g-spray" /></svg>
+        </div>
+        <div class="pointer-events-none absolute -right-4 -top-3 w-32" data-aos="fade">
+          <svg class="sway block w-full origin-top-right [animation-delay:-2s]" viewBox="0 0 180 130" aria-hidden="true"><use href="#g-spray" transform="matrix(-1 0 0 1 180 0)" /></svg>
+        </div>
+        <div class="pointer-events-none absolute -bottom-2 -left-2 w-[45%] max-w-48" data-aos="fade" data-aos-offset="0">
+          <svg class="sway block w-full origin-bottom-left [animation-delay:-4s]" viewBox="0 0 240 240" aria-hidden="true"><use href="#g-corner" transform="matrix(1 0 0 -1 0 240)" /></svg>
+        </div>
+        <div class="pointer-events-none absolute -bottom-2 -right-2 w-[45%] max-w-48" data-aos="fade" data-aos-offset="0">
+          <svg class="sway block w-full origin-bottom-right [animation-delay:-1s]" viewBox="0 0 240 240" aria-hidden="true"><use href="#g-corner" transform="rotate(180 120 120)" /></svg>
+        </div>
+
+        <h2 class="font-script text-6xl text-dusty-dark" data-aos="fade-up">Terima Kasih</h2>
+        <p class="mx-auto mt-5 max-w-sm text-lg leading-relaxed text-pretty" data-aos="fade-up" data-aos-delay="150">
+          Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa
+          restu.
+        </p>
+        <svg class="mx-auto mt-8 w-48" viewBox="0 0 280 44" aria-hidden="true" data-aos="fade"><use href="#g-divider" /></svg>
+        <p class="mt-6 text-lg italic" data-aos="fade-up">Kami yang berbahagia,</p>
+        <p class="mt-1 font-script text-5xl leading-tight text-dusty-dark" data-aos="zoom-in" data-aos-delay="150">
+          <span data-bind="couple.wanita.panggilan"></span> <span class="font-serif text-[0.8em] font-normal italic text-gold">&amp;</span> <span data-bind="couple.pria.panggilan"></span>
+        </p>
+        <p class="mt-2 font-sans text-xs font-medium tracking-[0.15em] text-dusty" data-bind="couple.hashtag" data-aos="fade" data-aos-delay="300"></p>
+        <p class="mt-12 font-sans text-[10px] tracking-[0.2em] text-ink/45">Undangan digital · by.me</p>
+      </footer>
+    </main>
+
+    <!-- List item templates, filled by script.js -->
+    <template id="tpl-session">
+      <article class="relative rounded-t-full border border-dusty/30 bg-ivory px-3 pb-7 pt-14 shadow-[0_14px_34px_-22px_rgba(79,100,128,0.6)]">
+        <span class="pointer-events-none absolute inset-1.5 rounded-t-full border border-gold/30" aria-hidden="true"></span>
+        <svg class="mx-auto h-6 w-6 text-rose" viewBox="-12 -12 24 24" aria-hidden="true"><use href="#g-fleur" /></svg>
+        <h3 class="mt-1 flex min-h-20 items-center justify-center font-script text-[1.95rem] leading-[1.15] text-dusty-dark" data-f="label"></h3>
+        <span class="mx-auto my-3 block h-px w-10 bg-gold/60" aria-hidden="true"></span>
+        <p class="font-sans text-[10px] font-semibold uppercase leading-relaxed tracking-[0.18em] text-dusty" data-f="$tanggal"></p>
+        <p class="mt-2 inline-flex items-center gap-1.5 text-lg text-ink">
+          <svg class="h-4 w-4 text-dusty" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
+          </svg>
+          <span data-f="$jam"></span>
+        </p>
+        <p class="mt-1 text-base italic text-ink/75" data-opt="dress_code">Dress code: <span class="font-semibold not-italic" data-f="dress_code"></span></p>
+      </article>
+    </template>
+
+    <template id="tpl-venue">
+      <article class="relative overflow-hidden rounded-[2rem] border border-dusty/25 bg-ivory px-6 pb-9 pt-8 shadow-[0_14px_34px_-22px_rgba(79,100,128,0.6)]">
+        <!-- Garden pavilion -->
+        <svg class="mx-auto h-24 w-36 text-dusty" viewBox="0 0 120 80" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true">
+          <path d="M60 4 V12" /><circle cx="60" cy="3" r="2" />
+          <path d="M28 32 Q60 4 92 32" /><path d="M22 32 H98" /><path d="M26 36 H94" />
+          <path d="M32 36 V68 M50 36 V68 M70 36 V68 M88 36 V68" />
+          <path d="M32 46 Q41 38 50 46 M50 46 Q60 38 70 46 M70 46 Q79 38 88 46" />
+          <path d="M20 68 H100 M24 73 H96" />
+          <use href="#g-fleur" transform="translate(16 66) scale(.45)" color="#7d93ad" stroke="none" />
+          <use href="#g-fleur" transform="translate(104 66) scale(.45)" color="#7d93ad" stroke="none" />
+          <use href="#g-fleur" transform="translate(22 32) scale(.42)" color="#d9a29c" stroke="none" />
+          <use href="#g-fleur" transform="translate(98 32) scale(.42)" color="#d9a29c" stroke="none" />
+          <use href="#g-fleur" transform="translate(60 14) scale(.38)" color="#d9a29c" stroke="none" />
+        </svg>
+        <h3 class="mt-2 font-script text-5xl leading-tight text-dusty-dark" data-f="$judul"></h3>
+        <p class="mt-2 text-xl font-semibold text-ink" data-opt="tempat" data-f="tempat"></p>
+        <p class="mx-auto mt-1 max-w-xs text-lg leading-snug text-ink/80" data-f="alamat"></p>
+        <a
+          data-href="maps"
+          target="_blank"
+          rel="noopener"
+          class="mt-6 inline-flex items-center gap-2 rounded-full bg-dusty-dark px-6 py-2.5 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-ivory shadow-md transition hover:bg-dusty"
+        >
+          <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z" /><circle cx="12" cy="9" r="2.5" />
+          </svg>
+          Lihat Peta
+        </a>
+        <a
+          data-href="live_stream"
+          target="_blank"
+          rel="noopener"
+          class="ml-2 mt-6 inline-block rounded-full border border-dusty-dark px-6 py-2.5 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-dusty-dark"
+          >Live Streaming</a
+        >
+      </article>
+    </template>
+
+    <!-- Gallery lightbox -->
+    <div
+      id="lightbox"
+      hidden
+      class="fixed inset-0 z-50 flex items-center justify-center bg-[#1e2632]/92"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Galeri foto"
+    >
+      <img id="lightbox-img" alt="" class="max-h-[85vh] max-w-[92vw] rounded-xl object-contain" />
+      <button id="lb-close" type="button" aria-label="Tutup" class="absolute right-4 top-4 p-2 text-3xl leading-none text-ivory">&times;</button>
+      <button id="lb-prev" type="button" aria-label="Sebelumnya" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 text-4xl text-ivory">&lsaquo;</button>
+      <button id="lb-next" type="button" aria-label="Berikutnya" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 text-4xl text-ivory">&rsaquo;</button>
+      <p id="lb-count" class="absolute bottom-5 font-sans text-xs tracking-[0.2em] text-ivory/80"></p>
+    </div>
+
+    <!-- Music -->
+    <audio id="music" loop preload="none"></audio>
+    <button
+      id="music-btn"
+      hidden
+      type="button"
+      aria-label="Putar/jeda musik"
+      class="fixed bottom-5 right-5 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-dusty-dark text-ivory shadow-lg ring-1 ring-gold/60 ring-offset-2 ring-offset-ivory"
+    >
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+        <path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" />
+      </svg>
+    </button>
+
+    <div
+      id="toast"
+      hidden
+      role="status"
+      class="fixed bottom-20 left-1/2 z-50 -translate-x-1/2 rounded-full bg-dusty-dark/95 px-5 py-2 font-sans text-xs tracking-wide text-ivory shadow-lg"
+    ></div>
+  </body>
+</html>

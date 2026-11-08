@@ -9,12 +9,14 @@ import { Guests } from '@/pages/Guests'
 import { Login } from '@/pages/Login'
 import { MasterTemplates } from '@/pages/MasterTemplates'
 import { NotFound } from '@/pages/NotFound'
+import { Portfolio } from '@/pages/Portfolio'
 import { Templates } from '@/pages/Templates'
 import { Users } from '@/pages/Users'
 import { eventPaths, PATHS } from '@/route.paths'
 
 export const router = createBrowserRouter([
   { path: PATHS.login, Component: Login },
+  { path: PATHS.portfolio, Component: Portfolio },
   {
     Component: RequireAuth,
     children: [

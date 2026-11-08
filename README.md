@@ -11,6 +11,7 @@ npm test             # vitest: domain logic, REST client, Apps Script parity (se
 npm run lint
 npm run build
 npm run sample:xlsx  # regenerate ../sheet-templates/undangan-db-sample.xlsx
+npm run portfolio:thumbs  # screenshot each design for /portfolio (needs Google Chrome)
 ```
 
 ## Backend
@@ -57,7 +58,7 @@ src/
 ├── pages/           route components (Login, Events, Users, Event, Guests, Templates, …); page-only parts live in pages/<Page>/components/
 ├── hooks/           useMediaQuery
 ├── utils/           download, format
-├── route.ts         /login · /admin/events · /admin/events/new · /admin/users · /admin/events/:eventId/{event,tamu,template/:templateId,dashboard}
+├── route.ts         /login · /portfolio (public) · /admin/events · /admin/events/new · /admin/users · /admin/events/:eventId/{event,tamu,template/:templateId,dashboard}
 ├── route.paths.ts   URL constants shared by routes and links
 └── App.tsx          ThemeProvider (next-themes) + AuthProvider + RouterProvider + sonner Toaster
 ```
@@ -66,6 +67,13 @@ Imports use the `@/` alias (`@/core/store`, `@/components/Button`). A deployed b
 needs an SPA fallback to `index.html` so deep links such as `/admin/events/{event ID}/template/{template ID}` resolve.
 Admin URLs carry row IDs (UUIDs, the `ID` column of each tab), never slugs, so renaming a slug keeps every admin link.
 The public invitation is served from `public/events/{slug}/` at `/events/{slug}/` (a static page, outside the SPA).
+
+`/portfolio` is public (no login). It lists the designs in `src/core/domain/portfolio.ts`, and each card
+opens `/events/{slug}/?demo=1`, where the template renders its bundled `assets/demo.json` instead of
+calling the API. In every template folder, only the `LOOK` block at the top of `script.js` differs,
+so a fix can be copied over the whole file. Card images (`assets/portfolio.jpg`) come from
+`npm run portfolio:thumbs`. To add a design, create the folder with its `assets/demo.json`, add it to
+`PORTFOLIO`, then run the script.
 
 Every preview, draft render and link generation goes to `renderTemplate_()` on
 the server. The TS renderer in `domain/template.ts` is the reference that

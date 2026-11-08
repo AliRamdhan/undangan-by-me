@@ -5,6 +5,13 @@
  * see docs/URL-CONTRACT.md § 7 (Public invitation read).
  *
  * Guest link: /events/{slug}/{pin} (or /events/{slug}/?to={nama}&pin={pin})
+ *
+ * Portfolio demo: /events/{slug}/?demo=1 renders assets/demo.json (same shape as
+ * the § 7 `data`) instead of calling the API. Delete assets/demo.json when this
+ * folder becomes a real event.
+ *
+ * Only the LOOK block differs between template folders; keep the rest of this
+ * file identical in every copy so a fix can be copied as a whole file.
  */
 
 const CONFIG = {
@@ -12,6 +19,29 @@ const CONFIG = {
   // Public by design — never put an admin token here.
   // Empty → the page shows its load error: event data only comes from the API.
   API_URL: window.INVITATION_API || '',
+}
+
+// ---------- look: the only block that differs between template folders ----------
+
+const LOOK = {
+  title: (wanita, pria) => `The Wedding of ${wanita} & ${pria}`,
+  calendarTitle: (wanita, pria) => `Pernikahan ${wanita} & ${pria}`,
+  sonOf: 'Putra dari',
+  daughterOf: 'Putri dari',
+  venue: 'Lokasi',
+  // Every number on the page is bold.
+  numClass: 'font-bold',
+  // Calendar strip (renderCalendar): the weekday row, then the date row.
+  calLabel: (i) => `pt-2 pb-1 text-sm font-semibold text-pink-deep ${i < 2 ? 'border-r-2 border-olive/70' : ''}`,
+  calCell: (i) => `relative flex h-20 items-center justify-center border-t-2 border-olive/70 ${i < 2 ? 'border-r-2' : ''}`,
+  calDay: (tgl, main) =>
+    main
+      ? `<svg class="heart-beat absolute h-20 w-20 text-pink-deep" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11z"/></svg>
+         <b class="relative -mt-2 text-3xl font-bold italic text-white">${tgl}</b>`
+      : `<b class="text-3xl font-bold italic text-pink-deep">${tgl}</b>`,
+  // Gallery tile (button) and its photo; i is the photo's index.
+  galleryTile: () => 'aspect-[3/4] overflow-hidden rounded-md shadow-sm',
+  galleryImg: 'h-full w-full object-cover transition duration-500 hover:scale-105',
 }
 
 const TZ_OFFSET = { WIB: 7, WITA: 8, WIT: 9 }
@@ -32,8 +62,7 @@ const pad2 = (n) => String(n).padStart(2, '0')
 // Text context only, so & < > are enough (no digits in the entities, see num()).
 const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c])
 
-// Every number on the page is bold.
-const num = (s) => esc(s).replace(/\d+/g, '<b class="font-bold">$&</b>')
+const num = (s) => esc(s).replace(/\d+/g, `<b class="${LOOK.numClass}">$&</b>`)
 
 function put(el, value) {
   el.innerHTML = num(value ?? '').replace(/\n/g, '<br />')
@@ -131,6 +160,13 @@ async function load(eventId, slug, pin) {
   return env.data
 }
 
+// Portfolio preview (?demo=1): bundled sample data, never the API.
+async function loadDemo() {
+  const res = await fetch('assets/demo.json', { cache: 'no-cache' })
+  if (!res.ok) throw new Error('NO_DEMO')
+  return res.json()
+}
+
 // ---------- render ----------
 
 function render({ event: ev, guest }, params) {
@@ -141,15 +177,15 @@ function render({ event: ev, guest }, params) {
     .sort((a, b) => instant(a.tanggal, a.mulai, tz) - instant(b.tanggal, b.mulai, tz))
   const utama = ev.tanggal_utama || sesi[0]?.tanggal
 
-  document.title = `The Wedding of ${wanita.panggilan} & ${pria.panggilan}`
+  document.title = LOOK.title(wanita.panggilan, pria.panggilan)
 
   const { y, m } = utama ? ymd(utama) : {}
   fill(document.body, {
     ...ev,
     $tanggalTitik: fmtTitik(utama),
     $bulan: utama ? `${BULAN[m - 1]} ${y}` : '',
-    $ortuPria: pria.ortu ? `Putra dari ${pria.ortu}` : '',
-    $ortuWanita: wanita.ortu ? `Putri dari ${wanita.ortu}` : '',
+    $ortuPria: pria.ortu ? `${LOOK.sonOf} ${pria.ortu}` : '',
+    $ortuWanita: wanita.ortu ? `${LOOK.daughterOf} ${wanita.ortu}` : '',
   })
 
   const nama = guest ? [guest.gelar, guest.nama].filter(Boolean).join(' ') : params.get('to')
@@ -162,7 +198,7 @@ function render({ event: ev, guest }, params) {
   setupMusic(safeUrl(ev.media?.musik))
 }
 
-// Calendar strip: the day before, the day (in a heart), the day after.
+// Calendar strip: the day before, the day itself, the day after.
 function renderCalendar(date) {
   const { y, m, d } = ymd(date)
   const days = [-1, 0, 1].map((off) => {
@@ -172,17 +208,14 @@ function renderCalendar(date) {
   const strip = $('#cal-strip')
   days.forEach(({ hari }, i) => {
     const el = document.createElement('div')
-    el.className = `pt-2 pb-1 text-sm font-semibold text-pink-deep ${i < 2 ? 'border-r-2 border-olive/70' : ''}`
+    el.className = LOOK.calLabel(i)
     el.textContent = hari
     strip.append(el)
   })
   days.forEach(({ tgl, main }, i) => {
     const el = document.createElement('div')
-    el.className = `relative flex h-20 items-center justify-center border-t-2 border-olive/70 ${i < 2 ? 'border-r-2' : ''}`
-    el.innerHTML = main
-      ? `<svg class="heart-beat absolute h-20 w-20 text-pink-deep" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11z"/></svg>
-         <b class="relative -mt-2 text-3xl font-bold italic text-white">${tgl}</b>`
-      : `<b class="text-3xl font-bold italic text-pink-deep">${tgl}</b>`
+    el.className = LOOK.calCell(i)
+    el.innerHTML = LOOK.calDay(tgl, main)
     strip.append(el)
   })
 }
@@ -218,7 +251,7 @@ function renderCountdown(ev, utama, sesi, tz) {
   const stamp = (t) => new Date(t).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')
   const q = new URLSearchParams({
     action: 'TEMPLATE',
-    text: `Pernikahan ${ev.couple.wanita.panggilan} & ${ev.couple.pria.panggilan}`,
+    text: LOOK.calendarTitle(ev.couple.wanita.panggilan, ev.couple.pria.panggilan),
     dates: `${stamp(target)}/${stamp(end)}`,
     location: [first.tempat, first.alamat].filter(Boolean).join(', '),
   })
@@ -235,7 +268,7 @@ function renderVenue(sesi, tz) {
     list.append(el)
   })
 
-  // Sessions at the same venue share one "Lokasi" block.
+  // Sessions at the same venue share one venue block.
   const venues = []
   for (const s of sesi) {
     if (!s.tempat && !s.alamat && !s.maps) continue
@@ -246,7 +279,7 @@ function renderVenue(sesi, tz) {
   }
   const vlist = $('#venue-list')
   venues.forEach((v) => {
-    const $judul = venues.length > 1 ? `Lokasi ${v.labels.join(' & ')}` : 'Lokasi'
+    const $judul = venues.length > 1 ? `${LOOK.venue} ${v.labels.join(' & ')}` : LOOK.venue
     const el = fill(clone('tpl-venue'), { ...v, $judul })
     el.dataset.aos = 'fade-up'
     vlist.append(el)
@@ -279,7 +312,7 @@ function renderGallery(photos) {
   photos.forEach((src, i) => {
     const btn = document.createElement('button')
     btn.type = 'button'
-    btn.className = 'aspect-[3/4] overflow-hidden rounded-md shadow-sm'
+    btn.className = LOOK.galleryTile(i)
     btn.setAttribute('aria-label', `Buka foto ${i + 1}`)
     // Tiles pop in left to right, one row at a time.
     btn.dataset.aos = 'zoom-in'
@@ -288,7 +321,7 @@ function renderGallery(photos) {
     img.src = src
     img.alt = ''
     img.loading = 'lazy'
-    img.className = 'h-full w-full object-cover transition duration-500 hover:scale-105'
+    img.className = LOOK.galleryImg
     btn.append(img)
     btn.addEventListener('click', () => openLightbox(i))
     grid.append(btn)
@@ -405,7 +438,7 @@ async function init() {
   const btn = $('#open-btn')
   try {
     const { event: eventId, slug } = document.body.dataset
-    const data = await load(eventId, slug, pinFromUrl(params))
+    const data = params.has('demo') ? await loadDemo() : await load(eventId, slug, pinFromUrl(params))
     render(data, params)
     await coverReady()
     btn.disabled = false

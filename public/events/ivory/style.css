@@ -1,0 +1,210 @@
+/* What Tailwind utilities don't cover. Colors mirror the @theme tokens in index.html. */
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.locked {
+  overflow: hidden;
+}
+
+/* Loader covers the greeting until data and the cover photo are ready */
+#loader {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fafaf7;
+  color: #111111;
+  text-align: center;
+  transition:
+    opacity 0.6s ease,
+    visibility 0.6s;
+}
+#loader.done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-title {
+  margin: 0;
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: 2.25rem;
+  line-height: 1.1;
+}
+.loader-line {
+  width: 72px;
+  height: 1px;
+  margin: 1.25rem 0;
+  background: #b26841;
+  transform-origin: left;
+  animation: loader-line 1.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+@keyframes loader-line {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  50% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  50.01% {
+    transform-origin: right;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+}
+.loader-text {
+  margin: 0;
+  font-family: "Jost", ui-sans-serif, system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: #6b6b66;
+}
+
+/* Hold the cover's entrance until the loader fades, so it isn't spent unseen */
+body.loading .cover-in,
+body.loading .cover-line,
+body.loading .cover-ken {
+  animation-play-state: paused;
+}
+
+/* Greeting modal fades up and away when opened */
+#greeting {
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+#greeting.closing {
+  opacity: 0;
+  transform: translateY(-3%);
+  pointer-events: none;
+}
+
+/* Greeting content stages in on load; --d sets each element's delay */
+.cover-in {
+  animation: cover-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0s) both;
+}
+@keyframes cover-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+/* Hairlines draw out from their start */
+.cover-line {
+  transform-origin: center;
+  animation: cover-line 1.2s cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0s) both;
+}
+@keyframes cover-line {
+  from {
+    transform: scaleX(0);
+  }
+}
+/* The cover photo settles slowly into place */
+.cover-ken {
+  animation: cover-ken 3.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes cover-ken {
+  from {
+    transform: scale(1.08);
+  }
+}
+
+/* Custom AOS animations. AOS sets .aos-animate once an element scrolls in. */
+
+/* AOS slides fades 100px by default; shorter feels calmer */
+[data-aos="fade-up"] {
+  transform: translate3d(0, 28px, 0);
+}
+[data-aos="fade-down"] {
+  transform: translate3d(0, -28px, 0);
+}
+[data-aos="fade-right"] {
+  transform: translate3d(-32px, 0, 0);
+}
+[data-aos="fade-left"] {
+  transform: translate3d(32px, 0, 0);
+}
+
+/* Photo is uncovered top to bottom, like a print sliding out */
+[data-aos="reveal"] {
+  clip-path: inset(0 0 100% 0);
+  transition-property: clip-path;
+}
+[data-aos="reveal"].aos-animate {
+  clip-path: inset(0);
+}
+
+/* Hairline rule draws itself from the left (give it origin-left) */
+[data-aos="rule"] {
+  transform: scaleX(0);
+  transition-property: transform;
+}
+[data-aos="rule"].aos-animate {
+  transform: none;
+}
+
+/* Vertical hairline grows downwards */
+[data-aos="rule-y"] {
+  transform: scaleY(0);
+  transform-origin: top;
+  transition-property: transform;
+}
+[data-aos="rule-y"].aos-animate {
+  transform: none;
+}
+
+/* Floating music button: three bars that bounce while the song plays */
+#music-btn .eq {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  transform: scaleY(0.35);
+  transition: transform 0.3s ease;
+}
+#music-btn.playing .eq {
+  animation: eq 0.9s ease-in-out infinite alternate;
+}
+#music-btn.playing .eq:nth-child(2) {
+  animation-delay: -0.3s;
+}
+#music-btn.playing .eq:nth-child(3) {
+  animation-delay: -0.6s;
+}
+@keyframes eq {
+  from {
+    transform: scaleY(0.3);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  #greeting,
+  #loader {
+    transition: none;
+  }
+  .loader-line,
+  .cover-in,
+  .cover-line,
+  .cover-ken,
+  #music-btn.playing .eq {
+    animation: none;
+  }
+}
