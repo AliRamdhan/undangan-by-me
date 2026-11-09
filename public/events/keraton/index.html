@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pawiwahan Laras &amp; Prabu</title>
+    <link rel="icon" type="image/png" href="assets/favicon/favicon-96x96.png?v=3" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.svg?v=3" />
+    <link rel="shortcut icon" href="assets/favicon/favicon.ico?v=3" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png?v=3" />
+    <link rel="manifest" href="assets/favicon/site.webmanifest?v=3" />
+    <meta name="description" content="Undangan pernikahan adat Jawa digital" />
+    <meta name="theme-color" content="#5a1a1f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Files in public/ skip Vite, so Tailwind runs in the browser. -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-maroon: #5a1a1f;
+        --color-maroon-tua: #3d0f13;
+        --color-maroon-muda: #7a2a2f;
+        --color-emas: #c9a24a;
+        --color-emas-muda: #e8cf8a;
+        --color-emas-tua: #8f6a24;
+        --color-krem: #f6efe0;
+        --color-krem-tua: #ece0c6;
+        --color-sogan: #6b4423;
+        --color-tinta: #2b1a12;
+        --font-display: "Cinzel Decorative", "Cinzel", Georgia, serif;
+        --font-serif: "Cormorant Garamond", "Cormorant", Georgia, serif;
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Deferred scripts run in order, so AOS is ready before script.js. -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
+    <script src="../config.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+
+  <!-- When copying this template for a new event, change data-event (01_Event.ID; admin URL /admin/events/{ID}) and data-slug (fallback). -->
+  <body data-event="" data-slug="keraton" class="locked loading bg-maroon-tua bg-parang font-serif text-[17px] text-tinta antialiased selection:bg-emas/30">
+    <!-- Ornament sprite: gunungan (kayon), kawung seed, vine corner and divider; plus the gunungan clip for photos. -->
+    <svg class="absolute h-0 w-0 overflow-hidden" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="prada" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#f3dc98" />
+          <stop offset=".55" stop-color="#c9a24a" />
+          <stop offset="1" stop-color="#8f6a24" />
+        </linearGradient>
+        <!-- Gunungan silhouette for photo frames: a tall leaf rising to a point, on a flat base -->
+        <clipPath id="clip-gunungan" clipPathUnits="objectBoundingBox">
+          <path d="M.5 0 C.6 .1 .93 .3 .99 .58 C1 .62 1 .66 1 .7 V1 H0 V.7 C0 .66 0 .62 .01 .58 C.07 .3 .4 .1 .5 0 Z" />
+        </clipPath>
+      </defs>
+      <symbol id="gunungan" viewBox="0 0 100 140">
+        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M50 3 C62 19 91 49 95 86 C97 100 90 107 82 109 V122 H18 V109 C10 107 3 100 5 86 C9 49 38 19 50 3 Z" stroke-width="2" />
+          <path d="M50 13 C60 27 84 53 87 85 C88 95 83 100 76 101 H24 C17 100 12 95 13 85 C16 53 40 27 50 13 Z" stroke-width=".9" stroke-opacity=".7" />
+          <!-- Tree of life -->
+          <path d="M50 101 V30" stroke-width="1.6" />
+          <path d="M50 86 C42 78 30 78 24 70 M50 86 C58 78 70 78 76 70" stroke-width="1.3" />
+          <path d="M50 70 C43 63 35 60 31 52 M50 70 C57 63 65 60 69 52" stroke-width="1.3" />
+          <path d="M50 55 C45 49 42 44 42 37 M50 55 C55 49 58 44 58 37" stroke-width="1.3" />
+          <path d="M28 82 C24 76 30 72 33 76 M72 82 C76 76 70 72 67 76" stroke-width="1" />
+          <path d="M35 62 C31 57 36 53 39 57 M65 62 C69 57 64 53 61 57" stroke-width="1" />
+        </g>
+        <g fill="currentColor">
+          <circle cx="50" cy="27" r="2.6" />
+          <circle cx="24" cy="70" r="1.8" /><circle cx="76" cy="70" r="1.8" />
+          <circle cx="31" cy="52" r="1.6" /><circle cx="69" cy="52" r="1.6" />
+          <circle cx="42" cy="36" r="1.4" /><circle cx="58" cy="36" r="1.4" />
+          <!-- Gapura (gate) at the foot -->
+          <path d="M38 101 V91 L44 86 H56 L62 91 V101 H57 V93 H43 V101 Z" />
+          <rect x="22" y="112" width="56" height="3" rx="1" />
+          <rect x="14" y="125" width="72" height="3" rx="1" />
+          <rect x="20" y="131" width="60" height="2.5" rx="1" />
+        </g>
+      </symbol>
+      <symbol id="kawung" viewBox="0 0 40 40">
+        <g fill="currentColor">
+          <ellipse cx="20" cy="9.5" rx="6" ry="9" />
+          <ellipse cx="20" cy="30.5" rx="6" ry="9" />
+          <ellipse cx="9.5" cy="20" rx="9" ry="6" />
+          <ellipse cx="30.5" cy="20" rx="9" ry="6" />
+        </g>
+        <g fill="#5a1a1f" fill-opacity=".85">
+          <circle cx="20" cy="20" r="2" />
+          <ellipse cx="20" cy="8" rx="1.4" ry="3" />
+          <ellipse cx="20" cy="32" rx="1.4" ry="3" />
+          <ellipse cx="8" cy="20" rx="3" ry="1.4" />
+          <ellipse cx="32" cy="20" rx="3" ry="1.4" />
+        </g>
+      </symbol>
+      <symbol id="sulur" viewBox="0 0 80 80">
+        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 77 V12 Q3 3 12 3 H77" stroke-width="1.6" />
+          <path d="M9 64 V18 Q9 9 18 9 H64" stroke-width=".8" />
+          <path d="M16 56 C16 34 28 22 46 20 C56 19 58 30 50 31 C45 32 44 26 48 25" stroke-width="1.6" />
+          <path d="M24 44 C30 40 34 34 34 28" stroke-width="1.1" />
+          <path d="M16 56 C12 50 18 46 21 50" stroke-width="1.1" />
+        </g>
+        <g fill="currentColor">
+          <path d="M30 36 C33 30 40 29 43 31 C40 36 35 38 30 36 Z" />
+          <path d="M22 30 C22 24 26 20 30 20 C30 25 27 29 22 30 Z" />
+          <rect x="66" y="12" width="5" height="5" transform="rotate(45 68.5 14.5)" />
+          <rect x="12" y="66" width="5" height="5" transform="rotate(45 14.5 68.5)" />
+        </g>
+      </symbol>
+      <symbol id="divider" viewBox="0 0 240 28">
+        <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+          <path d="M6 14 H92 M148 14 H234" />
+          <path d="M30 10 H92 M148 10 H210" stroke-opacity=".45" stroke-width=".8" />
+          <path d="M30 18 H92 M148 18 H210" stroke-opacity=".45" stroke-width=".8" />
+        </g>
+        <g fill="currentColor">
+          <ellipse cx="120" cy="6.5" rx="4" ry="6" />
+          <ellipse cx="120" cy="21.5" rx="4" ry="6" />
+          <ellipse cx="112.5" cy="14" rx="6" ry="4" />
+          <ellipse cx="127.5" cy="14" rx="6" ry="4" />
+          <path d="M100 14 l4 -4 4 4 -4 4z M132 14 l4 -4 4 4 -4 4z" />
+          <circle cx="4" cy="14" r="2" /><circle cx="236" cy="14" r="2" />
+        </g>
+      </symbol>
+    </svg>
+
+    <!-- 0. Loader: plain CSS (style.css) so it paints before Tailwind compiles; hidden by script.js once data is ready -->
+    <div id="loader" role="status" aria-live="polite">
+      <svg class="loader-gunungan" aria-hidden="true"><use href="#gunungan" /></svg>
+      <p class="loader-title">Pawiwahan</p>
+      <p class="loader-text">Memuat undangan</p>
+    </div>
+
+    <!-- 1. Greeting modal (cover) -->
+    <div
+      id="greeting"
+      class="fixed inset-0 z-50 overflow-hidden bg-maroon-tua bg-parang"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="greeting-title"
+    >
+      <div class="tumpal-y relative mx-auto flex h-full max-w-[500px] flex-col items-center overflow-hidden bg-maroon bg-parang px-10 pb-12 pt-14 text-center text-krem shadow-2xl shadow-black/60">
+        <div class="pointer-events-none absolute inset-x-4 inset-y-7 border border-emas/50"></div>
+        <svg class="pointer-events-none absolute left-6 top-9 h-12 w-12 text-emas" aria-hidden="true"><use href="#sulur" /></svg>
+        <svg class="pointer-events-none absolute right-6 top-9 h-12 w-12 -scale-x-100 text-emas" aria-hidden="true"><use href="#sulur" /></svg>
+        <svg class="pointer-events-none absolute bottom-9 left-6 h-12 w-12 -scale-y-100 text-emas" aria-hidden="true"><use href="#sulur" /></svg>
+        <svg class="pointer-events-none absolute bottom-9 right-6 h-12 w-12 -scale-x-100 -scale-y-100 text-emas" aria-hidden="true"><use href="#sulur" /></svg>
+
+        <p class="cover-in pl-[0.5em] text-xs font-semibold uppercase tracking-[0.5em] text-emas-muda" style="--d: 0.15s">Pawiwahan Ageng</p>
+        <h1 id="greeting-title" class="cover-in mt-3 font-display text-[2.1rem] font-bold leading-tight text-prada" style="--d: 0.35s">
+          <span data-bind="couple.wanita.panggilan"></span> <span class="font-serif font-normal italic">&amp;</span> <span data-bind="couple.pria.panggilan"></span>
+        </h1>
+        <svg class="cover-in mx-auto mt-3 h-5 w-40 text-emas" style="--d: 0.5s" aria-hidden="true"><use href="#divider" /></svg>
+
+        <div class="cover-in cover-zoom relative mt-6 flex min-h-0 w-full flex-1 items-center justify-center" style="--d: 0.7s">
+          <div class="gunungan-frame aspect-[5/7] h-full max-h-[400px] max-w-[78%]">
+            <img src="assets/cover.webp" data-src="media.cover" alt="Foto mempelai" class="h-full w-full object-cover" />
+          </div>
+        </div>
+
+        <p class="cover-in mt-7 text-[13px] italic text-krem/80" style="--d: 0.95s">Katur dhumateng Bapak/Ibu/Saudara/i</p>
+        <p id="guest-name" class="cover-in mt-1 max-w-full truncate font-display text-xl font-bold text-emas-muda" style="--d: 1.05s">Tamu Undangan</p>
+        <button
+          id="open-btn"
+          type="button"
+          disabled
+          style="--d: 1.25s"
+          class="cover-in shine mt-5 inline-flex shrink-0 items-center gap-2 border border-emas-muda bg-prada px-7 py-3 text-sm font-bold uppercase tracking-[0.25em] text-maroon-tua shadow-xl shadow-black/30 transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emas-muda disabled:opacity-60"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 40 40" aria-hidden="true"><use href="#kawung" /></svg>
+          <span>Buka Undangan</span>
+        </button>
+        <p id="load-error" hidden class="mt-4 text-sm text-krem">
+          Undangan gagal dimuat.
+          <button type="button" class="font-bold text-emas-muda underline" onclick="location.reload()">Muat ulang</button>
+        </p>
+      </div>
+    </div>
+
+    <main class="mx-auto max-w-[500px] overflow-hidden bg-krem shadow-2xl shadow-black/60">
+      <!-- 2. Hero -->
+      <header id="home" class="relative flex min-h-svh flex-col items-center justify-center overflow-hidden bg-krem bg-kawung px-8 pb-20 pt-20 text-center">
+        <div class="tumpal-top pointer-events-none absolute inset-x-0 top-0 h-6" aria-hidden="true"></div>
+        <svg class="pointer-events-none absolute left-3 top-9 h-14 w-14 text-emas" aria-hidden="true"><use href="#sulur" /></svg>
+        <svg class="pointer-events-none absolute right-3 top-9 h-14 w-14 -scale-x-100 text-emas" aria-hidden="true"><use href="#sulur" /></svg>
+
+        <p class="relative pl-[0.5em] text-xs font-semibold uppercase tracking-[0.5em] text-emas-tua" data-aos="fade-down" data-aos-delay="300" data-aos-anchor="#home">Sugeng Rawuh</p>
+        <p class="relative mt-1 text-base italic text-sogan" data-aos="fade-down" data-aos-delay="350" data-aos-anchor="#home">di pawiwahan</p>
+        <h2 class="relative mt-3 font-display text-[2.6rem] font-bold leading-[1.05] text-maroon" data-aos="zoom-in" data-aos-delay="450" data-aos-anchor="#home">
+          <span class="block" data-bind="couple.wanita.panggilan"></span>
+          <span class="my-1 block font-serif text-2xl font-normal italic text-emas-tua">&amp;</span>
+          <span class="block" data-bind="couple.pria.panggilan"></span>
+        </h2>
+
+        <div class="relative mt-9 w-[66%]" data-aos="zoom-in-up" data-aos-delay="600" data-aos-anchor="#home">
+          <div class="gunungan-frame aspect-[5/7] w-full">
+            <img src="assets/header.webp" alt="Foto mempelai" class="h-full w-full object-cover" />
+          </div>
+          <span class="seal-turn absolute -bottom-6 left-1/2 -ml-6 grid h-12 w-12 place-items-center rounded-full bg-maroon text-emas shadow-lg ring-2 ring-emas ring-offset-2 ring-offset-krem">
+            <svg class="h-7 w-7" viewBox="0 0 40 40" aria-hidden="true"><use href="#kawung" /></svg>
+          </span>
+        </div>
+
+        <div class="relative mt-12 flex items-center gap-3 text-maroon" data-aos="fade-up" data-aos-delay="750" data-aos-anchor="#home">
+          <span class="h-px w-10 bg-emas"></span>
+          <p class="pl-[0.3em] font-display text-xl tracking-[0.3em]" data-bind="$tanggalTitik"></p>
+          <span class="h-px w-10 bg-emas"></span>
+        </div>
+
+        <!-- Music player -->
+        <div id="player" data-aos="fade-up" data-aos-delay="900" data-aos-offset="0" class="relative mt-8 flex w-full max-w-[330px] items-center gap-3 border border-emas/70 bg-maroon bg-parang p-2.5 text-left shadow-lg shadow-maroon/30">
+          <img src="assets/cover.webp" alt="" class="h-12 w-12 shrink-0 object-cover ring-1 ring-emas" />
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-[15px] font-semibold text-krem" data-bind="media.judul_musik"></p>
+            <div class="mt-2 h-[3px] overflow-hidden bg-emas/25"><div id="progress" class="h-full w-0 bg-emas-muda"></div></div>
+            <div class="mt-1 flex justify-between text-[11px] text-krem/70"><span id="t-cur"><b>0</b>:<b>00</b></span><span id="t-dur"><b>0</b>:<b>00</b></span></div>
+          </div>
+          <button
+            id="player-toggle"
+            type="button"
+            aria-label="Putar musik"
+            class="flex h-11 w-11 shrink-0 rotate-45 items-center justify-center border border-emas-muda bg-prada text-maroon-tua shadow"
+          >
+            <svg data-icon="play" class="-rotate-45 ml-0.5 h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z" /></svg>
+            <svg data-icon="pause" hidden class="-rotate-45 h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z" /></svg>
+          </button>
+        </div>
+        <div class="tumpal-bottom pointer-events-none absolute inset-x-0 bottom-0 h-6" aria-hidden="true"></div>
+      </header>
+
+      <!-- 3. Verse: a Javanese proverb -->
+      <section id="verse" class="relative bg-maroon bg-parang px-8 py-20 text-center text-krem">
+        <svg class="mx-auto h-24 w-[68px] text-emas" data-aos="zoom-in" aria-hidden="true"><use href="#gunungan" /></svg>
+        <p class="mt-8 font-display text-[1.65rem] font-bold leading-snug text-prada" lang="jv" data-aos="fade-up" data-aos-delay="150">
+          Witing tresna<br />jalaran saka kulina
+        </p>
+        <p class="mt-4 text-lg italic text-emas-muda" data-aos="fade-up" data-aos-delay="250">“Cinta tumbuh karena terbiasa bersama.”</p>
+        <p class="mx-auto mt-5 max-w-sm text-base leading-relaxed text-krem/85" data-aos="fade-up" data-aos-delay="350">
+          Pepatah Jawa ini menjadi kisah kami: dari hari-hari biasa yang dilalui berdua, tumbuh rasa yang tak lagi bisa
+          dipisahkan. Kini, dengan restu kedua orang tua, kami ingin menyatukannya dalam ikatan suci pernikahan.
+        </p>
+        <svg class="mx-auto mt-10 h-6 w-56 text-emas" data-aos="unfold" data-aos-duration="1200" aria-hidden="true"><use href="#divider" /></svg>
+      </section>
+
+      <!-- 4. Couple -->
+      <section id="couple" class="relative overflow-hidden bg-krem bg-kawung px-6 py-24 text-center">
+        <p class="pl-[0.45em] text-xs font-semibold uppercase tracking-[0.45em] text-emas-tua" data-aos="fade-up">Assalamu’alaikum Wr. Wb.</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-maroon" data-aos="fade-up" data-aos-delay="100">Kedua Mempelai</h2>
+        <p class="mx-auto mt-4 max-w-sm text-base leading-relaxed text-tinta/80" data-aos="fade-up" data-aos-delay="200">
+          Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud menyelenggarakan pernikahan putra-putri kami:
+        </p>
+
+        <div class="mt-12 space-y-12">
+          <div data-aos="fade-up" data-aos-delay="150">
+            <div class="regol-frame mx-auto w-[62%]">
+              <img src="assets/wanita.webp" alt="Mempelai wanita" class="aspect-[4/5] w-full object-cover object-[50%_25%]" />
+            </div>
+            <h3 class="mt-6 font-display text-2xl font-bold leading-snug text-maroon" data-bind="couple.wanita.lengkap"></h3>
+            <p class="mt-2 text-base italic leading-relaxed text-sogan" data-bind="$ortuWanita"></p>
+          </div>
+
+          <div class="flex items-center justify-center gap-4 text-emas" data-aos="zoom-in">
+            <span class="h-px w-16 bg-linear-to-r from-transparent to-emas"></span>
+            <svg class="h-14 w-10" aria-hidden="true"><use href="#gunungan" /></svg>
+            <span class="h-px w-16 bg-linear-to-l from-transparent to-emas"></span>
+          </div>
+
+          <div data-aos="fade-up" data-aos-delay="150">
+            <div class="regol-frame mx-auto w-[62%]">
+              <img src="assets/pria.webp" alt="Mempelai pria" class="aspect-[4/5] w-full object-cover object-[50%_25%]" />
+            </div>
+            <h3 class="mt-6 font-display text-2xl font-bold leading-snug text-maroon" data-bind="couple.pria.lengkap"></h3>
+            <p class="mt-2 text-base italic leading-relaxed text-sogan" data-bind="$ortuPria"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Save the date + countdown -->
+      <section id="countdown" class="tumpal-y relative bg-maroon bg-parang px-6 py-24 text-center text-krem">
+        <p class="pl-[0.45em] text-xs font-semibold uppercase tracking-[0.45em] text-emas-muda" data-aos="fade-up">Dinten Ingkang Sae</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-prada" data-aos="fade-up" data-aos-delay="100">Hari Bahagia</h2>
+        <p class="mt-2 text-base italic text-krem/75" data-aos="fade-up" data-aos-delay="200">Hari baik yang telah dipilih kedua keluarga</p>
+
+        <div class="mx-auto mt-9 max-w-[340px]" data-aos="fade-up" data-aos-delay="300">
+          <div class="inline-flex items-center gap-2 bg-prada px-5 py-1.5 font-display text-sm font-bold text-maroon-tua">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 40 40" aria-hidden="true"><use href="#kawung" /></svg>
+            <span data-bind="$bulan"></span>
+          </div>
+          <div id="cal-strip" class="grid grid-cols-3 overflow-hidden border-2 border-emas bg-krem bg-kawung text-center shadow-xl shadow-black/30 outline-1 outline-offset-4 outline-emas/60">
+            <!-- filled by script.js -->
+          </div>
+        </div>
+
+        <p class="mt-8 pl-[0.3em] font-display text-lg tracking-[0.3em] text-emas-muda" data-bind="$tanggalTitik" data-aos="fade"></p>
+
+        <div id="cd" class="mt-8 flex items-start justify-center gap-2.5 text-center">
+          <div class="cd-box" data-aos="zoom-in" data-aos-delay="0"><b class="block font-display text-3xl font-bold text-prada" data-cd="d">00</b><span class="text-[11px] font-semibold uppercase tracking-widest text-krem/80">Hari</span></div>
+          <div class="cd-box" data-aos="zoom-in" data-aos-delay="120"><b class="block font-display text-3xl font-bold text-prada" data-cd="h">00</b><span class="text-[11px] font-semibold uppercase tracking-widest text-krem/80">Jam</span></div>
+          <div class="cd-box" data-aos="zoom-in" data-aos-delay="240"><b class="block font-display text-3xl font-bold text-prada" data-cd="m">00</b><span class="text-[11px] font-semibold uppercase tracking-widest text-krem/80">Menit</span></div>
+          <div class="cd-box" data-aos="zoom-in" data-aos-delay="360"><b class="block font-display text-3xl font-bold text-prada" data-cd="s">00</b><span class="text-[11px] font-semibold uppercase tracking-widest text-krem/80">Detik</span></div>
+        </div>
+        <p id="cd-done" hidden class="mt-6 text-center text-base font-semibold text-emas-muda">Hari bahagia telah tiba. Matur nuwun atas doa restunya.</p>
+        <div class="mt-9" data-aos="fade-up">
+          <a
+            id="cal-link"
+            target="_blank"
+            rel="noopener"
+            class="shine inline-flex items-center gap-2 border border-emas-muda bg-prada px-6 py-2.5 text-xs font-bold uppercase tracking-[0.2em] text-maroon-tua shadow-lg shadow-black/25 transition hover:brightness-110"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="16" rx="1" /><path d="M16 3v4M8 3v4M3 11h18" />
+            </svg>
+            Simpan ke Kalender
+          </a>
+        </div>
+      </section>
+
+      <!-- 6. Our story -->
+      <section id="story" class="relative overflow-hidden bg-krem bg-kawung px-7 py-24 text-center">
+        <p class="pl-[0.45em] text-xs font-semibold uppercase tracking-[0.45em] text-emas-tua" data-aos="fade-up">Lampahing Tresna</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-maroon" data-aos="fade-up" data-aos-delay="100">Kisah Kami</h2>
+        <svg class="mx-auto mt-4 h-5 w-44 text-emas" data-aos="unfold" data-aos-duration="1200" aria-hidden="true"><use href="#divider" /></svg>
+
+        <div class="relative mx-auto mt-10 w-[74%]" data-aos="zoom-out">
+          <div class="border border-emas p-2 outline-1 outline-offset-[5px] outline-emas/50">
+            <img src="assets/story.webp" alt="" class="aspect-[4/5] w-full object-cover" />
+          </div>
+          <svg class="pointer-events-none absolute -left-3 -top-3 h-11 w-11 text-emas-tua" aria-hidden="true"><use href="#sulur" /></svg>
+          <svg class="pointer-events-none absolute -right-3 -top-3 h-11 w-11 -scale-x-100 text-emas-tua" aria-hidden="true"><use href="#sulur" /></svg>
+          <svg class="pointer-events-none absolute -bottom-3 -left-3 h-11 w-11 -scale-y-100 text-emas-tua" aria-hidden="true"><use href="#sulur" /></svg>
+          <svg class="pointer-events-none absolute -bottom-3 -right-3 h-11 w-11 -scale-x-100 -scale-y-100 text-emas-tua" aria-hidden="true"><use href="#sulur" /></svg>
+        </div>
+
+        <div class="relative mx-auto mt-14 max-w-sm text-left">
+          <span class="absolute bottom-4 left-[15px] top-4 w-px bg-linear-to-b from-emas/0 via-emas to-emas/0" aria-hidden="true"></span>
+          <ol class="space-y-8">
+            <li class="relative pl-12" data-aos="fade-up">
+              <span class="absolute left-[3px] top-0.5 h-6 w-6 text-maroon" aria-hidden="true"><svg class="h-6 w-6" viewBox="0 0 40 40"><use href="#kawung" /></svg></span>
+              <p class="font-display text-[15px] font-bold tracking-wider text-maroon"><b class="font-bold">2018</b> · KKN di Lereng Merapi</p>
+              <p class="mt-1.5 text-base leading-relaxed text-tinta/80">
+                Satu kelompok KKN, satu desa di lereng Merapi. Laras mengajar anak-anak menari, Prabu sibuk membangun
+                bak penampungan air, dan diam-diam menonton dari kejauhan.
+              </p>
+            </li>
+            <li class="relative pl-12" data-aos="fade-up">
+              <span class="absolute left-[3px] top-0.5 h-6 w-6 text-maroon" aria-hidden="true"><svg class="h-6 w-6" viewBox="0 0 40 40"><use href="#kawung" /></svg></span>
+              <p class="font-display text-[15px] font-bold tracking-wider text-maroon"><b class="font-bold">2021</b> · Wedang Ronde</p>
+              <p class="mt-1.5 text-base leading-relaxed text-tinta/80">
+                Setiap malam Minggu di alun-alun kidul, ditemani semangkuk wedang ronde. Dari kebiasaan kecil itulah
+                rasa itu tumbuh, persis seperti kata pepatah.
+              </p>
+            </li>
+            <li class="relative pl-12" data-aos="fade-up">
+              <span class="absolute left-[3px] top-0.5 h-6 w-6 text-maroon" aria-hidden="true"><svg class="h-6 w-6" viewBox="0 0 40 40"><use href="#kawung" /></svg></span>
+              <p class="font-display text-[15px] font-bold tracking-wider text-maroon"><b class="font-bold">2026</b> · Lamaran</p>
+              <p class="mt-1.5 text-base leading-relaxed text-tinta/80">
+                Keluarga Prabu datang membawa peningset. Dengan tembang dan sesanti, kedua keluarga sepakat menautkan
+                tali silaturahmi.
+              </p>
+            </li>
+            <li class="relative pl-12" data-aos="fade-up">
+              <span class="absolute left-0 top-0 grid h-8 w-8 rotate-45 place-items-center border border-emas bg-maroon text-emas" aria-hidden="true">
+                <svg class="h-4 w-4 -rotate-45" viewBox="0 0 40 40"><use href="#kawung" /></svg>
+              </span>
+              <p class="font-display text-[15px] font-bold tracking-wider text-maroon"><b class="font-bold">2027</b> · Pawiwahan</p>
+              <p class="mt-1.5 text-base leading-relaxed text-tinta/80">
+                Kini kami melangkah bersama menuju bebrayan agung. Sampai jumpa di hari bahagia kami.
+              </p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- 7. Sessions & venues -->
+      <section id="location" class="tumpal-y relative bg-maroon bg-parang px-6 py-24 text-center text-krem">
+        <p class="pl-[0.45em] text-xs font-semibold uppercase tracking-[0.45em] text-emas-muda" data-aos="fade-up">Wekdal &amp; Papan</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-prada" data-aos="fade-up" data-aos-delay="100">Waktu &amp; Tempat</h2>
+        <svg class="mx-auto mt-4 h-5 w-44 text-emas" data-aos="unfold" data-aos-duration="1200" aria-hidden="true"><use href="#divider" /></svg>
+        <div id="session-list" class="mt-10 space-y-5"></div>
+        <div id="venue-list" class="mt-6 space-y-5"></div>
+      </section>
+
+      <!-- 8. Gallery -->
+      <section id="gallery" class="relative overflow-hidden bg-krem bg-kawung px-6 py-24 text-center">
+        <p class="pl-[0.45em] text-xs font-semibold uppercase tracking-[0.45em] text-emas-tua" data-aos="fade-up">Pepeling</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-maroon" data-aos="fade-up" data-aos-delay="100">Galeri Kenangan</h2>
+        <svg class="mx-auto mt-4 h-5 w-44 text-emas" data-aos="unfold" data-aos-duration="1200" aria-hidden="true"><use href="#divider" /></svg>
+        <div id="gallery-grid" class="mt-9 grid grid-cols-2 gap-3"></div>
+      </section>
+
+      <!-- 9. Gift -->
+      <section id="gift" class="tumpal-y relative overflow-hidden bg-maroon-tua bg-parang px-6 py-24 text-center text-krem">
+        <p class="pl-[0.45em] text-xs font-semibold uppercase tracking-[0.45em] text-emas-muda" data-aos="fade-up">Tanda Kasih</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-prada" data-aos="fade-up" data-aos-delay="100">Kado Pernikahan</h2>
+        <p class="mx-auto mt-4 max-w-sm text-base leading-relaxed text-krem/85" data-aos="fade-up" data-aos-delay="200">
+          Doa restu Bapak/Ibu/Saudara/i adalah anugerah terindah bagi kami. Namun apabila berkenan memberikan tanda kasih,
+          dapat dikirimkan melalui rekening berikut.
+        </p>
+
+        <div
+          id="envelope"
+          class="relative mx-auto mt-10 w-full max-w-[290px] border-2 border-emas bg-krem bg-kawung px-7 pb-8 pt-10 text-tinta shadow-2xl shadow-black/50 outline-1 outline-offset-[5px] outline-emas/60"
+          data-aos="rise"
+          data-aos-duration="1000"
+        >
+          <svg class="pointer-events-none absolute left-1.5 top-1.5 h-9 w-9 text-emas-tua" aria-hidden="true"><use href="#sulur" /></svg>
+          <svg class="pointer-events-none absolute right-1.5 top-1.5 h-9 w-9 -scale-x-100 text-emas-tua" aria-hidden="true"><use href="#sulur" /></svg>
+          <svg class="pointer-events-none absolute bottom-1.5 left-1.5 h-9 w-9 -scale-y-100 text-emas-tua" aria-hidden="true"><use href="#sulur" /></svg>
+          <svg class="pointer-events-none absolute bottom-1.5 right-1.5 h-9 w-9 -scale-x-100 -scale-y-100 text-emas-tua" aria-hidden="true"><use href="#sulur" /></svg>
+          <svg class="mx-auto h-16 w-12 text-maroon" aria-hidden="true"><use href="#gunungan" /></svg>
+          <p class="mt-4 pl-[0.2em] font-display text-2xl font-bold tracking-[0.2em] text-maroon" data-bind="gift.bank"></p>
+          <p class="mt-2 font-display text-[1.3rem] tracking-[0.08em] text-tinta" data-bind="gift.norek"></p>
+          <p class="mt-1 text-sm italic text-sogan">a.n. <span class="font-semibold not-italic" data-bind="gift.atas_nama"></span></p>
+          <button
+            id="copy-btn"
+            type="button"
+            class="mt-6 inline-flex items-center gap-2 border border-emas bg-maroon px-6 py-2.5 text-xs font-bold uppercase tracking-[0.2em] text-emas-muda shadow-md transition hover:bg-maroon-muda"
+          >
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="9" y="9" width="12" height="12" rx="1" /><path d="M5 15V5a2 2 0 0 1 2-2h10" />
+            </svg>
+            Salin Nomor
+          </button>
+        </div>
+
+        <figure id="qris-wrap" class="mt-10">
+          <img id="qris" alt="QRIS" data-aos="zoom-in" class="mx-auto w-52 border-2 border-emas bg-white p-3 shadow-lg" loading="lazy" />
+          <figcaption class="mt-3 text-sm text-krem/80">Scan QRIS untuk mengirim tanda kasih</figcaption>
+        </figure>
+      </section>
+
+      <!-- 10. Wishes -->
+      <section id="wishes" class="bg-krem bg-kawung px-6 py-24 text-center">
+        <p class="pl-[0.45em] text-xs font-semibold uppercase tracking-[0.45em] text-emas-tua" data-aos="fade-up">Donga Pangestu</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-maroon" data-aos="fade-up" data-aos-delay="100">Ucapan &amp; Doa</h2>
+        <svg class="mx-auto mt-4 h-5 w-44 text-emas" data-aos="unfold" data-aos-duration="1200" aria-hidden="true"><use href="#divider" /></svg>
+        <p class="mx-auto mt-4 max-w-sm text-base leading-relaxed text-tinta/80" data-aos="fade-up">Kirimkan doa restu dan ucapan bahagia untuk kedua mempelai.</p>
+        <form id="wish-form" class="mx-auto mt-8 max-w-sm border border-emas bg-white/80 p-5 text-left shadow-lg shadow-maroon/10 outline-1 outline-offset-4 outline-emas/40" hidden>
+          <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-emas-tua">Saking <span id="wish-name" class="ml-1 font-display normal-case tracking-normal text-maroon"></span></p>
+          <label for="wish-text" class="sr-only">Ucapan dan doa</label>
+          <textarea id="wish-text" rows="4" maxlength="500" required placeholder="Tulis ucapan dan doa…" class="mt-3 block w-full resize-none border border-emas/50 bg-krem px-4 py-3 text-base leading-relaxed text-tinta placeholder:text-tinta/40 focus:border-maroon focus:outline-none"></textarea>
+          <button id="wish-send" type="submit" class="mt-4 w-full border border-emas bg-maroon px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-emas-muda shadow-md transition hover:bg-maroon-muda disabled:opacity-50">Kirim Ucapan</button>
+        </form>
+        <p id="wish-locked" class="mx-auto mt-8 max-w-sm border border-emas/50 bg-white/70 px-5 py-4 text-base text-tinta/80" hidden>Buka undangan dari link pribadi Anda untuk mengirim ucapan.</p>
+        <p class="mt-10 text-xs font-semibold uppercase tracking-[0.3em] text-emas-tua"><span id="wish-count">0</span> Ucapan</p>
+        <div id="wish-list" class="mx-auto mt-4 flex max-h-[30rem] max-w-sm flex-col gap-3 overflow-y-auto pr-1 text-left [scrollbar-color:rgb(201_162_74/0.6)_transparent] [scrollbar-width:thin]" aria-live="polite"></div>
+        <p id="wish-empty" class="mt-6 text-base italic text-tinta/60" hidden>Belum ada ucapan. Jadilah yang pertama.</p>
+      </section>
+
+      <!-- 11. Closing -->
+      <footer class="tumpal-y relative overflow-hidden bg-maroon bg-parang px-8 pb-28 pt-28 text-center text-krem">
+        <svg class="pointer-events-none absolute bottom-10 left-4 h-14 w-14 -scale-y-100 text-emas/80" aria-hidden="true"><use href="#sulur" /></svg>
+        <svg class="pointer-events-none absolute bottom-10 right-4 h-14 w-14 -scale-x-100 -scale-y-100 text-emas/80" aria-hidden="true"><use href="#sulur" /></svg>
+
+        <svg class="gunungan-sway mx-auto h-40 w-[114px] text-emas" data-aos="zoom-in" aria-hidden="true"><use href="#gunungan" /></svg>
+        <p class="mx-auto mt-10 max-w-sm text-base leading-relaxed text-krem/85" data-aos="fade-up" data-aos-delay="150">
+          Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan
+          memberikan doa restu.
+        </p>
+        <p class="mt-5 text-lg italic text-emas-muda" lang="jv" data-aos="fade-up" data-aos-delay="250">Matur sembah nuwun</p>
+        <p class="mt-6 text-base text-krem/85" data-aos="fade-up">Wassalamu’alaikum Wr. Wb.</p>
+        <p class="mt-8 text-base italic" data-aos="fade-up">Kami yang berbahagia,</p>
+        <p class="mt-3 font-display text-3xl font-bold leading-tight text-prada" data-aos="zoom-in" data-aos-delay="150">
+          <span data-bind="couple.wanita.panggilan"></span> <span class="font-serif font-normal italic">&amp;</span> <span data-bind="couple.pria.panggilan"></span>
+        </p>
+        <p class="mt-3 text-base font-semibold tracking-wider text-emas-muda" data-bind="couple.hashtag" data-aos="fade" data-aos-delay="400"></p>
+        <p class="mt-14 text-xs text-krem/50">Undangan digital · by.me</p>
+      </footer>
+    </main>
+
+    <!-- List item templates, filled by script.js -->
+    <template id="tpl-session">
+      <article class="relative overflow-hidden border-2 border-emas bg-krem bg-kawung px-6 py-8 text-tinta shadow-xl shadow-black/30 outline-1 outline-offset-[-8px] outline-emas/50">
+        <svg class="mx-auto h-12 w-9 text-maroon" aria-hidden="true"><use href="#gunungan" /></svg>
+        <h3 class="mt-2 font-display text-2xl font-bold leading-tight text-maroon" data-f="label"></h3>
+        <svg class="mx-auto mt-2 h-4 w-28 text-emas" aria-hidden="true"><use href="#divider" /></svg>
+        <p class="mt-3 text-base font-semibold" data-f="$tanggal"></p>
+        <p class="mt-1 inline-flex items-center gap-1.5 text-base text-tinta/85">
+          <svg class="h-4 w-4 text-emas-tua" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
+          </svg>
+          <span data-f="$jam"></span>
+        </p>
+        <p class="mt-3 text-sm italic text-sogan" data-opt="dress_code">Busana: <span class="font-semibold not-italic text-maroon" data-f="dress_code"></span></p>
+      </article>
+    </template>
+
+    <template id="tpl-wish">
+      <article class="border-l-2 border-emas bg-white/80 px-5 py-4 shadow-sm ring-1 ring-emas/30">
+        <p class="font-display text-sm font-bold text-maroon" data-f="nama"></p>
+        <p class="mt-1 text-base leading-relaxed text-tinta/85" data-f="pesan"></p>
+      </article>
+    </template>
+    <template id="tpl-venue">
+      <article class="relative border border-emas/70 bg-maroon-tua/50 px-6 py-7 text-krem shadow-lg shadow-black/20">
+        <span class="mx-auto grid h-11 w-11 rotate-45 place-items-center border border-emas bg-maroon text-emas-muda" aria-hidden="true">
+          <svg class="h-5 w-5 -rotate-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z" /><circle cx="12" cy="9" r="2.5" />
+          </svg>
+        </span>
+        <h3 class="mt-4 font-display text-xl font-bold leading-snug text-prada" data-f="$judul"></h3>
+        <p class="mt-2 text-base font-semibold text-krem" data-opt="tempat" data-f="tempat"></p>
+        <p class="mx-auto mt-1 max-w-xs text-base leading-relaxed text-krem/75" data-f="alamat"></p>
+        <div class="mt-5 flex flex-wrap justify-center gap-2">
+          <a
+            data-href="maps"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-1.5 border border-emas-muda bg-prada px-5 py-2 text-xs font-bold uppercase tracking-wider text-maroon-tua shadow transition hover:brightness-110"
+          >
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z" /><circle cx="12" cy="9" r="2.5" />
+            </svg>
+            Buka Peta
+          </a>
+          <a
+            data-href="live_stream"
+            target="_blank"
+            rel="noopener"
+            class="inline-block border border-emas px-5 py-2 text-xs font-bold uppercase tracking-wider text-emas-muda"
+            >Live Streaming</a
+          >
+        </div>
+      </article>
+    </template>
+
+    <!-- Gallery lightbox -->
+    <div
+      id="lightbox"
+      hidden
+      class="fixed inset-0 z-50 flex items-center justify-center bg-maroon-tua/95"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Galeri foto"
+    >
+      <img id="lightbox-img" alt="" class="max-h-[85vh] max-w-[92vw] border-2 border-emas object-contain" />
+      <button id="lb-close" type="button" aria-label="Tutup" class="absolute right-4 top-4 p-2 text-3xl leading-none text-emas-muda">&times;</button>
+      <button id="lb-prev" type="button" aria-label="Sebelumnya" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 text-4xl text-emas-muda">&lsaquo;</button>
+      <button id="lb-next" type="button" aria-label="Berikutnya" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 text-4xl text-emas-muda">&rsaquo;</button>
+      <p id="lb-count" class="absolute bottom-5 font-display text-sm text-emas-muda/90"></p>
+    </div>
+
+    <!-- Music -->
+    <audio id="music" loop preload="none"></audio>
+    <button
+      id="music-btn"
+      hidden
+      type="button"
+      aria-label="Putar/jeda musik"
+      class="fixed bottom-5 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full border-2 border-emas bg-maroon text-emas shadow-lg shadow-black/40"
+    >
+      <svg class="h-7 w-7" viewBox="0 0 40 40" aria-hidden="true"><use href="#kawung" /></svg>
+    </button>
+
+    <div
+      id="toast"
+      hidden
+      role="status"
+      class="fixed bottom-20 left-1/2 z-50 -translate-x-1/2 bg-maroon-tua/95 px-5 py-2 text-base text-emas-muda ring-1 ring-emas/60"
+    ></div>
+  </body>
+</html>

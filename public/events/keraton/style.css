@@ -1,0 +1,335 @@
+/* What Tailwind utilities don't cover. Colors mirror the @theme tokens in index.html. */
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.locked {
+  overflow: hidden;
+}
+
+/* ---------- batik patterns ---------- */
+
+/* Parang (diagonal knife-edge bands with hooks and lozenges): faint gold on maroon */
+.bg-parang {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23c9a24a' stroke-opacity='.11' stroke-width='1' stroke-linecap='round'%3E%3Cpath d='M0 24 L24 0 M24 48 L48 24 M0 48 L48 0'/%3E%3Cpath d='M9 27 C9 19 17 17 19 21 C21 25 15 27 15 23'/%3E%3Cpath d='M33 51 C33 43 41 41 43 45 C45 49 39 51 39 47' /%3E%3Cpath d='M33 3 C33 -5 41 -7 43 -3 C45 1 39 3 39 -1' /%3E%3C/g%3E%3Cpath d='M36 30 l3 -3 3 3 -3 3z M12 6 l3 -3 3 3 -3 3z' fill='%23c9a24a' fill-opacity='.18'/%3E%3C/svg%3E");
+  background-size: 48px 48px;
+}
+
+/* Kawung (four palm-fruit seeds around a point): faint maroon on cream */
+.bg-kawung {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill='none' stroke='%235a1a1f' stroke-opacity='.08' stroke-width='1'%3E%3Cellipse cx='20' cy='11' rx='5' ry='8'/%3E%3Cellipse cx='20' cy='29' rx='5' ry='8'/%3E%3Cellipse cx='11' cy='20' rx='8' ry='5'/%3E%3Cellipse cx='29' cy='20' rx='8' ry='5'/%3E%3C/g%3E%3Cg fill='%23c9a24a' fill-opacity='.22'%3E%3Ccircle cx='20' cy='20' r='1.6'/%3E%3Ccircle cx='0' cy='0' r='1.6'/%3E%3Ccircle cx='40' cy='0' r='1.6'/%3E%3Ccircle cx='0' cy='40' r='1.6'/%3E%3Ccircle cx='40' cy='40' r='1.6'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 40px 40px;
+}
+
+/* Tumpal (row of temple triangles) edging. Gold outline along the maroon sections... */
+.tumpal-y {
+  position: relative;
+}
+.tumpal-y::before,
+.tumpal-y::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 16px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='16' viewBox='0 0 24 16'%3E%3Cg fill='none' stroke='%23c9a24a' stroke-width='1.1' stroke-linejoin='round'%3E%3Cpath d='M0 15.5 H24 M0 1 H24' stroke-opacity='.7'/%3E%3Cpath d='M0 15 L12 3 L24 15'/%3E%3Cpath d='M6 15 L12 9 L18 15' stroke-opacity='.55'/%3E%3C/g%3E%3Ccircle cx='12' cy='13' r='1.2' fill='%23c9a24a'/%3E%3C/svg%3E")
+    left center / 24px 16px repeat-x;
+  pointer-events: none;
+}
+.tumpal-y::before {
+  top: 14px;
+}
+.tumpal-y::after {
+  bottom: 14px;
+  transform: scaleY(-1);
+}
+/* ...and solid maroon teeth hanging from the edges of the cream hero */
+.tumpal-top,
+.tumpal-bottom {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M0 0 H24 V4 L12 22 L0 4 Z' fill='%235a1a1f'/%3E%3Cpath d='M4 4 L12 16 L20 4' fill='none' stroke='%23c9a24a' stroke-width='1'/%3E%3Ccircle cx='12' cy='8' r='1.3' fill='%23c9a24a'/%3E%3C/svg%3E")
+    left top / 24px 24px repeat-x;
+}
+.tumpal-bottom {
+  transform: scaleY(-1);
+}
+
+/* ---------- gold leaf (prada) ---------- */
+
+.text-prada {
+  background: linear-gradient(180deg, #f6e3a4 0%, #e8cf8a 30%, #c9a24a 62%, #9c7428 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.bg-prada {
+  background: linear-gradient(135deg, #f6e3a4 0%, #e8cf8a 30%, #c9a24a 68%, #a27a2c 100%);
+}
+
+/* ---------- photo frames ---------- */
+
+/* Gunungan (kayon) silhouette: a gold band, then the photo cut to the same shape */
+.gunungan-frame {
+  clip-path: url(#clip-gunungan);
+  background: linear-gradient(180deg, #f3dc98, #c9a24a 55%, #8f6a24);
+  padding: 5px;
+}
+.gunungan-frame > img {
+  display: block;
+  clip-path: url(#clip-gunungan);
+}
+
+/* Regol (stepped joglo roofline) for the couple portraits */
+.regol-frame {
+  --regol: polygon(0 14%, 12% 14%, 12% 8%, 26% 8%, 26% 3%, 38% 3%, 38% 0, 62% 0, 62% 3%, 74% 3%, 74% 8%, 88% 8%, 88% 14%, 100% 14%, 100% 100%, 0 100%);
+  clip-path: var(--regol);
+  background: linear-gradient(180deg, #f3dc98, #c9a24a 55%, #8f6a24);
+  padding: 4px;
+}
+.regol-frame > img {
+  display: block;
+  clip-path: var(--regol);
+}
+
+/* Countdown tiles: dark maroon with a gold lozenge cresting the top */
+.cd-box {
+  position: relative;
+  width: 70px;
+  padding: 0.85rem 0 0.7rem;
+  border: 1px solid #c9a24a;
+  background: rgb(61 15 19 / 0.6);
+  box-shadow: 0 6px 14px rgb(0 0 0 / 0.25);
+}
+.cd-box::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -5px;
+  width: 9px;
+  height: 9px;
+  margin-left: -4.5px;
+  background: #c9a24a;
+  transform: rotate(45deg);
+}
+
+/* ---------- loader ---------- */
+
+/* Loader covers the greeting until data and the cover photo are ready */
+#loader {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  background-color: #5a1a1f;
+  background-image: radial-gradient(ellipse at 50% 45%, rgb(201 162 74 / 0.18), transparent 60%);
+  text-align: center;
+  transition:
+    opacity 0.6s ease,
+    visibility 0.6s;
+}
+#loader.done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-gunungan {
+  width: 72px;
+  height: 100px;
+  color: #c9a24a;
+  animation: breathe 2.4s ease-in-out infinite;
+}
+@keyframes breathe {
+  50% {
+    transform: scale(1.06);
+    opacity: 0.75;
+  }
+}
+.loader-title {
+  margin: 1rem 0 0;
+  font-family: "Cinzel Decorative", "Cinzel", Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  color: #e8cf8a;
+}
+.loader-text {
+  margin: 0.35rem 0 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 15px;
+  font-style: italic;
+  letter-spacing: 0.08em;
+  color: #f6efe0;
+  opacity: 0.75;
+}
+
+/* ---------- cover ---------- */
+
+/* Hold the cover's entrance until the loader fades, so it isn't spent unseen */
+body.loading .cover-in,
+body.loading .gunungan-sway {
+  animation-play-state: paused;
+}
+
+/* Greeting modal lifts away like a curtain when opened */
+#greeting {
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s cubic-bezier(0.6, 0, 0.3, 1);
+}
+#greeting.closing {
+  opacity: 0;
+  transform: translateY(-6%);
+  pointer-events: none;
+}
+
+/* Greeting content stages in on load; --d sets each element's delay */
+.cover-in {
+  animation: cover-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0s) both;
+}
+.cover-zoom {
+  animation-name: cover-zoom;
+}
+@keyframes cover-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+@keyframes cover-zoom {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+}
+
+/* ---------- ornaments ---------- */
+
+/* The closing gunungan rocks gently from its base, as the dalang plants it */
+.gunungan-sway {
+  transform-origin: 50% 100%;
+  animation: sway 4.5s ease-in-out infinite alternate;
+}
+@keyframes sway {
+  from {
+    transform: rotate(-3deg);
+  }
+  to {
+    transform: rotate(3deg);
+  }
+}
+
+/* Kawung seal under the hero photo turns slowly */
+.seal-turn svg {
+  animation: spin 24s linear infinite;
+}
+
+/* The wedding day's lozenge on the calendar strip */
+.lozenge-glow {
+  animation: lozenge-glow 2.6s ease-in-out infinite;
+}
+@keyframes lozenge-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(201 162 74 / 0.5);
+  }
+  50% {
+    box-shadow: 0 0 16px 3px rgb(201 162 74 / 0.45);
+  }
+}
+
+/* Light sweep across gold buttons */
+.shine {
+  position: relative;
+  overflow: hidden;
+}
+.shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.5) 50%, transparent 70%);
+  transform: translateX(-120%);
+  animation: shine 4s ease-in-out 1.5s infinite;
+  pointer-events: none;
+}
+@keyframes shine {
+  0% {
+    transform: translateX(-120%);
+  }
+  35%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+/* ---------- custom AOS animations (AOS sets .aos-animate once an element scrolls in) ---------- */
+
+/* AOS slides fades 100px by default; shorter feels gentler on a phone */
+[data-aos="fade-up"] {
+  transform: translate3d(0, 36px, 0);
+}
+[data-aos="fade-down"] {
+  transform: translate3d(0, -36px, 0);
+}
+[data-aos="fade-right"] {
+  transform: translate3d(-40px, 0, 0);
+}
+[data-aos="fade-left"] {
+  transform: translate3d(40px, 0, 0);
+}
+
+/* Kawung divider opens from the centre */
+[data-aos="unfold"] {
+  clip-path: inset(0 50% 0 50%);
+  transition-property: clip-path;
+}
+[data-aos="unfold"].aos-animate {
+  clip-path: inset(0);
+}
+
+/* Gift card rises into place */
+[data-aos="rise"] {
+  opacity: 0;
+  transform: translateY(50px) scale(0.96);
+  transition-property: opacity, transform;
+}
+[data-aos="rise"].aos-animate {
+  opacity: 1;
+  transform: none;
+}
+
+#music-btn.playing svg {
+  animation: spin 6s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  #greeting,
+  #loader {
+    transition: none;
+  }
+  .loader-gunungan,
+  .cover-in,
+  .gunungan-sway,
+  .seal-turn svg,
+  .lozenge-glow,
+  .shine::after,
+  #music-btn.playing svg {
+    animation: none;
+  }
+}

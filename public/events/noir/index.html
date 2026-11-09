@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Wedding of Alya & Reza</title>
+    <link rel="icon" type="image/png" href="assets/favicon/favicon-96x96.png?v=3" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.svg?v=3" />
+    <link rel="shortcut icon" href="assets/favicon/favicon.ico?v=3" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png?v=3" />
+    <link rel="manifest" href="assets/favicon/site.webmanifest?v=3" />
+    <meta name="description" content="Undangan pernikahan digital" />
+    <meta name="theme-color" content="#0b0b0b" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;500;600&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400;1,6..96,500;1,6..96,700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Files in public/ skip Vite, so Tailwind runs in the browser. -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-ink: #0b0b0b;
+        --color-ink-2: #171717;
+        --color-paper: #f3f1ec;
+        --color-accent: #d4c5a9;
+        --font-serif: "Bodoni Moda", ui-serif, Georgia, serif;
+        --font-label: "Archivo Narrow", ui-sans-serif, system-ui, sans-serif;
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Deferred scripts run in order, so AOS is ready before script.js. -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
+    <script src="../config.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+
+  <!-- When copying this template for a new event, change data-event (01_Event.ID; admin URL /admin/events/{ID}) and data-slug (fallback). -->
+  <body data-event="" data-slug="noir" class="locked loading bg-ink font-serif text-paper lining-nums antialiased selection:bg-accent selection:text-ink">
+    <!-- Barcode for the cover, drawn once and reused with <use> -->
+    <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden">
+      <symbol id="i-barcode" viewBox="0 0 84 40" fill="currentColor">
+        <rect x="0" width="2" height="32" /><rect x="3" width="1" height="32" /><rect x="6" width="3" height="32" />
+        <rect x="10" width="1" height="32" /><rect x="13" width="2" height="32" /><rect x="16" width="1" height="32" />
+        <rect x="18" width="3" height="32" /><rect x="23" width="1" height="32" /><rect x="25" width="2" height="32" />
+        <rect x="29" width="1" height="32" /><rect x="31" width="3" height="32" /><rect x="35" width="1" height="32" />
+        <rect x="38" width="2" height="32" /><rect x="41" width="1" height="32" /><rect x="43" width="1" height="32" />
+        <rect x="46" width="3" height="32" /><rect x="50" width="1" height="32" /><rect x="53" width="2" height="32" />
+        <rect x="56" width="1" height="32" /><rect x="59" width="3" height="32" /><rect x="63" width="1" height="32" />
+        <rect x="65" width="2" height="32" /><rect x="69" width="1" height="32" /><rect x="71" width="3" height="32" />
+        <rect x="75" width="1" height="32" /><rect x="78" width="2" height="32" /><rect x="82" width="2" height="32" />
+        <text x="42" y="39.5" text-anchor="middle" font-family="DM Mono, monospace" font-size="6" letter-spacing="1.2">9 772027 051507</text>
+      </symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square">
+        <path d="M3 12h17M14 6l6 6-6 6" />
+      </symbol>
+    </svg>
+
+    <!-- 0. Loader: plain CSS (style.css) so it paints before Tailwind compiles; hidden by script.js once data is ready -->
+    <div id="loader" role="status" aria-live="polite">
+      <p class="loader-kicker">Vol. 01 — Edisi Spesial</p>
+      <p class="loader-title">The Wedding<br /><i>Issue</i></p>
+      <span class="loader-bar" aria-hidden="true"></span>
+      <p class="loader-text">Memuat undangan</p>
+    </div>
+
+    <!-- 1. Greeting: a magazine cover -->
+    <div
+      id="greeting"
+      class="fixed inset-0 z-50 overflow-hidden bg-ink"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="greeting-title"
+    >
+      <img
+        src="assets/cover.webp"
+        data-src="media.cover"
+        alt="Foto mempelai"
+        class="cover-photo absolute inset-0 h-full w-full object-cover object-[50%_35%] grayscale contrast-[1.1]"
+      />
+      <div class="absolute inset-0 bg-linear-to-b from-ink/80 via-ink/5 via-45% to-ink"></div>
+      <div class="grain pointer-events-none absolute inset-0"></div>
+
+      <div class="relative mx-auto flex h-full max-w-md flex-col px-6 pb-7 pt-6 sm:max-w-lg">
+        <!-- Masthead -->
+        <div class="cover-in flex items-center justify-between font-label text-[10px] uppercase tracking-[0.2em] text-paper/75" style="--d: 0.2s">
+          <span>Vol. 01</span><span>Edisi Spesial</span><span data-bind="$tanggalTitik"></span>
+        </div>
+        <span class="cover-rule mt-3 block h-px w-full bg-paper/60"></span>
+        <p class="cover-in mt-3 text-center text-[clamp(3rem,16vw,4.75rem)] font-black uppercase leading-[0.84] tracking-[-0.02em] text-paper" style="--d: 0.35s">
+          The<br />Wedding
+        </p>
+        <span class="cover-rule mt-3 block h-px w-full bg-paper/60" style="--d: 0.2s"></span>
+        <p class="cover-in mt-2.5 text-center font-label text-[10px] uppercase tracking-[0.28em] text-accent" style="--d: 0.5s">Dua nama · Satu janji · Satu cerita</p>
+
+        <div class="min-h-6 flex-1"></div>
+
+        <!-- Cover line -->
+        <div class="cover-in" style="--d: 0.8s">
+          <p class="font-label text-[10px] uppercase tracking-[0.3em] text-accent">Cerita Utama —</p>
+          <h1 id="greeting-title" class="mt-2 text-[clamp(2.75rem,14vw,4rem)] italic leading-[0.95] text-paper">
+            <span data-bind="couple.wanita.panggilan"></span><br /><span class="not-italic text-accent">&amp;</span>
+            <span data-bind="couple.pria.panggilan"></span>
+          </h1>
+        </div>
+
+        <div class="cover-in mt-6 flex items-end justify-between gap-5 border-t border-paper/30 pt-4" style="--d: 1.05s">
+          <div class="min-w-0">
+            <p class="font-label text-[9px] uppercase tracking-[0.22em] text-paper/60">Kepada Yth. Bapak/Ibu/Saudara/i</p>
+            <p id="guest-name" class="mt-1 truncate text-2xl italic text-paper">Tamu Undangan</p>
+          </div>
+          <svg class="h-9 w-[4.5rem] shrink-0 text-paper/85" aria-hidden="true"><use href="#i-barcode" /></svg>
+        </div>
+
+        <button
+          id="open-btn"
+          type="button"
+          disabled
+          style="--d: 1.25s"
+          class="cover-in mt-5 flex w-full shrink-0 items-center justify-between bg-paper px-5 py-4 font-label text-[11px] uppercase tracking-[0.25em] text-ink transition hover:bg-accent focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-paper disabled:opacity-50"
+        >
+          <span>Buka Undangan</span>
+          <svg class="h-4 w-4" aria-hidden="true"><use href="#i-arrow" /></svg>
+        </button>
+        <p id="load-error" hidden class="mt-4 font-label text-xs text-paper/80">
+          Undangan gagal dimuat.
+          <button type="button" class="text-accent underline underline-offset-4" onclick="location.reload()">Muat ulang</button>
+        </p>
+      </div>
+    </div>
+
+    <!-- 2. Hero: first section on phones, a fixed left-hand spread from 1024px -->
+    <header id="hero" class="relative h-svh min-h-[640px] overflow-hidden bg-ink lg:fixed lg:inset-y-0 lg:left-0 lg:z-0 lg:h-auto lg:min-h-0 lg:w-[58%] lg:border-r lg:border-paper/15">
+      <div class="absolute inset-0" aria-hidden="true">
+        <img class="slide absolute inset-0 h-full w-full object-cover object-[50%_25%] grayscale contrast-[1.1]" src="assets/hero-1.webp" alt="" fetchpriority="high" />
+        <img class="slide absolute inset-0 h-full w-full object-cover object-[50%_25%] grayscale contrast-[1.1]" src="assets/hero-2.webp" alt="" />
+        <img class="slide absolute inset-0 h-full w-full object-cover object-[50%_25%] grayscale contrast-[1.1]" src="assets/hero-3.webp" alt="" />
+      </div>
+      <div class="absolute inset-0 bg-linear-to-t from-ink from-10% via-ink/45 via-55% to-ink/40"></div>
+      <div class="grain pointer-events-none absolute inset-0"></div>
+
+      <div class="hero-in absolute inset-x-6 top-6 flex items-center justify-between border-b border-paper/40 pb-3 font-label text-[10px] uppercase tracking-[0.22em] text-paper/80 lg:inset-x-10 lg:top-10" style="--d: 0.3s">
+        <span>Vol. 01</span><span>The Wedding Issue</span><span data-bind="$bulan"></span>
+      </div>
+      <p class="hero-in absolute right-2 top-1/2 -translate-y-1/2 font-label text-[9px] uppercase tracking-[0.5em] text-paper/45 [writing-mode:vertical-rl] lg:right-4" style="--d: 0.6s" aria-hidden="true">
+        Sebuah undangan pernikahan
+      </p>
+
+      <!-- From 1024px the text clears the floating music button in the corner -->
+      <div class="absolute inset-x-0 bottom-0 px-6 pb-28 lg:px-10 lg:pb-24">
+        <p class="hero-in font-label text-[10px] uppercase tracking-[0.3em] text-accent" style="--d: 0.5s">Dengan restu keluarga, kami menikah</p>
+        <h2 class="mt-4 italic leading-[1] text-paper">
+          <span class="hero-in block text-[clamp(4rem,23vw,6rem)] lg:text-[8.5rem]" style="--d: 0.65s" data-bind="couple.wanita.panggilan"></span>
+          <span class="hero-in block pl-[12%] text-[clamp(4rem,23vw,6rem)] lg:text-[8.5rem]" style="--d: 0.85s"
+            ><span class="not-italic text-accent">&amp;</span> <span data-bind="couple.pria.panggilan"></span
+          ></span>
+        </h2>
+        <div class="hero-in mt-8 flex items-end justify-between gap-4 border-t border-paper/40 pt-4" style="--d: 1.1s">
+          <p class="text-4xl text-paper lg:text-5xl" data-bind="$tanggalTitik"></p>
+          <p class="pb-1 text-right font-label text-[10px] uppercase tracking-[0.15em] text-paper/60" data-bind="couple.hashtag"></p>
+        </div>
+      </div>
+
+      <div class="hero-in absolute inset-x-0 bottom-8 flex flex-col items-center gap-2 lg:hidden" style="--d: 1.6s" aria-hidden="true">
+        <span class="font-label text-[9px] uppercase tracking-[0.4em] text-paper/50">Gulir</span>
+        <span class="scroll-cue block h-7 w-px bg-paper/50"></span>
+      </div>
+    </header>
+
+    <main class="relative overflow-hidden bg-ink lg:ml-[58%]">
+      <!-- 3. Opening + music -->
+      <section id="intro" class="relative px-6 py-20 lg:flex lg:min-h-svh lg:flex-col lg:justify-center lg:px-12">
+        <span class="block h-px bg-paper/30" data-aos="rule"></span>
+        <div class="mt-3 flex items-center justify-between font-label text-[10px] uppercase tracking-[0.25em] text-paper/50" data-aos="fade">
+          <span>N° 01</span><span>Pembuka</span>
+        </div>
+        <div class="mt-8 flex items-end gap-5">
+          <span class="num-outline text-[7rem] font-black leading-[0.75] text-paper/80" data-aos="fade-up">01</span>
+          <h2 class="text-[2.6rem] italic leading-[0.95] text-paper" data-aos="fade-up" data-aos-delay="100">The<br />Invitation</h2>
+        </div>
+
+        <p class="dropcap mt-10 text-xl leading-relaxed text-paper/90" data-aos="fade-up" data-aos-delay="150">
+          Dengan penuh sukacita, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dan berbagi kebahagiaan di hari pernikahan kami.
+        </p>
+        <p class="mt-6 font-label text-[10px] uppercase tracking-[0.25em] text-paper/50" data-aos="fade-up" data-aos-delay="200">
+          — <span data-bind="couple.wanita.panggilan"></span> &amp; <span data-bind="couple.pria.panggilan"></span>, <span data-bind="$tanggalTitik"></span>
+        </p>
+
+        <!-- Music player -->
+        <div id="player" data-aos="fade-up" data-aos-delay="300" data-aos-offset="0" class="mt-12 flex items-center gap-4 border-y border-paper/25 py-4">
+          <img src="assets/cover.webp" alt="" class="h-16 w-16 shrink-0 object-cover grayscale" />
+          <div class="min-w-0 flex-1">
+            <p class="font-label text-[9px] uppercase tracking-[0.3em] text-accent">Sedang Diputar</p>
+            <p class="mt-1 truncate text-lg italic text-paper" data-bind="media.judul_musik"></p>
+            <div class="mt-2 h-[2px] overflow-hidden bg-paper/15"><div id="progress" class="h-full w-0 bg-accent"></div></div>
+            <div class="mt-1.5 flex justify-between font-label text-[10px] text-paper/50"><span id="t-cur"><b class="font-normal">0</b>:<b class="font-normal">00</b></span><span id="t-dur"><b class="font-normal">0</b>:<b class="font-normal">00</b></span></div>
+          </div>
+          <button
+            id="player-toggle"
+            type="button"
+            aria-label="Putar musik"
+            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-paper text-ink transition hover:bg-accent"
+          >
+            <svg data-icon="play" class="ml-0.5 h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z" /></svg>
+            <svg data-icon="pause" hidden class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z" /></svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- 4. Pull quote -->
+      <section id="quote" class="relative bg-paper px-6 py-20 text-ink lg:px-12">
+        <span class="block h-px bg-ink/30" data-aos="rule"></span>
+        <div class="mt-3 flex items-center justify-between font-label text-[10px] uppercase tracking-[0.25em] text-ink/50" data-aos="fade">
+          <span>N° 02</span><span>Kutipan</span>
+        </div>
+        <p class="mt-8 h-16 text-[9rem] font-black leading-[0.8] text-ink" data-aos="fade-up" aria-hidden="true">“</p>
+        <blockquote class="mt-4 text-[2.1rem] italic leading-[1.12]" data-aos="fade-up" data-aos-delay="100">
+          Whatever our souls are made of, his and mine are the same.
+        </blockquote>
+        <p class="mt-7 border-l-2 border-ink pl-4 text-base leading-relaxed text-ink/70" data-aos="fade-up" data-aos-delay="200">
+          Apa pun yang membentuk jiwa kami, jiwanya dan jiwaku adalah sama.
+        </p>
+        <p class="mt-6 font-label text-[10px] uppercase tracking-[0.25em] text-ink/55" data-aos="fade-up" data-aos-delay="300">— Emily Brontë, Wuthering Heights</p>
+      </section>
+
+      <!-- 5. Couple -->
+      <section id="couple" class="relative px-6 py-20 lg:px-12">
+        <span class="block h-px bg-paper/30" data-aos="rule"></span>
+        <div class="mt-3 flex items-center justify-between font-label text-[10px] uppercase tracking-[0.25em] text-paper/50" data-aos="fade">
+          <span>N° 03</span><span>Mempelai</span>
+        </div>
+        <div class="mt-8 flex items-end gap-5">
+          <span class="num-outline text-[7rem] font-black leading-[0.75] text-paper/80" data-aos="fade-up">03</span>
+          <h2 class="text-[2.6rem] italic leading-[0.95] text-paper" data-aos="fade-up" data-aos-delay="100">The<br />Couple</h2>
+        </div>
+
+        <!-- Bride -->
+        <article class="mt-14 w-[88%]">
+          <figure data-aos="fade-right">
+            <img src="assets/wanita.webp" alt="Mempelai wanita" loading="lazy" class="aspect-[4/5] w-full object-cover object-top grayscale contrast-[1.05]" />
+            <figcaption class="mt-2.5 flex justify-between font-label text-[9px] uppercase tracking-[0.25em] text-paper/45"><span>Fig. 01</span><span>Mempelai Wanita</span></figcaption>
+          </figure>
+          <h3 class="mt-6 text-[2.1rem] italic leading-[1.05] text-paper" data-aos="fade-up" data-bind="couple.wanita.lengkap"></h3>
+          <p class="mt-4 border-l border-accent pl-4 text-sm leading-relaxed text-paper/65" data-aos="fade-up" data-aos-delay="100" data-bind="$ortuWanita"></p>
+        </article>
+
+        <p class="my-12 text-center text-[7rem] italic leading-[0.7] text-accent" data-aos="zoom-in" aria-hidden="true">&amp;</p>
+
+        <!-- Groom -->
+        <article class="ml-auto w-[88%] text-right">
+          <figure data-aos="fade-left">
+            <img src="assets/pria.webp" alt="Mempelai pria" loading="lazy" class="aspect-[4/5] w-full object-cover object-top grayscale contrast-[1.05]" />
+            <figcaption class="mt-2.5 flex justify-between font-label text-[9px] uppercase tracking-[0.25em] text-paper/45"><span>Mempelai Pria</span><span>Fig. 02</span></figcaption>
+          </figure>
+          <h3 class="mt-6 text-[2.1rem] italic leading-[1.05] text-paper" data-aos="fade-up" data-bind="couple.pria.lengkap"></h3>
+          <p class="mt-4 border-r border-accent pr-4 text-sm leading-relaxed text-paper/65" data-aos="fade-up" data-aos-delay="100" data-bind="$ortuPria"></p>
+        </article>
+      </section>
+
+      <!-- 6. Save the date + countdown -->
+      <section id="countdown" class="relative bg-paper px-6 py-20 text-ink lg:px-12">
+        <span class="block h-px bg-ink/30" data-aos="rule"></span>
+        <div class="mt-3 flex items-center justify-between font-label text-[10px] uppercase tracking-[0.25em] text-ink/50" data-aos="fade">
+          <span>N° 04</span><span>Hari Bahagia</span>
+        </div>
+        <div class="mt-8 flex items-end gap-5">
+          <span class="num-outline text-[7rem] font-black leading-[0.75] text-ink/80" data-aos="fade-up">04</span>
+          <h2 class="text-[2.6rem] italic leading-[0.95]" data-aos="fade-up" data-aos-delay="100">Save the<br />Date</h2>
+        </div>
+
+        <div class="mt-12 border-y border-ink" data-aos="fade-up" data-aos-delay="100">
+          <div class="flex items-center justify-between border-b border-ink/15 py-3 font-label text-[10px] uppercase tracking-[0.25em]">
+            <span data-bind="$bulan"></span><span class="text-ink/50" data-bind="$tanggalTitik"></span>
+          </div>
+          <div id="cal-strip" class="grid grid-cols-3 pt-4 text-center">
+            <!-- filled by script.js -->
+          </div>
+        </div>
+
+        <p class="mt-14 font-label text-[10px] uppercase tracking-[0.3em] text-ink/55" data-aos="fade-up">Menuju hari bahagia</p>
+        <div id="cd" class="mt-4 grid grid-cols-4 border-y border-ink text-center" data-aos="fade-up">
+          <div class="py-5"><b class="block text-5xl font-normal leading-none tabular-nums lining-nums" data-cd="d">00</b><span class="mt-2 block font-label text-[9px] uppercase tracking-[0.25em] text-ink/55">Hari</span></div>
+          <div class="border-l border-ink/15 py-5"><b class="block text-5xl font-normal leading-none tabular-nums lining-nums" data-cd="h">00</b><span class="mt-2 block font-label text-[9px] uppercase tracking-[0.25em] text-ink/55">Jam</span></div>
+          <div class="border-l border-ink/15 py-5"><b class="block text-5xl font-normal leading-none tabular-nums lining-nums" data-cd="m">00</b><span class="mt-2 block font-label text-[9px] uppercase tracking-[0.25em] text-ink/55">Menit</span></div>
+          <div class="border-l border-ink/15 py-5"><b class="block text-5xl font-normal italic leading-none tabular-nums lining-nums" data-cd="s">00</b><span class="mt-2 block font-label text-[9px] uppercase tracking-[0.25em] text-ink/55">Detik</span></div>
+        </div>
+        <p id="cd-done" hidden class="mt-6 text-2xl italic leading-snug">Hari bahagia telah tiba. Terima kasih atas doa dan kehadiran Anda.</p>
+        <div class="mt-10" data-aos="fade-up">
+          <a
+            id="cal-link"
+            target="_blank"
+            rel="noopener"
+            class="flex w-full items-center justify-between bg-ink px-5 py-4 font-label text-[11px] uppercase tracking-[0.25em] text-paper transition hover:bg-ink-2"
+          >
+            <span>Simpan ke Kalender</span>
+            <svg class="h-4 w-4" aria-hidden="true"><use href="#i-arrow" /></svg>
+          </a>
+        </div>
+      </section>
+
+      <!-- 7. Our story -->
+      <section id="story" class="relative px-6 py-20 lg:px-12">
+        <span class="block h-px bg-paper/30" data-aos="rule"></span>
+        <div class="mt-3 flex items-center justify-between font-label text-[10px] uppercase tracking-[0.25em] text-paper/50" data-aos="fade">
+          <span>N° 05</span><span>Kisah Kami</span>
+        </div>
+        <div class="mt-8 flex items-end gap-5">
+          <span class="num-outline text-[7rem] font-black leading-[0.75] text-paper/80" data-aos="fade-up">05</span>
+          <h2 class="text-[2.6rem] italic leading-[0.95] text-paper" data-aos="fade-up" data-aos-delay="100">Our<br />Story</h2>
+        </div>
+
+        <figure class="mt-12" data-aos="fade-up">
+          <img src="assets/story.webp" alt="" loading="lazy" class="aspect-[3/2] w-full object-cover grayscale contrast-[1.1]" />
+          <figcaption class="mt-2.5 flex justify-between font-label text-[9px] uppercase tracking-[0.25em] text-paper/45"><span>Fig. 03</span><span>Golden Gate, dalam kabut</span></figcaption>
+        </figure>
+
+        <ol class="mt-12 border-t border-paper/25">
+          <li class="grid grid-cols-[4.75rem_1fr] gap-4 border-b border-paper/15 py-7" data-aos="fade-up">
+            <span class="num-outline text-6xl font-black leading-[0.8] text-paper/70">01</span>
+            <div>
+              <p class="font-label text-[9px] uppercase tracking-[0.25em] text-accent">Jakarta</p>
+              <h3 class="mt-2 text-2xl italic text-paper">Kamar Gelap</h3>
+              <p class="mt-2 text-[0.95rem] leading-relaxed text-paper/65">Kami bertemu di kelas cetak foto analog. Di bawah lampu merah kamar gelap, satu gambar muncul perlahan di nampan, dan begitu pula percakapan kami.</p>
+            </div>
+          </li>
+          <li class="grid grid-cols-[4.75rem_1fr] gap-4 border-b border-paper/15 py-7" data-aos="fade-up">
+            <span class="num-outline text-6xl font-black leading-[0.8] text-paper/70">02</span>
+            <div>
+              <p class="font-label text-[9px] uppercase tracking-[0.25em] text-accent">Dua Kota</p>
+              <h3 class="mt-2 text-2xl italic text-paper">Negatif &amp; Positif</h3>
+              <p class="mt-2 text-[0.95rem] leading-relaxed text-paper/65">Pekerjaan sempat memisahkan kami di dua kota. Kami saling mengirim foto setiap hari, dan belajar bahwa jarak hanyalah ruang untuk rindu.</p>
+            </div>
+          </li>
+          <li class="grid grid-cols-[4.75rem_1fr] gap-4 border-b border-paper/15 py-7" data-aos="fade-up">
+            <span class="num-outline text-6xl font-black leading-[0.8] text-paper/70">03</span>
+            <div>
+              <p class="font-label text-[9px] uppercase tracking-[0.25em] text-accent">San Francisco</p>
+              <h3 class="mt-2 text-2xl italic text-paper">Satu Pertanyaan</h3>
+              <p class="mt-2 text-[0.95rem] leading-relaxed text-paper/65">Di tepi teluk yang berkabut, sebuah pertanyaan sederhana akhirnya terucap. Jawabannya lebih sederhana lagi: ya.</p>
+            </div>
+          </li>
+          <li class="grid grid-cols-[4.75rem_1fr] gap-4 border-b border-paper/15 py-7" data-aos="fade-up">
+            <span class="text-6xl font-black leading-[0.8] text-accent">04</span>
+            <div>
+              <p class="font-label text-[9px] uppercase tracking-[0.25em] text-accent">Hari Ini</p>
+              <h3 class="mt-2 text-2xl italic text-paper">Babak Baru</h3>
+              <p class="mt-2 text-[0.95rem] leading-relaxed text-paper/65">Kini kami siap mencetak babak baru bersama, dan kami ingin Anda ada di dalam bingkainya.</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- 8. Events: sessions & venues -->
+      <section id="location" class="relative bg-paper px-6 py-20 text-ink lg:px-12">
+        <span class="block h-px bg-ink/30" data-aos="rule"></span>
+        <div class="mt-3 flex items-center justify-between font-label text-[10px] uppercase tracking-[0.25em] text-ink/50" data-aos="fade">
+          <span>N° 06</span><span>Rangkaian Acara</span>
+        </div>
+        <div class="mt-8 flex items-end gap-5">
+          <span class="num-outline text-[7rem] font-black leading-[0.75] text-ink/80" data-aos="fade-up">06</span>
+          <h2 class="text-[2.6rem] italic leading-[0.95]" data-aos="fade-up" data-aos-delay="100">The<br />Program</h2>
+        </div>
+        <div id="session-list" class="mt-12 border-t border-ink"></div>
+
+        <div class="mt-16 flex items-center gap-4 font-label text-[10px] uppercase tracking-[0.3em] text-ink/55" data-aos="fade-up">
+          <span>Venue</span><span class="h-px flex-1 bg-ink/25"></span>
+        </div>
+        <div id="venue-list" class="mt-8 space-y-12"></div>
+      </section>
+
+      <!-- 9. Gallery -->
+      <section id="gallery" class="relative px-6 py-20 lg:px-12">
+        <span class="block h-px bg-paper/30" data-aos="rule"></span>
+        <div class="mt-3 flex items-center justify-between font-label text-[10px] uppercase tracking-[0.25em] text-paper/50" data-aos="fade">
+          <span>N° 07</span><span>Galeri</span>
+        </div>
+        <div class="mt-8 flex items-end gap-5">
+          <span class="num-outline text-[7rem] font-black leading-[0.75] text-paper/80" data-aos="fade-up">07</span>
+          <h2 class="text-[2.6rem] italic leading-[0.95] text-paper" data-aos="fade-up" data-aos-delay="100">Contact<br />Sheet</h2>
+        </div>
+        <div id="gallery-grid" class="mt-12 grid grid-cols-2 gap-1.5"></div>
+        <p class="mt-4 text-right font-label text-[9px] uppercase tracking-[0.25em] text-paper/40">Ketuk foto untuk memperbesar</p>
+      </section>
+
+      <!-- 10. Gift -->
+      <section id="gift" class="relative bg-paper px-6 py-20 text-ink lg:px-12">
+        <span class="block h-px bg-ink/30" data-aos="rule"></span>
+        <div class="mt-3 flex items-center justify-between font-label text-[10px] uppercase tracking-[0.25em] text-ink/50" data-aos="fade">
+          <span>N° 08</span><span>Tanda Kasih</span>
+        </div>
+        <div class="mt-8 flex items-end gap-5">
+          <span class="num-outline text-[7rem] font-black leading-[0.75] text-ink/80" data-aos="fade-up">08</span>
+          <h2 class="text-[2.6rem] italic leading-[0.95]" data-aos="fade-up" data-aos-delay="100">Wedding<br />Gift</h2>
+        </div>
+        <p class="mt-8 text-base leading-relaxed text-ink/70" data-aos="fade-up" data-aos-delay="150">
+          Kehadiran dan doa restu Anda adalah hadiah terindah bagi kami. Namun bila Anda ingin memberikan tanda kasih, kami menerimanya dengan penuh rasa syukur.
+        </p>
+
+        <div id="envelope" class="mt-10" data-aos="fade-up" data-aos-delay="150">
+          <div class="relative flex aspect-[1.586/1] flex-col justify-between overflow-hidden bg-ink p-6 text-paper shadow-[0_30px_50px_-28px_rgba(0,0,0,0.7)]">
+            <div class="grain pointer-events-none absolute inset-0"></div>
+            <div class="relative flex items-start justify-between">
+              <p class="font-label text-[9px] uppercase leading-relaxed tracking-[0.3em] text-paper/50">Wedding Gift<br />N° 08</p>
+              <p class="text-2xl italic text-accent" data-bind="gift.bank"></p>
+            </div>
+            <p class="relative font-label text-[1.35rem] tracking-[0.14em] text-paper" data-bind="gift.norek"></p>
+            <div class="relative flex items-end justify-between gap-4">
+              <div class="min-w-0">
+                <p class="font-label text-[8px] uppercase tracking-[0.3em] text-paper/45">Atas Nama</p>
+                <p class="mt-1 truncate text-lg italic text-paper" data-bind="gift.atas_nama"></p>
+              </div>
+              <span class="text-5xl italic leading-[0.7] text-accent" aria-hidden="true">&amp;</span>
+            </div>
+          </div>
+          <button
+            id="copy-btn"
+            type="button"
+            class="mt-5 flex w-full items-center justify-between border border-ink px-5 py-4 font-label text-[11px] uppercase tracking-[0.25em] text-ink transition hover:bg-ink hover:text-paper"
+          >
+            <span>Salin Nomor Rekening</span>
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+              <rect x="8" y="8" width="13" height="13" /><path d="M16 8V3H3v13h5" />
+            </svg>
+          </button>
+        </div>
+        <figure id="qris-wrap" class="mt-12 text-center">
+          <img id="qris" alt="QRIS" data-aos="zoom-in" class="mx-auto w-52 border border-ink bg-white p-3" loading="lazy" />
+          <figcaption class="mt-3 font-label text-[10px] uppercase tracking-[0.2em] text-ink/55">Pindai QRIS untuk mengirim tanda kasih</figcaption>
+        </figure>
+      </section>
+
+      <!-- 11. Wishes -->
+      <section id="wishes" class="relative px-6 py-20 lg:px-12">
+        <span class="block h-px bg-paper/30" data-aos="rule"></span>
+        <div class="mt-3 flex items-center justify-between font-label text-[10px] uppercase tracking-[0.25em] text-paper/50" data-aos="fade">
+          <span>N° 09</span><span>Ucapan &amp; Doa</span>
+        </div>
+        <div class="mt-8 flex items-end gap-5">
+          <span class="num-outline text-[7rem] font-black leading-[0.75] text-paper/80" data-aos="fade-up">09</span>
+          <h2 class="text-[2.6rem] italic leading-[0.95] text-paper" data-aos="fade-up" data-aos-delay="100">Surat<br />Pembaca</h2>
+        </div>
+        <p class="mt-8 text-base leading-relaxed text-paper/70" data-aos="fade-up">Kirimkan doa dan ucapan terbaik Anda untuk kami.</p>
+
+        <form id="wish-form" class="mt-8" hidden>
+          <p class="font-label text-[10px] uppercase tracking-[0.25em] text-paper/50">Dari <span id="wish-name" class="ml-1 font-serif text-base normal-case italic tracking-normal text-accent"></span></p>
+          <label for="wish-text" class="sr-only">Ucapan dan doa</label>
+          <textarea
+            id="wish-text"
+            rows="4"
+            maxlength="500"
+            required
+            placeholder="Tulis ucapan dan doa…"
+            class="mt-3 block w-full resize-none border-y border-paper/30 bg-transparent px-0 py-3 text-lg italic leading-relaxed text-paper placeholder:text-paper/30 focus:border-accent focus:outline-none"
+          ></textarea>
+          <button
+            id="wish-send"
+            type="submit"
+            class="mt-5 flex w-full items-center justify-between bg-paper px-5 py-4 font-label text-[11px] uppercase tracking-[0.25em] text-ink transition hover:bg-accent disabled:opacity-50"
+          >
+            <span>Kirim Ucapan</span>
+            <svg class="h-4 w-4" aria-hidden="true"><use href="#i-arrow" /></svg>
+          </button>
+        </form>
+        <p id="wish-locked" class="mt-8 border-l border-accent pl-4 font-label text-[11px] leading-relaxed text-paper/60" hidden>Buka undangan dari link pribadi Anda untuk mengirim ucapan.</p>
+
+        <p class="mt-12 flex items-baseline justify-between border-b border-paper/25 pb-3 font-label text-[10px] uppercase tracking-[0.25em] text-paper/50">
+          <span>Surat Masuk</span><span><span id="wish-count">0</span> Ucapan</span>
+        </p>
+        <div
+          id="wish-list"
+          class="flex max-h-[32rem] flex-col overflow-y-auto pr-1 [scrollbar-color:rgb(212_197_169/0.4)_transparent] [scrollbar-width:thin]"
+          aria-live="polite"
+        ></div>
+        <p id="wish-empty" class="mt-6 text-lg italic text-paper/50" hidden>Belum ada ucapan. Jadilah yang pertama.</p>
+      </section>
+
+      <!-- 12. Closing -->
+      <footer class="relative overflow-hidden px-6 pb-16 pt-28 lg:px-12">
+        <img src="assets/hero-1.webp" alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover grayscale opacity-25" />
+        <div class="absolute inset-0 bg-linear-to-b from-ink via-ink/75 to-ink"></div>
+        <div class="relative">
+          <p class="font-label text-[10px] uppercase tracking-[0.3em] text-accent" data-aos="fade-up">Dengan cinta,</p>
+          <h2 class="mt-4 text-[clamp(3.5rem,19vw,5.5rem)] font-black uppercase leading-[0.85] tracking-[-0.02em] text-paper" data-aos="fade-up" data-aos-delay="100">
+            Terima<br />Kasih
+          </h2>
+          <p class="mt-8 text-base leading-relaxed text-paper/70" data-aos="fade-up" data-aos-delay="200">
+            Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu di hari bahagia kami.
+          </p>
+          <p class="mt-12 font-label text-[10px] uppercase tracking-[0.3em] text-paper/50" data-aos="fade-up">Kami yang berbahagia</p>
+          <p class="mt-3 text-5xl italic leading-tight text-paper" data-aos="fade-up" data-aos-delay="150">
+            <span data-bind="couple.wanita.panggilan"></span> <span class="not-italic text-accent">&amp;</span> <span data-bind="couple.pria.panggilan"></span>
+          </p>
+
+          <!-- Colophon -->
+          <dl class="mt-12 grid grid-cols-[7rem_1fr] border-t border-paper/30 font-label text-[10px] uppercase tracking-[0.2em]" data-aos="fade-up">
+            <dt class="border-b border-paper/15 py-3 text-paper/45">Edisi</dt>
+            <dd class="border-b border-paper/15 py-3 text-paper/85">Vol. 01 · Spesial</dd>
+            <dt class="border-b border-paper/15 py-3 text-paper/45">Tanggal</dt>
+            <dd class="border-b border-paper/15 py-3 text-paper/85" data-bind="$tanggalTitik"></dd>
+            <dt class="border-b border-paper/15 py-3 text-paper/45">Tagar</dt>
+            <dd class="truncate border-b border-paper/15 py-3 normal-case tracking-[0.1em] text-paper/85" data-bind="couple.hashtag"></dd>
+          </dl>
+          <p class="mt-16 font-label text-[10px] uppercase tracking-[0.35em] text-paper/35">Undangan digital · by.me</p>
+        </div>
+      </footer>
+    </main>
+
+    <!-- List item templates, filled by script.js -->
+    <template id="tpl-session">
+      <article class="border-b border-ink/20 py-8">
+        <div class="flex items-baseline justify-between gap-4">
+          <h3 class="text-[2.4rem] italic leading-none" data-f="label"></h3>
+          <span class="font-label text-[9px] uppercase tracking-[0.25em] text-ink/40">Acara</span>
+        </div>
+        <dl class="mt-6 grid grid-cols-[6.5rem_1fr] gap-y-3 font-label text-[11px] uppercase tracking-[0.12em]">
+          <dt class="text-ink/45">Tanggal</dt>
+          <dd data-f="$tanggal"></dd>
+          <dt class="text-ink/45">Waktu</dt>
+          <dd data-f="$jam"></dd>
+        </dl>
+        <dl class="mt-3 grid grid-cols-[6.5rem_1fr] font-label text-[11px] uppercase tracking-[0.12em]" data-opt="dress_code">
+          <dt class="text-ink/45">Dress Code</dt>
+          <dd><span class="bg-ink px-2 py-0.5 text-paper" data-f="dress_code"></span></dd>
+        </dl>
+      </article>
+    </template>
+
+    <template id="tpl-wish">
+      <article class="border-b border-paper/15 py-5">
+        <p class="font-label text-[10px] uppercase tracking-[0.2em] text-accent" data-f="nama"></p>
+        <p class="mt-2 text-lg italic leading-snug text-paper/85" data-f="pesan"></p>
+      </article>
+    </template>
+
+    <template id="tpl-venue">
+      <article class="border-t border-ink pt-6">
+        <p class="font-label text-[10px] uppercase tracking-[0.25em] text-ink/50" data-f="$judul"></p>
+        <h3 class="mt-3 text-[2.2rem] leading-[1.05]" data-opt="tempat" data-f="tempat"></h3>
+        <p class="mt-3 max-w-xs text-base leading-relaxed text-ink/65" data-f="alamat"></p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a
+            data-href="maps"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-3 bg-ink px-5 py-3.5 font-label text-[11px] uppercase tracking-[0.2em] text-paper transition hover:bg-ink-2"
+          >
+            Lihat Peta
+            <svg class="h-3.5 w-3.5" aria-hidden="true"><use href="#i-arrow" /></svg>
+          </a>
+          <a
+            data-href="live_stream"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center border border-ink px-5 py-3.5 font-label text-[11px] uppercase tracking-[0.2em] text-ink transition hover:bg-ink hover:text-paper"
+            >Live Streaming</a
+          >
+        </div>
+      </article>
+    </template>
+
+    <!-- Gallery lightbox -->
+    <div
+      id="lightbox"
+      hidden
+      class="fixed inset-0 z-50 flex items-center justify-center bg-ink/95"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Galeri foto"
+    >
+      <img id="lightbox-img" alt="" class="max-h-[85vh] max-w-[92vw] object-contain" />
+      <button id="lb-close" type="button" aria-label="Tutup" class="absolute right-4 top-4 p-2 text-3xl leading-none text-paper">&times;</button>
+      <button id="lb-prev" type="button" aria-label="Sebelumnya" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 text-4xl text-paper">&lsaquo;</button>
+      <button id="lb-next" type="button" aria-label="Berikutnya" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 text-4xl text-paper">&rsaquo;</button>
+      <p id="lb-count" class="absolute bottom-5 font-label text-xs tracking-[0.3em] text-paper/70"></p>
+    </div>
+
+    <!-- Music -->
+    <audio id="music" loop preload="none"></audio>
+    <button
+      id="music-btn"
+      hidden
+      type="button"
+      aria-label="Putar/jeda musik"
+      class="fixed bottom-5 right-5 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-paper/60 bg-ink/90 text-paper shadow-lg"
+    >
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" />
+      </svg>
+    </button>
+
+    <div
+      id="toast"
+      hidden
+      role="status"
+      class="fixed bottom-20 left-1/2 z-50 -translate-x-1/2 bg-paper px-5 py-2.5 font-label text-xs text-ink shadow-lg lg:left-[21%]"
+    ></div>
+  </body>
+</html>

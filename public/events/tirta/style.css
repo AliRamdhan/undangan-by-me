@@ -1,0 +1,361 @@
+/* What Tailwind utilities don't cover. Colors mirror the @theme tokens in index.html. */
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.locked {
+  overflow: hidden;
+}
+
+/* Loader covers the greeting until data and the cover photo are ready: a sun bobbing on the swell */
+#loader {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #08263a;
+  color: #fbf8f1;
+  text-align: center;
+  transition:
+    opacity 0.7s ease,
+    visibility 0.7s;
+}
+#loader.done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-sea {
+  position: relative;
+  width: 96px;
+  height: 56px;
+  overflow: hidden;
+}
+.loader-sun {
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  width: 36px;
+  height: 36px;
+  margin-left: -18px;
+  border-radius: 50%;
+  background: #e46f55;
+  animation: loader-bob 2.4s ease-in-out infinite;
+}
+.loader-wave {
+  position: absolute;
+  left: -96px;
+  bottom: 0;
+  width: 288px;
+  height: 22px;
+  color: #08263a;
+  animation: drift 2.4s linear infinite;
+}
+@keyframes loader-bob {
+  50% {
+    transform: translateY(8px);
+  }
+}
+.loader-title {
+  margin: 1.1rem 0 0;
+  font-family: "Gloock", Georgia, serif;
+  font-size: 2rem;
+  line-height: 1.1;
+}
+.loader-text {
+  margin: 0.6rem 0 0;
+  font-family: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: rgb(251 248 241 / 0.55);
+}
+
+/* Waves slide sideways forever; the SVG is three tiles wide and moves one tile per loop */
+@keyframes drift {
+  to {
+    transform: translateX(96px);
+  }
+}
+.swell {
+  animation: swell 9s linear infinite;
+}
+.swell-slow {
+  animation-duration: 14s;
+  animation-direction: reverse;
+}
+@keyframes swell {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Hold the cover's entrance until the loader fades, so it isn't spent unseen */
+body.loading .cover-in,
+body.loading .cover-ken,
+body.loading .cover-sun {
+  animation-play-state: paused;
+}
+
+/* Greeting modal sinks below the waterline when opened */
+#greeting {
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+#greeting.closing {
+  opacity: 0;
+  transform: translateY(4%);
+  pointer-events: none;
+}
+
+/* Greeting content stages in on load; --d sets each element's delay */
+.cover-in {
+  animation: cover-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0s) both;
+}
+@keyframes cover-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+.cover-ken {
+  animation: cover-ken 3.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes cover-ken {
+  from {
+    transform: scale(1.12);
+  }
+}
+/* The coral sun rises behind the porthole photo */
+.cover-sun {
+  animation: cover-sun 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s both;
+}
+@keyframes cover-sun {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+}
+/* The dashed ring around the porthole turns slowly, like a compass bezel */
+.spin-slow {
+  animation: spin 60s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Wavy hairline, drawn in currentColor: <span class="squiggle text-karang"></span> */
+.squiggle {
+  display: block;
+  height: 10px;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 10'%3E%3Cpath d='M0 5 Q6 0 12 5 T24 5' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3C/svg%3E")
+    repeat-x center / 24px 10px;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 10'%3E%3Cpath d='M0 5 Q6 0 12 5 T24 5' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3C/svg%3E")
+    repeat-x center / 24px 10px;
+}
+
+/* Postage-stamp edge: half-circle notches all round, the middle left whole */
+.stamp {
+  padding: 10px;
+  -webkit-mask:
+    radial-gradient(circle, #0000 4px, #000 4.5px) -7px -7px / 14px 14px round,
+    linear-gradient(#000 0 0) center / calc(100% - 14px) calc(100% - 14px) no-repeat;
+  mask:
+    radial-gradient(circle, #0000 4px, #000 4.5px) -7px -7px / 14px 14px round,
+    linear-gradient(#000 0 0) center / calc(100% - 14px) calc(100% - 14px) no-repeat;
+}
+
+/* A photo whose bottom edge is a wave, like the waterline */
+.waterline {
+  -webkit-mask:
+    linear-gradient(#000 0 0) top / 100% calc(100% - 13px) no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 14'%3E%3Cpath d='M0 0H48V7Q36 14 24 7T0 7Z'/%3E%3C/svg%3E")
+      bottom / 48px 14px repeat-x;
+  mask:
+    linear-gradient(#000 0 0) top / 100% calc(100% - 13px) no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 14'%3E%3Cpath d='M0 0H48V7Q36 14 24 7T0 7Z'/%3E%3C/svg%3E")
+      bottom / 48px 14px repeat-x;
+}
+
+/* Sand: a soft speckle so the warm sections read as a beach, not a flat fill */
+.sand {
+  background-color: #efe2cc;
+  background-image:
+    radial-gradient(rgb(160 120 70 / 0.12) 1px, transparent 1.4px),
+    radial-gradient(rgb(255 255 255 / 0.5) 1px, transparent 1.4px);
+  background-size:
+    18px 18px,
+    26px 26px;
+  background-position:
+    0 0,
+    9px 13px;
+}
+
+/* Deep sea: faint ripple lines */
+.deep {
+  background-color: #0e3a56;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40' viewBox='0 0 120 40'%3E%3Cpath d='M0 20 Q15 12 30 20 T60 20 T90 20 T120 20' fill='none' stroke='%23fbf8f1' stroke-opacity='0.045' stroke-width='1.2'/%3E%3C/svg%3E");
+  background-size: 120px 40px;
+}
+
+/* The wedding day's sun on the calendar strip breathes gently */
+.sun-day {
+  animation: sun-day 4s ease-in-out infinite;
+}
+@keyframes sun-day {
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+/* ---------- Swiper gallery ---------- */
+
+#gallery .swiper {
+  overflow: visible;
+  padding-bottom: 3.25rem;
+}
+#gallery .swiper-slide {
+  transition:
+    transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 0.6s ease,
+    filter 0.6s ease;
+  transform: scale(0.86);
+  opacity: 0.55;
+  filter: saturate(0.6);
+}
+#gallery .swiper-slide-active {
+  transform: none;
+  opacity: 1;
+  filter: none;
+}
+#gallery .swiper-slide:focus-visible {
+  outline: 2px solid #e46f55;
+  outline-offset: 4px;
+}
+#gallery .swiper-pagination {
+  bottom: 0.5rem;
+}
+#gallery .swiper-pagination-bullet {
+  width: 7px;
+  height: 7px;
+  margin: 0 5px !important;
+  background: #fbf8f1;
+  opacity: 0.35;
+  transition:
+    width 0.4s ease,
+    opacity 0.4s ease,
+    background-color 0.4s ease;
+}
+#gallery .swiper-pagination-bullet-active {
+  width: 26px;
+  border-radius: 999px;
+  background: #e46f55;
+  opacity: 1;
+}
+.slider-prev.swiper-button-disabled,
+.slider-next.swiper-button-disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+/* Before Swiper starts, or if its CDN is blocked: a native swipe strip */
+#gallery .swiper:not(.swiper-initialized) .swiper-wrapper {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+#gallery .swiper:not(.swiper-initialized) .swiper-slide {
+  width: 78%;
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  transform: none;
+  opacity: 1;
+  filter: none;
+}
+
+/* Custom AOS animations. AOS sets .aos-animate once an element scrolls in. */
+
+/* AOS slides fades 100px by default; shorter feels calmer */
+[data-aos="fade-up"] {
+  transform: translate3d(0, 28px, 0);
+}
+
+/* Photo rises out of the water: uncovered bottom to top */
+[data-aos="rise"] {
+  clip-path: inset(100% 0 0 0);
+  transition-property: clip-path;
+}
+[data-aos="rise"].aos-animate {
+  clip-path: inset(0);
+}
+
+/* Stamps drop onto the page with a slight tilt */
+[data-aos="stamp"] {
+  opacity: 0;
+  transform: translateY(24px) rotate(var(--tilt, 0deg)) scale(1.06);
+  transition-property: opacity, transform;
+}
+[data-aos="stamp"].aos-animate {
+  opacity: 1;
+  transform: rotate(var(--tilt, 0deg));
+}
+
+/* Floating music button: three bars that bounce while the song plays */
+#music-btn .eq {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  transform: scaleY(0.35);
+  transition: transform 0.3s ease;
+}
+#music-btn.playing .eq {
+  animation: eq 0.9s ease-in-out infinite alternate;
+}
+#music-btn.playing .eq:nth-child(2) {
+  animation-delay: -0.3s;
+}
+#music-btn.playing .eq:nth-child(3) {
+  animation-delay: -0.6s;
+}
+@keyframes eq {
+  from {
+    transform: scaleY(0.3);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  #greeting,
+  #loader {
+    transition: none;
+  }
+  .loader-sun,
+  .loader-wave,
+  .swell,
+  .spin-slow,
+  .sun-day,
+  .cover-in,
+  .cover-ken,
+  .cover-sun,
+  #music-btn.playing .eq {
+    animation: none;
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "event": {
+    "slug": "keraton",
+    "tipe": "PERNIKAHAN",
+    "bahasa": "id",
+    "timezone": "WIB",
+    "couple": {
+      "pria": {
+        "panggilan": "Prabu",
+        "lengkap": "Raden Prabu Wicaksono, S.T.",
+        "ortu": "Bapak R. Bambang Wicaksono & Ibu Sri Rahayu"
+      },
+      "wanita": {
+        "panggilan": "Laras",
+        "lengkap": "Larasati Kusumaningrum, S.Psi.",
+        "ortu": "Bapak Hadi Kusumo & Ibu Endang Lestari"
+      },
+      "hashtag": "#LarasPrabuManunggal"
+    },
+    "tanggal_utama": "2027-05-15",
+    "sesi": [
+      {
+        "kode": "S1",
+        "label": "Akad Nikah",
+        "tanggal": "2027-05-15",
+        "mulai": "08:00",
+        "selesai": "10:00",
+        "tempat": "Masjid Gedhe Kauman",
+        "alamat": "Jl. Kauman, Ngupasan, Gondomanan, Kota Yogyakarta",
+        "maps": "https://maps.google.com/?q=Masjid+Gedhe+Kauman+Yogyakarta",
+        "dress_code": "Batik & Kebaya",
+        "live_stream": ""
+      },
+      {
+        "kode": "S2",
+        "label": "Resepsi",
+        "tanggal": "2027-05-15",
+        "mulai": "11:00",
+        "selesai": "14:00",
+        "tempat": "Pendopo Ndalem Mangkubumen",
+        "alamat": "Jl. Mangkubumen No. 5, Kadipaten, Kraton, Kota Yogyakarta",
+        "maps": "https://maps.google.com/?q=Ndalem+Mangkubumen+Yogyakarta",
+        "dress_code": "Batik & Kebaya",
+        "live_stream": ""
+      }
+    ],
+    "gift": {
+      "bank": "BNI",
+      "atas_nama": "Larasati Kusumaningrum",
+      "norek": "0812 3456 789",
+      "qris": ""
+    },
+    "media": {
+      "musik": "assets/demo/musik.mp3",
+      "judul_musik": "Kebo Giro — Gamelan Instrumental",
+      "cover": ""
+    },
+    "gallery": [
+      "assets/demo/gallery-1.webp",
+      "assets/demo/gallery-2.webp",
+      "assets/demo/gallery-3.webp",
+      "assets/demo/gallery-4.webp",
+      "assets/demo/gallery-5.webp",
+      "assets/demo/gallery-6.webp"
+    ]
+  },
+  "guest": null,
+  "wishes": [
+    {
+      "nama": "Keluarga Besar Wicaksono",
+      "pesan": "Sugeng tindak ing bebrayan agung, Prabu & Laras. Mugi dados keluarga ingkang sakinah, mawaddah, warahmah."
+    },
+    {
+      "nama": "Ibu Retno Wulandari",
+      "pesan": "Selamat menempuh hidup baru, Laras sayang. Semoga rukun selalu sampai kaken-kaken ninen-ninen."
+    },
+    {
+      "nama": "Mas Dimas Aryo",
+      "pesan": "Akhirnya, Bro! Lancar sampai hari H, ditunggu sungkemannya 😄"
+    },
+    {
+      "nama": "Sdri. Ayu Paramitha",
+      "pesan": "Laras pasti ayu banget pakai paes ageng. Bahagia selalu kalian berdua!"
+    },
+    {
+      "nama": "Keluarga Bapak Hadi Kusumo",
+      "pesan": "Matur nuwun atas doa restunya. Semoga pernikahan ini membawa berkah bagi kedua keluarga."
+    }
+  ]
+}

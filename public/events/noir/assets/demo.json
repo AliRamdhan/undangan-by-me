@@ -1,0 +1,90 @@
+{
+  "event": {
+    "slug": "noir",
+    "tipe": "PERNIKAHAN",
+    "bahasa": "id",
+    "timezone": "WIB",
+    "couple": {
+      "pria": {
+        "panggilan": "Reza",
+        "lengkap": "Reza Pradipta Mahendra",
+        "ortu": "Bapak Bambang Mahendra & Ibu Ratna Kusuma"
+      },
+      "wanita": {
+        "panggilan": "Alya",
+        "lengkap": "Alya Putri Rahmadani",
+        "ortu": "Bapak Hadi Rahmadani & Ibu Sari Wulandari"
+      },
+      "hashtag": "#AlyaRezaInMono"
+    },
+    "tanggal_utama": "2027-05-15",
+    "sesi": [
+      {
+        "kode": "S1",
+        "label": "Akad Nikah",
+        "tanggal": "2027-05-15",
+        "mulai": "08:00",
+        "selesai": "10:00",
+        "tempat": "Masjid Cut Meutia",
+        "alamat": "Jl. Taman Cut Mutiah No. 1, Menteng, Jakarta Pusat",
+        "maps": "https://maps.google.com/?q=Masjid+Cut+Meutia+Jakarta",
+        "dress_code": "Putih & Abu",
+        "live_stream": ""
+      },
+      {
+        "kode": "S2",
+        "label": "Resepsi",
+        "tanggal": "2027-05-15",
+        "mulai": "19:00",
+        "selesai": "22:00",
+        "tempat": "Dia.Lo.Gue Artspace",
+        "alamat": "Jl. Kemang Selatan No. 99A, Bangka, Jakarta Selatan",
+        "maps": "https://maps.google.com/?q=Dia.Lo.Gue+Artspace+Kemang",
+        "dress_code": "All Black",
+        "live_stream": ""
+      }
+    ],
+    "gift": {
+      "bank": "BCA",
+      "atas_nama": "Alya Putri Rahmadani",
+      "norek": "8730 1125 64",
+      "qris": ""
+    },
+    "media": {
+      "musik": "assets/demo/musik.mp3",
+      "judul_musik": "La Vie en Rose — Piano",
+      "cover": ""
+    },
+    "gallery": [
+      "assets/demo/gallery-1.webp",
+      "assets/demo/gallery-2.webp",
+      "assets/demo/gallery-3.webp",
+      "assets/demo/gallery-4.webp",
+      "assets/demo/gallery-5.webp",
+      "assets/demo/gallery-6.webp"
+    ]
+  },
+  "guest": null,
+  "wishes": [
+    {
+      "nama": "Bapak Agus Setiawan",
+      "pesan": "Selamat menempuh hidup baru, Alya & Reza. Semoga menjadi keluarga yang sakinah, mawaddah, warahmah."
+    },
+    {
+      "nama": "Ibu Dewi Lestari",
+      "pesan": "Barakallahu lakuma wa baraka 'alaikuma. Semoga langgeng sampai kakek nenek, ya."
+    },
+    {
+      "nama": "Sdr. Bima Ardiansyah",
+      "pesan": "Dari partner kamar gelap jadi partner seumur hidup. Selamat, kalian berdua!"
+    },
+    {
+      "nama": "Sdri. Nadia Kirana",
+      "pesan": "Alya, kamu cantik banget pasti nanti. Happy wedding, love you both!"
+    },
+    {
+      "nama": "Keluarga Besar Wiryawan",
+      "pesan": "Turut berbahagia. Semoga setiap babak baru kalian selalu dipenuhi cahaya."
+    }
+  ]
+}

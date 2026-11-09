@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Wedding of Maya &amp; Arga</title>
+    <link rel="icon" type="image/png" href="assets/favicon/favicon-96x96.png?v=3" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.svg?v=3" />
+    <link rel="shortcut icon" href="assets/favicon/favicon.ico?v=3" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png?v=3" />
+    <link rel="manifest" href="assets/favicon/site.webmanifest?v=3" />
+    <meta name="description" content="Undangan pernikahan digital" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Karla:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Files in public/ skip Vite, so Tailwind runs in the browser. -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-linen: #f6efe4;
+        --color-sand: #e8d9c4;
+        --color-kraft: #d8bd96;
+        --color-wheat: #d6b98c;
+        --color-terra: #b5654a;
+        --color-clay: #8a4632;
+        --color-sage: #8f9b7a;
+        --color-sage-wash: #e5e3d3;
+        --color-moss: #5f6b4f;
+        --color-bark: #4a3a2e;
+        --font-display: "Fraunces", ui-serif, Georgia, serif;
+        --font-sans: "Karla", ui-sans-serif, system-ui, sans-serif;
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Deferred scripts run in order, so AOS is ready before script.js. -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
+    <script src="../config.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+
+  <!-- When copying this template for a new event, change data-event (01_Event.ID; admin URL /admin/events/{ID}) and data-slug (fallback). -->
+  <body data-event="" data-slug="senja" class="locked loading senja-backdrop font-sans text-bark antialiased lining-nums selection:bg-terra/20">
+    <!--
+      Dried-flower sprite: line-art botanicals drawn around (0,0), stems pointing up.
+      Strokes and fills follow `color` (currentColor), so one drawing serves every tint.
+    -->
+    <svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+      <defs>
+        <!-- Pampas plume -->
+        <g id="g-pampas">
+          <path d="M0 0Q1 -70 10 -120" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" />
+          <path d="M1.8 -47.8Q-0.2 -49.6 0.2 -51.3M1.8 -47.8Q4.1 -49.2 4.1 -50.8M1.9 -49.6Q-0.6 -52 -0.6 -54.2M1.9 -49.6Q4.5 -51.7 4.8 -53.9M2 -51.4Q-0.7 -54.3 -1.1 -57.1M2 -51.4Q4.8 -54.1 5.2 -57M2.1 -53.1Q-0.8 -57.2 -1.2 -61M2.1 -53.1Q5.5 -56.7 6.5 -60.5M2.2 -54.9Q-1.5 -59.1 -2.9 -63.2M2.2 -54.9Q6 -59 7.3 -63.2M2.3 -56.6Q-1.3 -61.1 -2.6 -65.5M2.3 -56.6Q6.9 -60.4 9.1 -64.2M2.5 -58.4Q-1.5 -64 -3 -69.5M2.5 -58.4Q7.8 -62.9 10.8 -67.6M2.6 -60.1Q-1.6 -65 -3.4 -69.7M2.6 -60.1Q7 -64.7 8.9 -69.5M2.7 -61.8Q-0.9 -67.7 -2.1 -73.3M2.7 -61.8Q7.4 -66.9 9.8 -72.1M2.9 -63.6Q-1.5 -71.1 -3.6 -78.4M2.9 -63.6Q9 -69.9 12.8 -76.4M3 -65.3Q-1.7 -72.7 -4 -79.8M3 -65.3Q9.1 -71.6 12.8 -78.1M3.2 -67Q-0.6 -73.6 -2.1 -80M3.2 -67Q8.2 -72.7 10.9 -78.7M3.3 -68.7Q-1.8 -76.7 -4.5 -84.6M3.3 -68.7Q9.6 -75.8 13.4 -83.2M3.5 -70.3Q-1.7 -78.4 -4.4 -86.3M3.5 -70.3Q9.7 -77.5 13.6 -85M3.6 -72Q-2.3 -80.6 -5.8 -89M3.6 -72Q10.3 -79.9 14.5 -88M3.8 -73.7Q-1.6 -82.1 -4.6 -90.3M3.8 -73.7Q11.2 -80.5 16.2 -87.5M3.9 -75.4Q-1.3 -84.5 -4.1 -93.4M3.9 -75.4Q11.9 -82.4 17.5 -89.7M4.1 -77Q-0.6 -84.6 -3 -92M4.1 -77Q10.7 -83.2 14.9 -89.6M4.3 -78.7Q-0.6 -86.4 -3.2 -93.9M4.3 -78.7Q10 -85.7 13.3 -93M4.4 -80.3Q-1.6 -89.1 -5.3 -97.7M4.4 -80.3Q11.9 -87.9 17 -95.8M4.6 -81.9Q-0.8 -91.7 -3.9 -101.3M4.6 -81.9Q12.7 -89.8 18.3 -98M4.8 -83.5Q-0.8 -92.4 -3.9 -100.9M4.8 -83.5Q11.9 -91.1 16.7 -98.9M5 -85.1Q-1.5 -94.2 -5.7 -102.9M5 -85.1Q12.5 -93.1 17.7 -101.4M5.2 -86.8Q0.6 -96 -1.5 -105M5.2 -86.8Q12.7 -94 17.9 -101.4M5.3 -88.3Q-0.8 -96.6 -4.5 -104.6M5.3 -88.3Q13 -95.2 18.2 -102.4M5.5 -89.9Q1 -97.7 -1.2 -105.2M5.5 -89.9Q12.2 -96.1 16.5 -102.6M5.7 -91.5Q1.4 -98.5 -0.5 -105.1M5.7 -91.5Q11.2 -97.5 14.3 -103.7M5.9 -93.1Q2.2 -100.3 0.9 -107.2M5.9 -93.1Q12.1 -98.5 16 -104.1M6.1 -94.7Q2.3 -101.5 0.8 -108.1M6.1 -94.7Q11.8 -100.2 15 -106.1M6.3 -96.2Q2.2 -104.5 0.5 -112.6M6.3 -96.2Q13 -102.8 17.2 -109.7M6.5 -97.8Q1.7 -104.5 -0.8 -111M6.5 -97.8Q12.9 -103.1 16.9 -108.7M6.7 -99.3Q2.7 -106.7 1 -113.8M6.7 -99.3Q12.8 -105.2 16.5 -111.5M6.9 -100.8Q2.7 -106.5 0.9 -111.9M6.9 -100.8Q12.6 -105.1 15.9 -109.7M7.2 -102.4Q4.1 -107.7 3.4 -112.6M7.2 -102.4Q11.6 -106.6 13.7 -111.1M7.4 -103.9Q4.1 -108.8 3.3 -113.3M7.4 -103.9Q12 -107.6 14.2 -111.6M7.6 -105.4Q5 -110 4.8 -114.3M7.6 -105.4Q11.8 -108.8 13.6 -112.6M7.8 -106.9Q4.9 -111 4.3 -114.7M7.8 -106.9Q12.1 -109.7 14 -112.8M8.1 -108.4Q5.3 -112.3 4.9 -115.8M8.1 -108.4Q12 -111.2 13.5 -114.3M8.3 -109.8Q6.1 -113.1 6.3 -116.1M8.3 -109.8Q11.8 -111.9 13 -114.4M8.5 -111.3Q6.2 -113.6 6.3 -115.5M8.5 -111.3Q11.4 -112.8 11.9 -114.7M8.8 -112.8Q6.9 -114.8 7.3 -116.4M8.8 -112.8Q11.1 -114.1 11.1 -115.9M9 -114.2Q7.2 -116.4 7.8 -118.2M9 -114.2Q11.4 -115.7 11.5 -117.6M9.2 -115.7Q7.5 -117.6 8.1 -119.2M9.2 -115.7Q11.6 -116.9 11.6 -118.5M9.5 -117.1Q7.8 -119 8.5 -120.5M9.5 -117.1Q11.7 -118.3 11.6 -119.9M9.7 -118.6Q8 -120.4 8.5 -121.9M9.7 -118.6Q12 -119.8 11.8 -121.4M10 -120Q7.9 -122.3 8.2 -124.1M10 -120Q12.6 -121.5 12.7 -123.5" fill="none" stroke="currentColor" stroke-width=".75" stroke-linecap="round" stroke-opacity=".85" />
+        </g>
+        <!-- Dried fern frond -->
+        <g id="g-fern">
+          <path d="M0 0Q-6 -55 4 -104" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" />
+          <path d="M-1.2 -13.1Q-9.7 -22.4 -22.2 -24.1Q-13.7 -14.8 -1.2 -13.1ZM-1.2 -13.1Q10.8 -16.7 17.9 -27.1Q5.8 -23.5 -1.2 -13.1ZM-1.7 -20.9Q-9.5 -29.7 -21.2 -31.6Q-13.4 -22.7 -1.7 -20.9ZM-1.7 -20.9Q9.7 -24 16.5 -33.7Q5.1 -30.5 -1.7 -20.9ZM-2.1 -28.6Q-9.2 -37 -20.1 -39Q-13 -30.5 -2.1 -28.6ZM-2.1 -28.6Q8.7 -31.3 15.3 -40.2Q4.5 -37.5 -2.1 -28.6ZM-2.2 -36.2Q-8.7 -44.2 -18.9 -46.3Q-12.4 -38.2 -2.2 -36.2ZM-2.2 -36.2Q7.9 -38.5 14.2 -46.7Q4.1 -44.4 -2.2 -36.2ZM-2.2 -43.7Q-8.1 -51.3 -17.5 -53.5Q-11.6 -45.9 -2.2 -43.7ZM-2.2 -43.7Q7.2 -45.7 13.2 -53.2Q3.8 -51.2 -2.2 -43.7ZM-2.1 -51.2Q-7.3 -58.4 -15.9 -60.5Q-10.7 -53.4 -2.1 -51.2ZM-2.1 -51.2Q6.6 -52.8 12.3 -59.6Q3.6 -58 -2.1 -51.2ZM-1.8 -58.7Q-6.4 -65.3 -14.3 -67.5Q-9.6 -60.8 -1.8 -58.7ZM-1.8 -58.7Q6.3 -60 11.6 -66.1Q3.6 -64.8 -1.8 -58.7ZM-1.3 -66.1Q-5.4 -72.2 -12.4 -74.3Q-8.3 -68.2 -1.3 -66.1ZM-1.3 -66.1Q6 -67.1 11 -72.5Q3.7 -71.5 -1.3 -66.1ZM-0.6 -73.4Q-4.2 -79 -10.5 -81Q-6.9 -75.4 -0.6 -73.4ZM-0.6 -73.4Q6 -74.1 10.6 -78.9Q4 -78.2 -0.6 -73.4ZM0.2 -80.6Q-2.9 -85.7 -8.4 -87.6Q-5.4 -82.6 0.2 -80.6ZM0.2 -80.6Q6 -81.2 10.2 -85.3Q4.4 -84.8 0.2 -80.6ZM1.2 -87.8Q-1.4 -92.3 -6.2 -94.1Q-3.7 -89.6 1.2 -87.8ZM1.2 -87.8Q6.3 -88.2 10 -91.7Q4.9 -91.4 1.2 -87.8ZM2.3 -95Q0.2 -98.8 -3.9 -100.5Q-1.8 -96.6 2.3 -95ZM2.3 -95Q6.7 -95.2 10 -98.1Q5.6 -97.9 2.3 -95ZM3.6 -102Q1.9 -105.3 -1.4 -106.7Q0.2 -103.5 3.6 -102ZM3.6 -102Q7.3 -102.1 10 -104.5Q6.4 -104.4 3.6 -102Z" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-width=".7" stroke-linejoin="round" />
+        </g>
+        <!-- Wheat ear -->
+        <g id="g-wheat">
+          <path d="M0 0Q0 -60 5 -110" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" />
+          <path d="M1.2 -57.5Q1.7 -62.7 -2.6 -65.6Q-3 -60.4 1.2 -57.5ZM1.2 -57.5Q5.8 -60 5.8 -65.2Q1.3 -62.7 1.2 -57.5ZM1.5 -63.3Q2 -68.4 -2.1 -71.2Q-2.7 -66.2 1.5 -63.3ZM1.5 -63.3Q6 -65.7 6 -70.8Q1.5 -68.4 1.5 -63.3ZM1.8 -69.1Q2.5 -74 -1.7 -76.7Q-2.3 -71.8 1.8 -69.1ZM1.8 -69.1Q6.2 -71.3 6.2 -76.2Q1.8 -74 1.8 -69.1ZM2.2 -74.8Q2.9 -79.6 -1.1 -82.1Q-1.8 -77.4 2.2 -74.8ZM2.2 -74.8Q6.5 -76.9 6.4 -81.7Q2.1 -79.6 2.2 -74.8ZM2.5 -80.5Q3.3 -85.1 -0.6 -87.5Q-1.4 -82.9 2.5 -80.5ZM2.5 -80.5Q6.8 -82.4 6.6 -87Q2.4 -85.1 2.5 -80.5ZM2.9 -86.1Q3.8 -90.5 -0 -92.8Q-0.9 -88.4 2.9 -86.1ZM2.9 -86.1Q7.1 -87.8 6.8 -92.3Q2.7 -90.6 2.9 -86.1ZM3.4 -91.7Q4.4 -95.9 0.6 -98.1Q-0.4 -93.9 3.4 -91.7ZM3.4 -91.7Q7.4 -93.2 7.1 -97.6Q3.1 -96 3.4 -91.7ZM3.8 -97.2Q4.9 -101.3 1.2 -103.3Q0.1 -99.2 3.8 -97.2ZM3.8 -97.2Q7.8 -98.6 7.4 -102.8Q3.4 -101.4 3.8 -97.2ZM4.3 -102.6Q5.5 -106.5 1.8 -108.5Q0.7 -104.5 4.3 -102.6ZM4.3 -102.6Q8.2 -103.8 7.8 -107.9Q3.9 -106.7 4.3 -102.6ZM4.8 -108Q6.1 -111.8 2.5 -113.5Q1.3 -109.8 4.8 -108ZM4.8 -108Q8.6 -109.1 8.1 -113Q4.3 -111.9 4.8 -108Z" fill="currentColor" fill-opacity=".45" stroke="currentColor" stroke-width=".6" />
+        </g>
+        <!-- Bunny-tail grass -->
+        <g id="g-bunny">
+          <path d="M0 0Q2 -22 6 -40" fill="none" stroke="currentColor" stroke-width=".9" stroke-linecap="round" />
+          <ellipse cx="7.5" cy="-47" rx="4.6" ry="8.5" transform="rotate(10 7.5 -47)" fill="currentColor" fill-opacity=".55" />
+        </g>
+        <!-- Chamomile, centred -->
+        <g id="g-daisy">
+          <g fill="#f6efe4" stroke="currentColor" stroke-width=".8">
+            <ellipse cy="-8" rx="2.7" ry="6" /><ellipse cy="-8" rx="2.7" ry="6" transform="rotate(36)" />
+            <ellipse cy="-8" rx="2.7" ry="6" transform="rotate(72)" /><ellipse cy="-8" rx="2.7" ry="6" transform="rotate(108)" />
+            <ellipse cy="-8" rx="2.7" ry="6" transform="rotate(144)" /><ellipse cy="-8" rx="2.7" ry="6" transform="rotate(180)" />
+            <ellipse cy="-8" rx="2.7" ry="6" transform="rotate(216)" /><ellipse cy="-8" rx="2.7" ry="6" transform="rotate(252)" />
+            <ellipse cy="-8" rx="2.7" ry="6" transform="rotate(288)" /><ellipse cy="-8" rx="2.7" ry="6" transform="rotate(324)" />
+          </g>
+          <circle r="3.8" fill="#d6a15a" stroke="currentColor" stroke-width=".6" />
+        </g>
+        <!-- Striped sunset: a half disc of radius 50 sitting on y=0 -->
+        <path id="g-sun" d="M-44.9 -22A50 50 0 0 1 44.9 -22ZM-45.6 -20.4H45.6A50 50 0 0 1 48 -14H-48A50 50 0 0 1 -45.6 -20.4ZM-48.6 -11.8H48.6A50 50 0 0 1 49.4 -8H-49.4A50 50 0 0 1 -48.6 -11.8ZM-49.7 -5.2H49.7A50 50 0 0 1 49.9 -3.5H-49.9A50 50 0 0 1 -49.7 -5.2ZM-50 -0.1H50A50 50 0 0 1 50 0H-50A50 50 0 0 1 -50 -0.1Z" fill="currentColor" />
+        <!-- Sun with rays (calendar day), radius ~36 -->
+        <g id="g-sunburst">
+          <path d="M29 0L36 0M28 7.5L31.9 8.5M25.1 14.5L31.2 18M20.5 20.5L23.3 23.3M14.5 25.1L18 31.2M7.5 28L8.5 31.9M0 29L0 36M-7.5 28L-8.5 31.9M-14.5 25.1L-18 31.2M-20.5 20.5L-23.3 23.3M-25.1 14.5L-31.2 18M-28 7.5L-31.9 8.5M-29 0L-36 0M-28 -7.5L-31.9 -8.5M-25.1 -14.5L-31.2 -18M-20.5 -20.5L-23.3 -23.3M-14.5 -25.1L-18 -31.2M-7.5 -28L-8.5 -31.9M-0 -29L-0 -36M7.5 -28L8.5 -31.9M14.5 -25.1L18 -31.2M20.5 -20.5L23.3 -23.3M25.1 -14.5L31.2 -18M28 -7.5L31.9 -8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <circle r="25" fill="currentColor" />
+          <circle r="21" fill="none" stroke="#f6efe4" stroke-opacity=".55" stroke-width=".8" stroke-dasharray="2 3" />
+        </g>
+        <!-- Boho rainbow, base on y=0 (fits -52 -52 104 56) -->
+        <g id="g-rainbow" fill="none" stroke-width="9" stroke-linecap="round">
+          <path d="M-46 0A46 46 0 0 1 46 0" stroke="#b5654a" />
+          <path d="M-34 0A34 34 0 0 1 34 0" stroke="#d6b98c" />
+          <path d="M-22 0A22 22 0 0 1 22 0" stroke="#8f9b7a" />
+        </g>
+        <!-- Dried bouquet, tied at (0,0); fits -140 -150 280 165 -->
+        <g id="g-bouquet">
+          <use href="#g-fern" transform="rotate(-64) scale(.9)" color="#8f9b7a" />
+          <use href="#g-fern" transform="rotate(58) scale(.85)" color="#5f6b4f" />
+          <use href="#g-pampas" transform="rotate(-36) scale(1.02)" color="#c9a77a" />
+          <use href="#g-pampas" transform="rotate(30) scale(.95)" color="#c9a77a" />
+          <use href="#g-pampas" transform="rotate(-6) scale(1.2)" color="#d6b98c" />
+          <use href="#g-wheat" transform="rotate(-22) scale(.92)" color="#b5654a" />
+          <use href="#g-wheat" transform="rotate(14) scale(.98)" color="#b5654a" />
+          <use href="#g-bunny" transform="rotate(42)" color="#c9a77a" />
+          <use href="#g-bunny" transform="rotate(-50) scale(.9)" color="#c9a77a" />
+          <use href="#g-daisy" transform="translate(-12 -22) scale(.95)" color="#8a4632" />
+          <use href="#g-daisy" transform="translate(13 -13) scale(.78)" color="#8a4632" />
+          <use href="#g-daisy" transform="translate(-28 -6) scale(.62)" color="#8a4632" />
+          <!-- Twine bow -->
+          <path d="M0 2C-8 -6 -16 -2 -12 4C-9 8 -3 5 0 2C3 5 9 8 12 4C16 -2 8 -6 0 2M0 2L-6 14M0 2L5 15" fill="none" stroke="#8a4632" stroke-width="1" stroke-linecap="round" />
+        </g>
+      </defs>
+    </svg>
+
+    <!-- 0. Loader: plain CSS (style.css) so it paints before Tailwind compiles; hidden by script.js once data is ready -->
+    <div id="loader" role="status" aria-live="polite">
+      <svg class="loader-rainbow" viewBox="-52 -52 104 56" aria-hidden="true">
+        <path d="M-46 0A46 46 0 0 1 46 0" pathLength="1" stroke="#b5654a" />
+        <path d="M-34 0A34 34 0 0 1 34 0" pathLength="1" stroke="#d6b98c" />
+        <path d="M-22 0A22 22 0 0 1 22 0" pathLength="1" stroke="#8f9b7a" />
+      </svg>
+      <p class="loader-title">The Wedding</p>
+      <p class="loader-text">Memuat undangan</p>
+    </div>
+
+    <!-- 1. Greeting modal: an arched photo rising in front of a striped sunset -->
+    <div
+      id="greeting"
+      class="senja-backdrop fixed inset-0 z-50 overflow-hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="greeting-title"
+    >
+      <div class="grain relative mx-auto flex h-full max-w-md flex-col items-center justify-center overflow-hidden px-8 text-center shadow-2xl">
+        <p class="cover-in relative pl-[0.4em] text-[11px] font-bold uppercase tracking-[0.4em] text-terra" style="--d: 0.4s">Undangan Pernikahan</p>
+
+        <div class="relative mt-8 aspect-[3/4] h-[34svh] max-h-[310px] min-h-[170px]">
+          <div class="cover-in cover-rise pointer-events-none absolute -top-[14%] left-1/2 w-[150%] -translate-x-1/2" style="--d: 0.3s">
+            <svg class="block w-full text-terra/20" viewBox="-52 -52 104 52" aria-hidden="true"><use href="#g-sun" /></svg>
+          </div>
+          <div class="cover-in cover-zoom relative h-full w-full" style="--d: 0.6s">
+            <span class="absolute inset-0 translate-x-2.5 translate-y-2.5 rounded-t-full border border-terra/60" aria-hidden="true"></span>
+            <img src="assets/cover.webp" data-src="media.cover" alt="Foto mempelai" class="warm relative h-full w-full rounded-t-full object-cover shadow-lg" />
+          </div>
+          <div class="cover-in cover-sprout pointer-events-none absolute -bottom-8 -left-[42%] w-[76%] origin-bottom" style="--d: 0.9s">
+            <svg class="sway block w-full origin-bottom" viewBox="-140 -150 280 165" aria-hidden="true"><use href="#g-bouquet" transform="rotate(-24)" /></svg>
+          </div>
+          <div class="cover-in cover-sprout pointer-events-none absolute -bottom-8 -right-[42%] w-[76%] origin-bottom" style="--d: 1.05s">
+            <svg class="sway block w-full origin-bottom [animation-delay:-3s]" viewBox="-140 -150 280 165" aria-hidden="true"><use href="#g-bouquet" transform="scale(-1 1) rotate(-24)" /></svg>
+          </div>
+        </div>
+
+        <h1 id="greeting-title" class="cover-in relative mt-9 font-display text-5xl font-light italic leading-tight text-clay" style="--d: 1.1s">
+          <span data-bind="couple.wanita.panggilan"></span> <span class="not-italic text-terra">&amp;</span> <span data-bind="couple.pria.panggilan"></span>
+        </h1>
+        <p class="cover-in relative mt-2 pl-[0.4em] text-xs font-semibold tracking-[0.4em] text-bark/70" style="--d: 1.2s" data-bind="$tanggalTitik"></p>
+        <p class="cover-in relative mt-6 font-display text-base italic text-bark/70" style="--d: 1.35s">Kepada Yth. Bapak/Ibu/Saudara/i</p>
+        <p id="guest-name" class="cover-in relative mt-1 max-w-full truncate font-display text-2xl font-medium text-bark" style="--d: 1.45s">Tamu Undangan</p>
+        <button
+          id="open-btn"
+          type="button"
+          disabled
+          style="--d: 1.6s"
+          class="cover-in relative mt-6 inline-flex items-center gap-2.5 rounded-full bg-terra px-7 py-3 text-xs font-bold uppercase tracking-[0.22em] text-linen shadow-lg shadow-terra/30 transition hover:bg-clay focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-clay disabled:opacity-60"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3.5 7 8.5 6 8.5-6" /></svg>
+          <span>Buka Undangan</span>
+        </button>
+        <p id="load-error" hidden class="relative mt-4 text-base">
+          Undangan gagal dimuat.
+          <button type="button" class="font-bold underline" onclick="location.reload()">Muat ulang</button>
+        </p>
+      </div>
+    </div>
+
+    <main class="grain relative mx-auto max-w-md overflow-hidden shadow-[0_0_70px_rgba(74,58,46,0.22)]">
+      <!-- 2. Hero -->
+      <header id="home" class="relative flex min-h-svh flex-col items-center justify-center px-8 pb-16 pt-20 text-center">
+        <svg class="w-16" viewBox="-52 -52 104 56" aria-hidden="true" data-aos="fade-down" data-aos-anchor="#home"><use href="#g-rainbow" /></svg>
+        <p class="mt-4 pl-[0.4em] text-[11px] font-bold uppercase tracking-[0.4em] text-terra" data-aos="fade" data-aos-delay="150" data-aos-anchor="#home">The Wedding of</p>
+        <h1 class="mt-3 font-display font-light italic leading-[0.95] text-clay" data-aos="fade-up" data-aos-delay="250" data-aos-anchor="#home">
+          <span class="block text-7xl" data-bind="couple.wanita.panggilan"></span>
+          <span class="my-1 block text-3xl not-italic text-terra">&amp;</span>
+          <span class="block text-7xl" data-bind="couple.pria.panggilan"></span>
+        </h1>
+
+        <div class="relative mt-12 w-[70%]" data-aos="zoom-in" data-aos-delay="400" data-aos-anchor="#home">
+          <svg class="pointer-events-none absolute -top-[16%] left-1/2 w-[160%] -translate-x-1/2 text-wheat/40" viewBox="-52 -52 104 52" aria-hidden="true"><use href="#g-sun" /></svg>
+          <span class="absolute inset-0 -translate-x-2.5 translate-y-2.5 rounded-t-full border border-sage" aria-hidden="true"></span>
+          <img src="assets/header.webp" alt="Foto mempelai" class="warm relative aspect-[3/4] w-full rounded-t-full object-cover shadow-xl" />
+          <svg class="pointer-events-none absolute -bottom-10 -right-[22%] w-[60%]" viewBox="-140 -150 280 165" aria-hidden="true"><use href="#g-bouquet" transform="rotate(18)" /></svg>
+        </div>
+
+        <div class="mt-12 flex items-center gap-3" data-aos="fade-up" data-aos-offset="0">
+          <span class="h-px w-10 bg-terra/50"></span>
+          <p class="pl-[0.4em] text-xs font-semibold tracking-[0.4em] text-bark" data-bind="$tanggalTitik"></p>
+          <span class="h-px w-10 bg-terra/50"></span>
+        </div>
+
+        <!-- Music player: a little kraft cassette label -->
+        <div
+          id="player"
+          data-aos="fade-up"
+          data-aos-delay="150"
+          data-aos-offset="0"
+          class="mt-9 flex w-full max-w-xs items-center gap-3 rounded-2xl border border-dashed border-terra/45 bg-linen/90 p-2.5 text-left shadow-[0_12px_30px_-16px_rgba(138,70,50,0.55)]"
+        >
+          <span class="relative h-12 w-12 shrink-0">
+            <img src="assets/header.webp" alt="" class="warm h-12 w-12 rounded-xl object-cover" />
+          </span>
+          <div class="min-w-0 flex-1">
+            <p class="truncate font-display text-[15px] font-medium italic text-clay" data-bind="media.judul_musik"></p>
+            <div class="mt-1.5 h-[3px] overflow-hidden rounded-full bg-terra/20"><div id="progress" class="h-full w-0 bg-terra"></div></div>
+            <div class="mt-1 flex justify-between text-[10px] font-semibold text-bark/60"><span id="t-cur"><b class="font-medium">0</b>:<b class="font-medium">00</b></span><span id="t-dur"><b class="font-medium">0</b>:<b class="font-medium">00</b></span></div>
+          </div>
+          <button
+            id="player-toggle"
+            type="button"
+            aria-label="Putar musik"
+            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-terra text-linen shadow transition hover:bg-clay"
+          >
+            <svg data-icon="play" class="ml-0.5 h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z" /></svg>
+            <svg data-icon="pause" hidden class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z" /></svg>
+          </button>
+        </div>
+        <p class="mt-3 font-display text-sm italic text-bark/60" data-aos="fade" data-aos-delay="250" data-aos-offset="0">Putar lagu kami sambil membaca</p>
+      </header>
+
+      <!-- 3. Verse: a terracotta band with the sun setting behind the words -->
+      <section id="quote" class="wave relative bg-terra px-9 py-20 text-center text-linen [--wave:#b5654a]">
+        <svg class="pointer-events-none absolute bottom-0 left-1/2 w-[85%] -translate-x-1/2 text-linen/10" viewBox="-52 -52 104 52" aria-hidden="true"><use href="#g-sun" /></svg>
+        <svg class="relative mx-auto w-28" viewBox="-140 -150 280 165" aria-hidden="true" data-aos="fade"><use href="#g-bouquet" /></svg>
+        <blockquote class="relative mt-6 font-display text-[1.3rem] font-light italic leading-relaxed" data-aos="fade-up" data-aos-delay="150">
+          &ldquo;Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan untukmu dari jenismu sendiri, agar kamu
+          cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.&rdquo;
+        </blockquote>
+        <p class="relative mt-6 pl-[0.35em] text-[11px] font-bold uppercase tracking-[0.35em] text-sand" data-aos="fade-up" data-aos-delay="300">QS. Ar-Rum : 21</p>
+      </section>
+
+      <!-- 4. Couple: pill portraits side by side with their names -->
+      <section id="couple" class="relative px-6 py-24">
+        <div class="text-center">
+          <svg class="mx-auto w-14" viewBox="-52 -52 104 56" aria-hidden="true" data-aos="fade"><use href="#g-rainbow" /></svg>
+          <h2 class="mt-4 font-display text-5xl font-light italic text-clay" data-aos="fade-up">Sang Mempelai</h2>
+          <p class="mx-auto mt-4 max-w-sm text-base leading-relaxed text-pretty text-bark/85" data-aos="fade-up" data-aos-delay="150">
+            Dengan memohon rahmat Allah SWT, kami bermaksud menyelenggarakan pernikahan putra-putri kami:
+          </p>
+        </div>
+
+        <div class="mt-14 grid grid-cols-[44%_1fr] items-center gap-5" data-aos="fade-right">
+          <div class="relative">
+            <span class="absolute inset-0 translate-x-2 translate-y-2 rounded-full border border-terra/55" aria-hidden="true"></span>
+            <img src="assets/wanita.webp" alt="Mempelai wanita" class="warm relative aspect-[3/5] w-full rounded-full object-cover shadow-lg" />
+            <svg class="pointer-events-none absolute -bottom-6 -left-6 w-24" viewBox="-140 -150 280 165" aria-hidden="true"><use href="#g-bouquet" transform="rotate(-30)" /></svg>
+          </div>
+          <div class="text-left">
+            <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-terra">Mempelai Wanita</p>
+            <h3 class="mt-2 font-display text-[1.75rem] font-normal leading-tight text-clay" data-bind="couple.wanita.lengkap"></h3>
+            <span class="my-3 block h-px w-12 bg-terra/50" aria-hidden="true"></span>
+            <p class="text-sm leading-snug text-bark/80" data-bind="$ortuWanita"></p>
+          </div>
+        </div>
+
+        <p class="my-12 text-center font-display text-6xl font-light italic leading-none text-terra" data-aos="zoom-in">&amp;</p>
+
+        <div class="grid grid-cols-[1fr_44%] items-center gap-5" data-aos="fade-left">
+          <div class="text-right">
+            <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-terra">Mempelai Pria</p>
+            <h3 class="mt-2 font-display text-[1.75rem] font-normal leading-tight text-clay" data-bind="couple.pria.lengkap"></h3>
+            <span class="my-3 ml-auto block h-px w-12 bg-terra/50" aria-hidden="true"></span>
+            <p class="text-sm leading-snug text-bark/80" data-bind="$ortuPria"></p>
+          </div>
+          <div class="relative">
+            <span class="absolute inset-0 -translate-x-2 translate-y-2 rounded-full border border-sage" aria-hidden="true"></span>
+            <img src="assets/pria.webp" alt="Mempelai pria" class="warm relative aspect-[3/5] w-full rounded-full object-cover shadow-lg" />
+            <svg class="pointer-events-none absolute -bottom-6 -right-6 w-24" viewBox="-140 -150 280 165" aria-hidden="true"><use href="#g-bouquet" transform="scale(-1 1) rotate(-30)" /></svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Save the date + countdown -->
+      <section id="countdown" class="wave relative bg-sand px-6 py-20 text-center [--wave:#e8d9c4]">
+        <svg class="pointer-events-none absolute -left-8 top-6 w-32 opacity-80" viewBox="-140 -150 280 165" aria-hidden="true" data-aos="fade"><use href="#g-bouquet" transform="rotate(38)" /></svg>
+        <svg class="pointer-events-none absolute -right-8 top-6 w-32 opacity-80" viewBox="-140 -150 280 165" aria-hidden="true" data-aos="fade"><use href="#g-bouquet" transform="scale(-1 1) rotate(38)" /></svg>
+
+        <p class="relative pl-[0.35em] text-[11px] font-bold uppercase tracking-[0.35em] text-terra" data-aos="fade-up">Hari Bahagia</p>
+        <h2 class="relative mt-2 font-display text-6xl font-light italic text-clay" data-aos="fade-up" data-aos-delay="100">Save the Date</h2>
+
+        <div class="relative mx-auto mt-9 max-w-[22rem] rounded-[2rem] border border-dashed border-terra/40 bg-linen px-4 pb-4 pt-5 shadow-[0_16px_36px_-22px_rgba(138,70,50,0.6)]" data-aos="fade-up" data-aos-delay="200">
+          <p class="pl-[0.3em] font-display text-lg italic text-clay" data-bind="$bulan"></p>
+          <div id="cal-strip" class="mt-3 grid grid-cols-3 text-center">
+            <!-- filled by script.js -->
+          </div>
+        </div>
+
+        <p class="mt-12 font-display text-xl italic text-clay" data-aos="fade-up">Menuju hari bahagia</p>
+        <div id="cd" class="mx-auto mt-5 grid max-w-[21rem] grid-cols-4 gap-3 text-center">
+          <div class="flex aspect-square flex-col items-center justify-center rounded-full bg-terra text-linen shadow-md" data-aos="zoom-in" data-aos-delay="0">
+            <b class="font-display text-[1.7rem] font-medium leading-none" data-cd="d">00</b>
+            <span class="mt-1 text-[9px] font-bold uppercase tracking-[0.18em] text-linen/80">Hari</span>
+          </div>
+          <div class="flex aspect-square flex-col items-center justify-center rounded-full bg-[#c9814f] text-linen shadow-md" data-aos="zoom-in" data-aos-delay="120">
+            <b class="font-display text-[1.7rem] font-medium leading-none" data-cd="h">00</b>
+            <span class="mt-1 text-[9px] font-bold uppercase tracking-[0.18em] text-linen/80">Jam</span>
+          </div>
+          <div class="flex aspect-square flex-col items-center justify-center rounded-full bg-wheat text-bark shadow-md" data-aos="zoom-in" data-aos-delay="240">
+            <b class="font-display text-[1.7rem] font-medium leading-none" data-cd="m">00</b>
+            <span class="mt-1 text-[9px] font-bold uppercase tracking-[0.18em] text-bark/70">Menit</span>
+          </div>
+          <div class="flex aspect-square flex-col items-center justify-center rounded-full bg-sage text-linen shadow-md" data-aos="zoom-in" data-aos-delay="360">
+            <b class="font-display text-[1.7rem] font-medium leading-none" data-cd="s">00</b>
+            <span class="mt-1 text-[9px] font-bold uppercase tracking-[0.18em] text-linen/80">Detik</span>
+          </div>
+        </div>
+        <p id="cd-done" hidden class="mt-6 font-display text-lg italic">Acara telah berlangsung. Terima kasih atas doa dan restunya.</p>
+        <div class="mt-9" data-aos="fade-up">
+          <a
+            id="cal-link"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 rounded-full border border-clay px-6 py-2.5 text-xs font-bold uppercase tracking-[0.2em] text-clay transition hover:bg-clay hover:text-linen"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 11h18" />
+            </svg>
+            Simpan ke Kalender
+          </a>
+        </div>
+      </section>
+
+      <!-- 6. Our story: a dotted trail of little suns -->
+      <section id="story" class="relative px-7 py-24">
+        <div class="text-center">
+          <svg class="mx-auto w-14" viewBox="-52 -52 104 56" aria-hidden="true" data-aos="fade"><use href="#g-rainbow" /></svg>
+          <h2 class="mt-4 font-display text-5xl font-light italic text-clay" data-aos="fade-up">Kisah Kami</h2>
+          <p class="mt-2 pl-[0.35em] text-[11px] font-bold uppercase tracking-[0.35em] text-terra" data-aos="fade-up" data-aos-delay="100">Our Love Story</p>
+        </div>
+
+        <div class="relative mx-auto mt-12 w-[80%]" data-aos="zoom-in">
+          <span class="absolute inset-0 translate-x-3 -translate-y-3 rounded-t-full rounded-b-3xl bg-sand" aria-hidden="true"></span>
+          <img src="assets/story.webp" alt="" class="warm relative aspect-[4/5] w-full rounded-t-full rounded-b-3xl object-cover shadow-lg" />
+          <svg class="pointer-events-none absolute -bottom-10 -left-[18%] w-[55%]" viewBox="-140 -150 280 165" aria-hidden="true"><use href="#g-bouquet" transform="rotate(-16)" /></svg>
+        </div>
+
+        <ol class="relative mt-16 space-y-9 border-l border-dashed border-terra/45 pl-8">
+          <li class="relative" data-aos="fade-up">
+            <svg class="absolute -left-[2.85rem] top-0 h-7 w-7 text-terra" viewBox="-40 -40 80 80" aria-hidden="true"><use href="#g-sunburst" /></svg>
+            <p class="text-[11px] font-bold uppercase tracking-[0.3em] text-terra"><b class="font-bold">2020</b> · Bertemu</p>
+            <h3 class="mt-1 font-display text-2xl italic text-clay">Kelas Keramik di Jogja</h3>
+            <p class="mt-2 text-base leading-relaxed text-pretty text-bark/85">
+              Dua pemula di meja putar yang sama. Mangkuk pertamanya miring, mangkuk pertamaku retak — kami tertawa sampai
+              tanah liatnya kering.
+            </p>
+          </li>
+          <li class="relative" data-aos="fade-up">
+            <svg class="absolute -left-[2.85rem] top-0 h-7 w-7 text-wheat" viewBox="-40 -40 80 80" aria-hidden="true"><use href="#g-sunburst" /></svg>
+            <p class="text-[11px] font-bold uppercase tracking-[0.3em] text-terra"><b class="font-bold">2022</b> · Berjalan</p>
+            <h3 class="mt-1 font-display text-2xl italic text-clay">Mengejar Senja</h3>
+            <p class="mt-2 text-base leading-relaxed text-pretty text-bark/85">
+              Dari Parangtritis sampai Bukit Sikunir, kami selalu datang terlalu awal demi langit oranye yang sama — dan pulang
+              dengan cerita yang tak pernah habis.
+            </p>
+          </li>
+          <li class="relative" data-aos="fade-up">
+            <svg class="absolute -left-[2.85rem] top-0 h-7 w-7 text-sage" viewBox="-40 -40 80 80" aria-hidden="true"><use href="#g-sunburst" /></svg>
+            <p class="text-[11px] font-bold uppercase tracking-[0.3em] text-terra"><b class="font-bold">2026</b> · Berjanji</p>
+            <h3 class="mt-1 font-display text-2xl italic text-clay">Satu Pertanyaan</h3>
+            <p class="mt-2 text-base leading-relaxed text-pretty text-bark/85">
+              Di padang ilalang Lembang, ketika matahari tinggal sejengkal di cakrawala, ia bertanya — dan aku menjawab sebelum
+              matahari benar-benar tenggelam.
+            </p>
+          </li>
+        </ol>
+      </section>
+
+      <!-- 7. Sessions & venue -->
+      <section id="location" class="wave relative bg-sage-wash px-6 py-20 text-center [--wave:#e5e3d3]">
+        <svg class="mx-auto w-28" viewBox="-140 -150 280 165" aria-hidden="true" data-aos="fade"><use href="#g-bouquet" /></svg>
+        <h2 class="mt-3 font-display text-5xl font-light italic text-clay" data-aos="fade-up">Rangkaian Acara</h2>
+        <p class="mt-2 pl-[0.35em] text-[11px] font-bold uppercase tracking-[0.35em] text-moss" data-aos="fade-up" data-aos-delay="100">Waktu &amp; Tempat</p>
+        <div id="session-list" class="mt-10 grid gap-4 min-[380px]:grid-cols-2"></div>
+        <div id="venue-list" class="mt-6 space-y-6"></div>
+      </section>
+
+      <!-- 8. Gallery -->
+      <section id="gallery" class="relative px-6 py-24 text-center">
+        <svg class="mx-auto w-14" viewBox="-52 -52 104 56" aria-hidden="true" data-aos="fade"><use href="#g-rainbow" /></svg>
+        <h2 class="mt-4 font-display text-5xl font-light italic text-clay" data-aos="fade-up">Galeri Kami</h2>
+        <p class="mt-2 pl-[0.35em] text-[11px] font-bold uppercase tracking-[0.35em] text-terra" data-aos="fade-up" data-aos-delay="100">Potongan Cerita</p>
+        <div id="gallery-grid" class="mt-10 grid grid-cols-2 gap-x-4 gap-y-5"></div>
+      </section>
+
+      <!-- 9. Gift: a kraft gift tag on a length of twine -->
+      <section id="gift" class="wave relative bg-sand px-6 py-20 text-center [--wave:#e8d9c4]">
+        <h2 class="font-display text-5xl font-light italic text-clay" data-aos="fade-up">Tanda Kasih</h2>
+        <p class="mx-auto mt-4 max-w-sm text-base leading-relaxed text-pretty text-bark/85" data-aos="fade-up" data-aos-delay="150">
+          Doa restu Anda adalah hadiah terindah bagi kami. Bila ingin mengirimkan tanda kasih, Anda dapat melalui amplop digital
+          berikut.
+        </p>
+
+        <div id="envelope" class="relative mx-auto mt-6 w-full max-w-[300px]" data-aos="fade-up">
+          <!-- Twine -->
+          <svg class="mx-auto block h-16 w-24" viewBox="0 0 96 64" fill="none" stroke="#8a4632" stroke-width="1.3" stroke-linecap="round" aria-hidden="true">
+            <path d="M48 64C40 40 30 22 8 2" /><path d="M48 64C56 40 66 22 88 2" />
+          </svg>
+          <div class="tag relative -mt-2 bg-kraft px-6 pb-9 pt-12">
+            <span class="absolute left-1/2 top-4 h-5 w-5 -translate-x-1/2 rounded-full bg-sand ring-2 ring-clay/40" aria-hidden="true"></span>
+            <span class="pointer-events-none absolute inset-3 top-10 border border-dashed border-clay/35" aria-hidden="true"></span>
+            <p class="relative mt-4 text-[11px] font-bold uppercase tracking-[0.35em] text-clay/80">Amplop Digital</p>
+            <p class="relative mt-1 font-display text-5xl font-medium italic leading-tight text-clay" data-bind="gift.bank"></p>
+            <p class="relative mt-2 font-display text-[1.6rem] tracking-[0.1em] text-bark" data-bind="gift.norek"></p>
+            <p class="relative mt-1 text-sm text-bark/80">a.n. <span class="font-semibold" data-bind="gift.atas_nama"></span></p>
+            <button
+              id="copy-btn"
+              type="button"
+              class="relative mt-5 inline-flex items-center gap-2 rounded-full bg-bark px-5 py-2.5 text-xs font-bold uppercase tracking-[0.2em] text-linen shadow-md transition hover:bg-clay"
+            >
+              <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2" /><path d="M5 15V5a2 2 0 0 1 2-2h10" /></svg>
+              Salin Nomor
+            </button>
+          </div>
+          <svg class="pointer-events-none absolute -right-10 bottom-2 w-32" viewBox="-140 -150 280 165" aria-hidden="true"><use href="#g-bouquet" transform="rotate(-38)" /></svg>
+        </div>
+        <figure id="qris-wrap" class="mt-8">
+          <img id="qris" alt="QRIS" data-aos="zoom-in" class="mx-auto w-52 rounded-2xl border border-terra/25 bg-white p-3 shadow-sm" loading="lazy" />
+          <figcaption class="mt-3 font-display text-base italic">Pindai QRIS untuk mengirim hadiah</figcaption>
+        </figure>
+      </section>
+
+      <!-- 10. Wishes -->
+      <section id="wishes" class="relative px-6 py-24 text-center">
+        <svg class="mx-auto w-14" viewBox="-52 -52 104 56" aria-hidden="true" data-aos="fade"><use href="#g-rainbow" /></svg>
+        <h2 class="mt-4 font-display text-5xl font-light italic text-clay" data-aos="fade-up">Ucapan &amp; Doa</h2>
+        <p class="mx-auto mt-4 max-w-sm text-base leading-relaxed text-pretty text-bark/85" data-aos="fade-up" data-aos-delay="150">Titipkan doa dan harapan terbaik Anda untuk perjalanan kami.</p>
+        <form id="wish-form" class="mx-auto mt-8 max-w-[340px] rounded-[1.75rem] border border-terra/25 bg-white/60 p-5 text-left shadow-[0_18px_44px_-28px_rgba(138,70,50,0.7)]" hidden>
+          <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-terra">Dari</p>
+          <p id="wish-name" class="font-display text-xl italic text-clay"></p>
+          <label for="wish-text" class="sr-only">Ucapan dan doa</label>
+          <textarea id="wish-text" rows="4" maxlength="500" required placeholder="Tulis ucapan dan doa…" class="mt-3 block w-full resize-none rounded-2xl border border-terra/25 bg-linen px-4 py-3 text-base leading-snug text-bark placeholder:text-bark/40 focus:border-terra focus:outline-none"></textarea>
+          <button id="wish-send" type="submit" class="mt-4 w-full rounded-full bg-terra px-5 py-3 text-xs font-bold uppercase tracking-[0.2em] text-linen shadow-md transition hover:bg-clay disabled:opacity-50">Kirim Ucapan</button>
+        </form>
+        <p id="wish-locked" class="mx-auto mt-8 max-w-[340px] rounded-2xl bg-sand px-5 py-4 font-display text-base italic" hidden>Buka undangan dari link pribadi Anda untuk mengirim ucapan.</p>
+        <p class="mt-10 text-[11px] font-bold uppercase tracking-[0.3em] text-terra"><span id="wish-count">0</span> Ucapan</p>
+        <div id="wish-list" class="mx-auto mt-4 flex max-h-[30rem] max-w-[340px] flex-col gap-3 overflow-y-auto pr-1 text-left [scrollbar-color:rgb(181_101_74/0.4)_transparent] [scrollbar-width:thin]" aria-live="polite"></div>
+        <p id="wish-empty" class="mt-6 font-display text-lg italic text-bark/60" hidden>Belum ada ucapan. Jadilah yang pertama.</p>
+      </section>
+
+      <!-- 11. Closing: the sun sets on a clay sky -->
+      <footer class="wave relative overflow-x-clip bg-clay px-8 pb-56 pt-24 text-center text-linen [--wave:#8a4632]">
+        <h2 class="font-display text-6xl font-light italic" data-aos="fade-up">Terima Kasih</h2>
+        <p class="mx-auto mt-5 max-w-sm text-base leading-relaxed text-pretty text-linen/85" data-aos="fade-up" data-aos-delay="150">
+          Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa
+          restu.
+        </p>
+        <p class="mt-8 font-display text-base italic text-linen/80" data-aos="fade-up">Kami yang berbahagia,</p>
+        <p class="mt-1 font-display text-5xl font-light italic leading-tight" data-aos="zoom-in" data-aos-delay="150">
+          <span data-bind="couple.wanita.panggilan"></span> <span class="not-italic text-wheat">&amp;</span> <span data-bind="couple.pria.panggilan"></span>
+        </p>
+        <p class="mt-2 text-xs font-semibold tracking-[0.15em] text-wheat" data-bind="couple.hashtag" data-aos="fade" data-aos-delay="300"></p>
+
+        <div class="pointer-events-none absolute inset-x-0 bottom-0" aria-hidden="true">
+          <svg class="sun-set mx-auto block w-[78%] text-[#c9814f]" viewBox="-52 -52 104 52"><use href="#g-sun" /></svg>
+          <svg class="absolute -left-6 bottom-0 w-36" viewBox="-140 -150 280 165"><use href="#g-bouquet" transform="rotate(12)" /></svg>
+          <svg class="absolute -right-6 bottom-0 w-36" viewBox="-140 -150 280 165"><use href="#g-bouquet" transform="scale(-1 1) rotate(12)" /></svg>
+          <div class="h-10 border-t border-linen/25 bg-[#73392a]"></div>
+        </div>
+        <p class="absolute inset-x-0 bottom-3 text-[10px] tracking-[0.2em] text-linen/55">Undangan digital · by.me</p>
+      </footer>
+    </main>
+
+    <!-- List item templates, filled by script.js -->
+    <template id="tpl-session">
+      <div class="drop-shadow-[0_10px_16px_rgba(74,58,46,0.14)]"><article class="ticket relative bg-linen px-4 pb-6 pt-6">
+        <svg class="mx-auto h-9 w-9 text-terra" viewBox="-40 -40 80 80" aria-hidden="true"><use href="#g-sunburst" /></svg>
+        <h3 class="mt-2 flex min-h-16 items-center justify-center font-display text-[1.6rem] font-normal italic leading-[1.15] text-clay" data-f="label"></h3>
+        <span class="mx-auto my-3 block w-full border-t border-dashed border-terra/40" aria-hidden="true"></span>
+        <p class="text-[11px] font-bold uppercase leading-relaxed tracking-[0.16em] text-moss" data-f="$tanggal"></p>
+        <p class="mt-2 whitespace-nowrap font-display text-lg text-bark" data-f="$jam"></p>
+        <p class="mt-1 text-sm text-bark/75" data-opt="dress_code">Dress code: <span class="font-bold" data-f="dress_code"></span></p>
+      </article></div>
+    </template>
+
+    <template id="tpl-wish">
+      <article class="rounded-2xl border-l-4 border-terra/60 bg-white/65 px-5 py-4 shadow-sm">
+        <p class="font-display text-lg font-medium italic text-clay" data-f="nama"></p>
+        <p class="mt-1 text-[15px] leading-snug text-bark/85" data-f="pesan"></p>
+      </article>
+    </template>
+    <template id="tpl-venue">
+      <article class="relative overflow-hidden rounded-t-[10rem] rounded-b-[2rem] border border-terra/25 bg-linen px-6 pb-9 pt-12 shadow-[0_14px_34px_-22px_rgba(74,58,46,0.6)]">
+        <!-- Rustic pergola strung with lights -->
+        <svg class="mx-auto h-24 w-40 text-clay" viewBox="0 0 140 84" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true">
+          <path d="M8 78 H132" />
+          <path d="M34 78 V22 M106 78 V22" />
+          <path d="M24 22 H116 M28 16 H112" />
+          <path d="M40 16 V22 M56 16 V22 M70 16 V22 M84 16 V22 M100 16 V22" />
+          <path d="M34 28 Q70 48 106 28" stroke-dasharray="1 0" />
+          <g fill="#d6a15a" stroke="none"><circle cx="44" cy="33.5" r="2" /><circle cx="57" cy="38" r="2" /><circle cx="70" cy="39.5" r="2" /><circle cx="83" cy="38" r="2" /><circle cx="96" cy="33.5" r="2" /></g>
+          <use href="#g-pampas" transform="translate(18 78) rotate(-14) scale(.42)" color="#c9a77a" stroke="none" />
+          <use href="#g-fern" transform="translate(24 78) rotate(12) scale(.4)" color="#8f9b7a" stroke="none" />
+          <use href="#g-pampas" transform="translate(122 78) rotate(14) scale(.42)" color="#c9a77a" stroke="none" />
+          <use href="#g-wheat" transform="translate(116 78) rotate(-12) scale(.4)" color="#b5654a" stroke="none" />
+        </svg>
+        <h3 class="mt-3 font-display text-4xl font-light italic leading-tight text-clay" data-f="$judul"></h3>
+        <p class="mt-2 font-display text-xl font-medium text-bark" data-opt="tempat" data-f="tempat"></p>
+        <p class="mx-auto mt-1 max-w-xs text-base leading-snug text-bark/80" data-f="alamat"></p>
+        <a
+          data-href="maps"
+          target="_blank"
+          rel="noopener"
+          class="mt-6 inline-flex items-center gap-2 rounded-full bg-terra px-6 py-2.5 text-xs font-bold uppercase tracking-[0.2em] text-linen shadow-md transition hover:bg-clay"
+        >
+          <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z" /><circle cx="12" cy="9" r="2.5" />
+          </svg>
+          Lihat Peta
+        </a>
+        <a
+          data-href="live_stream"
+          target="_blank"
+          rel="noopener"
+          class="ml-2 mt-6 inline-block rounded-full border border-clay px-6 py-2.5 text-xs font-bold uppercase tracking-[0.2em] text-clay"
+          >Live Streaming</a
+        >
+      </article>
+    </template>
+
+    <!-- Gallery lightbox -->
+    <div
+      id="lightbox"
+      hidden
+      class="fixed inset-0 z-50 flex items-center justify-center bg-[#2e231b]/92"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Galeri foto"
+    >
+      <img id="lightbox-img" alt="" class="warm max-h-[85vh] max-w-[92vw] rounded-2xl object-contain" />
+      <button id="lb-close" type="button" aria-label="Tutup" class="absolute right-4 top-4 p-2 text-3xl leading-none text-linen">&times;</button>
+      <button id="lb-prev" type="button" aria-label="Sebelumnya" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 text-4xl text-linen">&lsaquo;</button>
+      <button id="lb-next" type="button" aria-label="Berikutnya" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 text-4xl text-linen">&rsaquo;</button>
+      <p id="lb-count" class="absolute bottom-5 text-xs tracking-[0.2em] text-linen/80"></p>
+    </div>
+
+    <!-- Music -->
+    <audio id="music" loop preload="none"></audio>
+    <button
+      id="music-btn"
+      hidden
+      type="button"
+      aria-label="Putar/jeda musik"
+      class="fixed bottom-5 right-5 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-terra text-linen shadow-lg ring-1 ring-terra/50 ring-offset-2 ring-offset-linen"
+    >
+      <svg class="h-6 w-6" viewBox="-40 -40 80 80" aria-hidden="true"><use href="#g-sunburst" /></svg>
+    </button>
+
+    <div
+      id="toast"
+      hidden
+      role="status"
+      class="fixed bottom-20 left-1/2 z-50 -translate-x-1/2 rounded-full bg-bark/95 px-5 py-2 text-xs tracking-wide text-linen shadow-lg"
+    ></div>
+  </body>
+</html>

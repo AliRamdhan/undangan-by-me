@@ -56,7 +56,10 @@ try {
         document.querySelectorAll('[data-aos]').forEach((el) => el.classList.add('aos-animate'))
         document.querySelector('#music')?.pause()
         await Promise.all(
-          [...document.images].map((img) => img.complete || new Promise((r) => (img.onload = img.onerror = r))),
+          [...document.images].map(
+            // Capped: an image that never starts loading (e.g. a lazy slide off to the side) must not hang the run.
+            (img) => img.complete || Promise.race([new Promise((r) => (img.onload = img.onerror = r)), sleep(5000)]),
+          ),
         )
         window.scrollTo(0, 0)
       })

@@ -1,0 +1,270 @@
+/* What Tailwind utilities don't cover. Colors mirror the @theme tokens in index.html. */
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.locked {
+  overflow: hidden;
+}
+
+/* The SVG sprite only holds <defs>; keep it out of the layout */
+.sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* Paper grain: fine warm noise over linen (the column) and sand (the backdrop) */
+:root {
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .27 0 0 0 0 .16 0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.senja-backdrop {
+  background: var(--grain), #e8d9c4;
+}
+.grain {
+  background: var(--grain), #f6efe4;
+}
+
+/* Photos get a warm, faded-film tint */
+.warm {
+  filter: sepia(0.28) saturate(0.9) contrast(0.96) brightness(1.02);
+}
+
+/* Loader covers the greeting until data and the cover photo are ready */
+#loader {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  background:
+    linear-gradient(to right, transparent calc(50% - 14rem), #f6efe4 0 calc(50% + 14rem), transparent 0),
+    var(--grain),
+    #e8d9c4;
+  text-align: center;
+  transition:
+    opacity 0.6s ease,
+    visibility 0.6s;
+}
+#loader.done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-rainbow {
+  width: 88px;
+  height: 48px;
+  overflow: visible;
+}
+.loader-rainbow path {
+  fill: none;
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: rainbow-draw 2.4s cubic-bezier(0.6, 0, 0.3, 1) infinite alternate;
+}
+.loader-rainbow path:nth-child(2) {
+  animation-delay: 0.18s;
+}
+.loader-rainbow path:nth-child(3) {
+  animation-delay: 0.36s;
+}
+@keyframes rainbow-draw {
+  70%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+.loader-title {
+  margin: 1rem 0 0;
+  font-family: "Fraunces", ui-serif, Georgia, serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 2.25rem;
+  line-height: 1.2;
+  color: #8a4632;
+}
+.loader-text {
+  margin: 0;
+  font-family: "Karla", ui-sans-serif, system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #b5654a;
+}
+
+/* Hold the cover's entrance until the loader fades, so it isn't spent unseen */
+body.loading .cover-in {
+  animation-play-state: paused;
+}
+
+/* Greeting modal lifts away when opened */
+#greeting {
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s ease;
+}
+#greeting.closing {
+  opacity: 0;
+  transform: translateY(-3%);
+  pointer-events: none;
+}
+
+/* Greeting content stages in on load; --d sets each element's delay */
+.cover-in {
+  animation: cover-in 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0s) both;
+}
+.cover-zoom {
+  animation-name: cover-zoom;
+}
+/* The sunset rises from behind the arch (Tailwind's centring uses `translate`, so it composes) */
+.cover-rise {
+  animation-name: cover-rise;
+  animation-duration: 1.6s;
+}
+/* Bouquets grow up from their stems */
+.cover-sprout {
+  animation-name: cover-sprout;
+  animation-duration: 1.4s;
+}
+@keyframes cover-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@keyframes cover-zoom {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+@keyframes cover-rise {
+  from {
+    opacity: 0;
+    transform: translateY(40%);
+  }
+}
+@keyframes cover-sprout {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+
+/* Dried stems sway in a slow breeze from their base */
+.sway {
+  animation: sway 6s ease-in-out infinite alternate;
+}
+@keyframes sway {
+  from {
+    transform: rotate(-2deg);
+  }
+  to {
+    transform: rotate(2.4deg);
+  }
+}
+
+/* The wedding day's sun turns slowly on the calendar strip */
+.sun-spin {
+  transform-origin: center;
+  animation: spin 40s linear infinite;
+}
+
+/* Wavy edge above and below tinted bands; --wave is the band colour */
+.wave::before,
+.wave::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  height: 18px;
+  pointer-events: none;
+  background: var(--wave);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='18' viewBox='0 0 120 18'%3E%3Cpath d='M0 18V10C20 0 40 0 60 10S100 20 120 10V18Z'/%3E%3C/svg%3E") 50% 0 / 120px 18px repeat-x;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='18' viewBox='0 0 120 18'%3E%3Cpath d='M0 18V10C20 0 40 0 60 10S100 20 120 10V18Z'/%3E%3C/svg%3E") 50% 0 / 120px 18px repeat-x;
+}
+.wave::before {
+  top: -17px;
+}
+.wave::after {
+  bottom: -17px;
+  transform: scaleY(-1);
+}
+
+/* Session card: a ticket stub with notches level with its dashed tear line */
+.ticket {
+  --n: 146px;
+  border-radius: 1.25rem;
+  -webkit-mask:
+    radial-gradient(circle 11px at 0 var(--n), #0000 98%, #000) 0 0 / 51% 100% no-repeat,
+    radial-gradient(circle 11px at 100% var(--n), #0000 98%, #000) 100% 0 / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle 11px at 0 var(--n), #0000 98%, #000) 0 0 / 51% 100% no-repeat,
+    radial-gradient(circle 11px at 100% var(--n), #0000 98%, #000) 100% 0 / 51% 100% no-repeat;
+}
+
+/* Gift tag: clipped corners; the shadow sits on the wrapper so the clip keeps it */
+.tag {
+  clip-path: polygon(16% 0, 84% 0, 100% 12%, 100% 100%, 0 100%, 0 12%);
+}
+#envelope {
+  filter: drop-shadow(0 16px 22px rgba(74, 58, 46, 0.22));
+}
+
+/* Custom AOS tweaks. AOS sets .aos-animate once an element scrolls in. */
+
+/* AOS slides fades 100px by default; shorter feels gentler on a phone */
+[data-aos="fade-up"] {
+  transform: translate3d(0, 36px, 0);
+}
+[data-aos="fade-down"] {
+  transform: translate3d(0, -36px, 0);
+}
+[data-aos="fade-right"] {
+  transform: translate3d(-40px, 0, 0);
+}
+[data-aos="fade-left"] {
+  transform: translate3d(40px, 0, 0);
+}
+
+#music-btn.playing svg {
+  animation: spin 6s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  #greeting,
+  #loader {
+    transition: none;
+  }
+  .loader-rainbow path,
+  .cover-in,
+  .sway,
+  .sun-spin,
+  #music-btn.playing svg {
+    animation: none;
+  }
+  .loader-rainbow path {
+    stroke-dashoffset: 0;
+  }
+}

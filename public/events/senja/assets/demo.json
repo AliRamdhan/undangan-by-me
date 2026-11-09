@@ -1,0 +1,90 @@
+{
+  "event": {
+    "slug": "senja",
+    "tipe": "PERNIKAHAN",
+    "bahasa": "id",
+    "timezone": "WIB",
+    "couple": {
+      "pria": {
+        "panggilan": "Arga",
+        "lengkap": "Arga Bimantara Putra",
+        "ortu": "Bapak Wahyu Bimantara & Ibu Retno Palupi"
+      },
+      "wanita": {
+        "panggilan": "Maya",
+        "lengkap": "Maya Kirana Larasati",
+        "ortu": "Bapak Hadi Kusumo & Ibu Endah Wulandari"
+      },
+      "hashtag": "#MayaArgaDiUjungSenja"
+    },
+    "tanggal_utama": "2027-08-14",
+    "sesi": [
+      {
+        "kode": "S1",
+        "label": "Akad Nikah",
+        "tanggal": "2027-08-14",
+        "mulai": "14:00",
+        "selesai": "15:00",
+        "tempat": "Rumah Ladang Kayu",
+        "alamat": "Jl. Kolonel Masturi No. 88, Lembang, Bandung Barat",
+        "maps": "https://maps.google.com/?q=Lembang+Bandung+Barat",
+        "dress_code": "Earth tone",
+        "live_stream": ""
+      },
+      {
+        "kode": "S2",
+        "label": "Resepsi Senja",
+        "tanggal": "2027-08-14",
+        "mulai": "16:00",
+        "selesai": "19:00",
+        "tempat": "Rumah Ladang Kayu",
+        "alamat": "Jl. Kolonel Masturi No. 88, Lembang, Bandung Barat",
+        "maps": "https://maps.google.com/?q=Lembang+Bandung+Barat",
+        "dress_code": "Earth tone",
+        "live_stream": ""
+      }
+    ],
+    "gift": {
+      "bank": "BNI",
+      "atas_nama": "Maya Kirana Larasati",
+      "norek": "0817 2345 6789",
+      "qris": ""
+    },
+    "media": {
+      "musik": "assets/demo/musik.mp3",
+      "judul_musik": "Sore Tugu Pancoran — Akustik",
+      "cover": ""
+    },
+    "gallery": [
+      "assets/demo/gallery-1.webp",
+      "assets/demo/gallery-2.webp",
+      "assets/demo/gallery-3.webp",
+      "assets/demo/gallery-4.webp",
+      "assets/demo/gallery-5.webp",
+      "assets/demo/gallery-6.webp"
+    ]
+  },
+  "guest": null,
+  "wishes": [
+    {
+      "nama": "Ibu Endang Sulastri",
+      "pesan": "Selamat menempuh hidup baru, Maya & Arga. Semoga rumah tangga kalian hangat seperti langit senja dan teduh seperti malam sesudahnya."
+    },
+    {
+      "nama": "Bapak Gunawan Saputra",
+      "pesan": "Barakallahu lakuma wa baraka 'alaikuma wa jama'a bainakuma fii khair. Langgeng sampai tua, Nak."
+    },
+    {
+      "nama": "Sdri. Laras Ayuningtyas",
+      "pesan": "Mayaaa! Dari teman satu kelas keramik sampai akhirnya jadi pengantin. Bahagia selalu ya 🌾"
+    },
+    {
+      "nama": "Sdr. Rio Pratama",
+      "pesan": "Selamat, bro Arga! Akhirnya ada yang mau menemanimu naik gunung tiap libur panjang."
+    },
+    {
+      "nama": "Keluarga Besar Kusumo",
+      "pesan": "Doa terbaik untuk kalian berdua. Semoga sakinah, mawaddah, warahmah."
+    }
+  ]
+}

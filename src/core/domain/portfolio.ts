@@ -37,6 +37,10 @@ export const PORTFOLIO: readonly PortfolioItem[] = [
   { slug: 'bloom', title: 'Bloom', couple: 'Nadia & Raka', categories: ['decorative'] },
   { slug: 'ivory', title: 'Ivory', couple: 'Sekar & Bima', categories: ['minimal', 'simple'] },
   { slug: 'fidaeno', title: 'Fidaeno', couple: 'Fida & Eno', categories: ['decorative', 'simple'] },
+  { slug: 'keraton', title: 'Keraton', couple: 'Laras & Prabu', categories: ['ethnic', 'exclusive'] },
+  { slug: 'noir', title: 'Noir', couple: 'Alya & Reza', categories: ['split', 'minimal'] },
+  { slug: 'senja', title: 'Senja', couple: 'Maya & Arga', categories: ['decorative'] },
+  { slug: 'tirta', title: 'Tirta', couple: 'Dinda & Ilham', categories: ['decorative', 'simple'] },
 ]
 
 /** The live demo: the template rendering its own sample data. */

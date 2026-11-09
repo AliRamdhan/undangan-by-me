@@ -1,0 +1,90 @@
+{
+  "event": {
+    "slug": "tirta",
+    "tipe": "PERNIKAHAN",
+    "bahasa": "id",
+    "timezone": "WITA",
+    "couple": {
+      "pria": {
+        "panggilan": "Ilham",
+        "lengkap": "Muhammad Ilham Saputra",
+        "ortu": "Bapak Lalu Hendra Wijaya & Ibu Baiq Nurhasanah"
+      },
+      "wanita": {
+        "panggilan": "Dinda",
+        "lengkap": "Dinda Ayu Paramitha",
+        "ortu": "Bapak Rudy Hartono & Ibu Ni Made Sulastri"
+      },
+      "hashtag": "#DindaIlhamDiTepiLaut"
+    },
+    "tanggal_utama": "2027-09-18",
+    "sesi": [
+      {
+        "kode": "S1",
+        "label": "Akad Nikah",
+        "tanggal": "2027-09-18",
+        "mulai": "08:30",
+        "selesai": "10:00",
+        "tempat": "Pendopo Pasir Putih",
+        "alamat": "Jl. Raya Senggigi Km. 8, Batu Layar, Lombok Barat, NTB",
+        "maps": "https://maps.google.com/?q=Pantai+Senggigi+Lombok",
+        "dress_code": "Putih & Biru Muda",
+        "live_stream": ""
+      },
+      {
+        "kode": "S2",
+        "label": "Resepsi Senja",
+        "tanggal": "2027-09-18",
+        "mulai": "16:00",
+        "selesai": "19:00",
+        "tempat": "Dermaga Senja, Pantai Sire",
+        "alamat": "Sire, Sigar Penjalin, Tanjung, Lombok Utara, NTB",
+        "maps": "https://maps.google.com/?q=Pantai+Sire+Lombok",
+        "dress_code": "Pastel Pantai, alas kaki santai",
+        "live_stream": "https://youtube.com/@contoh"
+      }
+    ],
+    "gift": {
+      "bank": "Mandiri",
+      "atas_nama": "Dinda Ayu Paramitha",
+      "norek": "1610 0123 4567",
+      "qris": ""
+    },
+    "media": {
+      "musik": "assets/demo/musik.mp3",
+      "judul_musik": "Tepi Laut — Akustik Instrumental",
+      "cover": ""
+    },
+    "gallery": [
+      "assets/demo/gallery-1.webp",
+      "assets/demo/gallery-2.webp",
+      "assets/demo/gallery-3.webp",
+      "assets/demo/gallery-4.webp",
+      "assets/demo/gallery-5.webp",
+      "assets/demo/gallery-6.webp"
+    ]
+  },
+  "guest": null,
+  "wishes": [
+    {
+      "nama": "Bapak Lalu Ahmad",
+      "pesan": "Selamat menempuh hidup baru, Dinda & Ilham. Semoga bahtera kalian selalu tenang dan sampai di tujuan."
+    },
+    {
+      "nama": "Ibu Ketut Ariani",
+      "pesan": "Barakallahu lakuma wa baraka 'alaikuma. Bahagia selalu, anak-anakku."
+    },
+    {
+      "nama": "Sdr. Bayu Pratama",
+      "pesan": "Dari teman snorkeling jadi teman hidup. Selamat, kalian berdua!"
+    },
+    {
+      "nama": "Sdri. Rani Oktaviani",
+      "pesan": "Dinda, akhirnya! Sampai jumpa di Sire, sudah siap sandal jepit."
+    },
+    {
+      "nama": "Keluarga Besar Hartono",
+      "pesan": "Semoga menjadi keluarga yang sakinah, mawaddah, warahmah. Doa terbaik dari kami semua."
+    }
+  ]
+}
