@@ -66,14 +66,14 @@ body.locked {
 }
 .loader-title {
   margin: 1.1rem 0 0;
-  font-family: "Gloock", Georgia, serif;
+  font-family: "Century Schoolbook", "Old Standard TT", serif;
   font-size: 2rem;
   line-height: 1.1;
 }
 .loader-text {
   margin: 0.6rem 0 0;
-  font-family: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
-  font-size: 10px;
+  font-family: "Crimson Pro", Georgia, serif;
+  font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.4em;
   text-transform: uppercase;

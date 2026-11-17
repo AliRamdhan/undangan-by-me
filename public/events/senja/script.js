@@ -30,8 +30,8 @@ const LOOK = {
   sonOf: 'Putra dari',
   daughterOf: 'Putri dari',
   venue: 'Lokasi',
-  // Numbers keep the text's weight; Fraunces figures already sit level.
-  numClass: 'font-medium',
+  // Numbers keep the weight of the text around them.
+  numClass: '[font-weight:inherit]',
   // Calendar strip (renderCalendar): the weekday row, then the date row. No grid lines, just air.
   calLabel: (i) =>
     `pb-3 font-sans text-[10px] font-bold uppercase tracking-[0.25em] ${i === 1 ? 'text-terra' : 'text-bark/45'}`,
@@ -40,8 +40,8 @@ const LOOK = {
   calDay: (tgl, main) =>
     main
       ? `<svg class="sun-spin absolute h-[5.6rem] w-[5.6rem] text-terra" viewBox="-40 -40 80 80" aria-hidden="true"><use href="#g-sunburst"/></svg>
-         <b class="relative font-display text-[1.9rem] font-semibold leading-none text-linen">${tgl}</b>`
-      : `<b class="font-display text-3xl font-light italic text-bark/40">${tgl}</b>`,
+         <b class="relative font-display text-[1.9rem] font-bold leading-none text-linen">${tgl}</b>`
+      : `<b class="font-display text-3xl font-normal italic text-bark/40">${tgl}</b>`,
   // Gallery tile (button) and its photo; i is the photo's index. Every six tiles:
   // a wide print, an arch and a pill, then a pill and an arch, then a wide print.
   galleryTile: (i) =>

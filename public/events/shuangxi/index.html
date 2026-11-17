@@ -14,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:ital,wght@0,300;0,400;0,700;1,400&family=Ma+Shan+Zheng&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Ma+Shan+Zheng&display=swap"
       rel="stylesheet"
     />
     <!-- Files in public/ skip Vite, so Tailwind runs in the browser. -->
@@ -31,7 +31,7 @@
         --color-tinta: #3a0a0d;
         --font-han: "Ma Shan Zheng", "STKaiti", "KaiTi", serif;
         --font-display: "Cinzel", Georgia, serif;
-        --font-sans: "Lato", ui-sans-serif, system-ui, sans-serif;
+        --font-sans: "Baskerville", "Libre Baskerville", Georgia, serif;
       }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
@@ -210,7 +210,7 @@
           <div class="min-w-0 flex-1">
             <p class="truncate text-sm font-bold text-krem" data-bind="media.judul_musik"></p>
             <div class="mt-2 h-1 overflow-hidden rounded bg-emas/25"><div id="progress" class="h-full w-0 bg-emas-muda"></div></div>
-            <div class="mt-1 flex justify-between text-[10px] text-krem/70"><span id="t-cur"><b>0</b>:<b>00</b></span><span id="t-dur"><b>0</b>:<b>00</b></span></div>
+            <div class="mt-1 flex justify-between text-[11px] text-krem/70"><span id="t-cur"><b>0</b>:<b>00</b></span><span id="t-dur"><b>0</b>:<b>00</b></span></div>
           </div>
           <button
             id="player-toggle"
@@ -298,10 +298,10 @@
         <p class="mt-7 pl-[0.3em] font-display text-lg tracking-[0.3em] text-merah" data-bind="$tanggalTitik" data-aos="fade"></p>
 
         <div id="cd" class="mt-8 flex items-start justify-center gap-2.5 text-center">
-          <div class="w-[70px] rounded-lg border border-emas bg-merah bg-coin py-3 shadow-md shadow-merah/25" data-aos="zoom-in" data-aos-delay="0"><b class="block font-display text-3xl font-bold text-emas-muda" data-cd="d">00</b><span class="text-[10px] font-bold uppercase tracking-widest text-krem/85">Hari</span></div>
-          <div class="w-[70px] rounded-lg border border-emas bg-merah bg-coin py-3 shadow-md shadow-merah/25" data-aos="zoom-in" data-aos-delay="120"><b class="block font-display text-3xl font-bold text-emas-muda" data-cd="h">00</b><span class="text-[10px] font-bold uppercase tracking-widest text-krem/85">Jam</span></div>
-          <div class="w-[70px] rounded-lg border border-emas bg-merah bg-coin py-3 shadow-md shadow-merah/25" data-aos="zoom-in" data-aos-delay="240"><b class="block font-display text-3xl font-bold text-emas-muda" data-cd="m">00</b><span class="text-[10px] font-bold uppercase tracking-widest text-krem/85">Menit</span></div>
-          <div class="w-[70px] rounded-lg border border-emas bg-merah bg-coin py-3 shadow-md shadow-merah/25" data-aos="zoom-in" data-aos-delay="360"><b class="block font-display text-3xl font-bold text-emas-muda" data-cd="s">00</b><span class="text-[10px] font-bold uppercase tracking-widest text-krem/85">Detik</span></div>
+          <div class="w-[70px] rounded-lg border border-emas bg-merah bg-coin py-3 shadow-md shadow-merah/25" data-aos="zoom-in" data-aos-delay="0"><b class="block font-display text-3xl font-bold text-emas-muda" data-cd="d">00</b><span class="text-[11px] font-bold uppercase tracking-[0.18em] text-krem/85">Hari</span></div>
+          <div class="w-[70px] rounded-lg border border-emas bg-merah bg-coin py-3 shadow-md shadow-merah/25" data-aos="zoom-in" data-aos-delay="120"><b class="block font-display text-3xl font-bold text-emas-muda" data-cd="h">00</b><span class="text-[11px] font-bold uppercase tracking-[0.18em] text-krem/85">Jam</span></div>
+          <div class="w-[70px] rounded-lg border border-emas bg-merah bg-coin py-3 shadow-md shadow-merah/25" data-aos="zoom-in" data-aos-delay="240"><b class="block font-display text-3xl font-bold text-emas-muda" data-cd="m">00</b><span class="text-[11px] font-bold uppercase tracking-[0.18em] text-krem/85">Menit</span></div>
+          <div class="w-[70px] rounded-lg border border-emas bg-merah bg-coin py-3 shadow-md shadow-merah/25" data-aos="zoom-in" data-aos-delay="360"><b class="block font-display text-3xl font-bold text-emas-muda" data-cd="s">00</b><span class="text-[11px] font-bold uppercase tracking-[0.18em] text-krem/85">Detik</span></div>
         </div>
         <p id="cd-done" hidden class="mt-6 text-center text-sm font-bold text-merah">Hari bahagia telah tiba. Terima kasih atas doa restunya.</p>
         <div class="mt-8" data-aos="fade-up">
@@ -456,7 +456,7 @@
         <svg class="mx-auto mt-4 h-6 w-48 text-emas" data-aos="unfold" data-aos-duration="1200" aria-hidden="true"><use href="#yun-divider" /></svg>
         <p class="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-tinta/80" data-aos="fade-up">Kirimkan doa dan ucapan bahagia untuk kedua mempelai.</p>
         <form id="wish-form" class="mx-auto mt-8 max-w-sm rounded-2xl border-2 border-emas/60 bg-white/80 p-5 text-left shadow-lg shadow-merah/10" hidden>
-          <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-emas-tua">Dari <span id="wish-name" class="ml-1 font-display normal-case tracking-normal text-merah"></span></p>
+          <p class="text-[11px] font-bold uppercase tracking-[0.3em] text-emas-tua">Dari <span id="wish-name" class="ml-1 font-display normal-case tracking-normal text-merah"></span></p>
           <label for="wish-text" class="sr-only">Ucapan dan doa</label>
           <textarea id="wish-text" rows="4" maxlength="500" required placeholder="Tulis ucapan dan doa…" class="mt-3 block w-full resize-none rounded-xl border border-emas/50 bg-krem px-4 py-3 text-sm leading-relaxed text-tinta placeholder:text-tinta/40 focus:border-merah focus:outline-none"></textarea>
           <button id="wish-send" type="submit" class="mt-4 w-full rounded-full bg-merah px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-emas-muda shadow-md ring-1 ring-emas transition hover:bg-merah-terang disabled:opacity-50">Kirim Ucapan</button>
@@ -532,7 +532,7 @@
             data-href="maps"
             target="_blank"
             rel="noopener"
-            class="inline-flex items-center gap-1.5 rounded-full border border-emas bg-merah px-5 py-2 text-xs font-bold uppercase tracking-wider text-emas-muda shadow transition hover:bg-merah-terang"
+            class="inline-flex items-center gap-1.5 rounded-full border border-emas bg-merah px-5 py-2 text-xs font-bold uppercase tracking-[0.18em] text-emas-muda shadow transition hover:bg-merah-terang"
           >
             <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z" /><circle cx="12" cy="9" r="2.5" />
@@ -543,7 +543,7 @@
             data-href="live_stream"
             target="_blank"
             rel="noopener"
-            class="inline-block rounded-full border border-merah px-5 py-2 text-xs font-bold uppercase tracking-wider text-merah"
+            class="inline-block rounded-full border border-merah px-5 py-2 text-xs font-bold uppercase tracking-[0.18em] text-merah"
             >Live Streaming</a
           >
         </div>

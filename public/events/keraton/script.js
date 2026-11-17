@@ -30,11 +30,11 @@ const LOOK = {
   sonOf: 'Putra dari',
   daughterOf: 'Putri dari',
   venue: 'Lokasi',
-  // Lining figures sit level in Cormorant; a touch heavier than the body text.
-  numClass: 'font-semibold lining-nums',
+  // Lining figures sit level with the Book Antiqua/Cardo text, same weight.
+  numClass: 'font-normal lining-nums',
   // Calendar strip (renderCalendar): the weekday row, then the date row. Maroon ink on cream.
   calLabel: (i) =>
-    `pt-3 pb-2 text-[11px] font-semibold uppercase tracking-[0.3em] ${i === 1 ? 'text-maroon' : 'text-emas-tua'} ${i < 2 ? 'border-r border-emas/40' : ''}`,
+    `pt-3 pb-2 text-[11px] font-normal uppercase tracking-[0.3em] ${i === 1 ? 'text-maroon' : 'text-emas-tua'} ${i < 2 ? 'border-r border-emas/40' : ''}`,
   calCell: (i) => `relative flex h-24 items-center justify-center border-t border-emas/40 ${i < 2 ? 'border-r' : ''}`,
   // The day itself sits in a gold lozenge (a single kawung seed) on maroon.
   calDay: (tgl, main) =>

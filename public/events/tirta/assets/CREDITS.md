@@ -21,3 +21,13 @@ when this folder becomes a real event.
 | `assets/demo/gallery-6.webp` | bloom `demo/gallery-4.webp` | https://unsplash.com/photos/Rnton6rhDe4 | Céline Druguet |
 
 `assets/demo/musik.mp3` is the shared demo track used by the portfolio templates.
+
+## Fonts
+
+Loaded from Google Fonts under the [SIL Open Font License](https://openfontlicense.org);
+no font files are stored in this folder.
+
+- **Old Standard TT** (400) for headings and display text. The stack lists system
+  **Century Schoolbook** first, so devices that have it installed use it and
+  Old Standard TT is the web fallback.
+- **Crimson Pro** (400, 500, 600) for body text and the tracked capital labels.

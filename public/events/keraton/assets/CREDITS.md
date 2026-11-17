@@ -21,3 +21,16 @@ when this folder becomes a real event.
 | `assets/demo/gallery-6.webp` | ivory `demo/gallery-3.webp` | https://unsplash.com/photos/mXdqXb-FOLc | Tron Le |
 
 `assets/demo/musik.mp3` is the shared demo track used by the portfolio templates.
+
+## Fonts
+
+Loaded from [Google Fonts](https://fonts.google.com) under the
+[SIL Open Font License](https://openfontlicense.org); no font files are stored here.
+
+| Family | Used for |
+|---|---|
+| Cinzel Decorative (400, 700) | Display headings, couple names, numerals |
+| Cardo (400, 400 italic, 700) | Body and italic text, tracked uppercase labels, buttons |
+
+The body stack asks for the system **Book Antiqua** / **Palatino** / Palatino
+Linotype first when installed; Cardo is the open-licensed fallback.

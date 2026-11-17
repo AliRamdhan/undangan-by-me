@@ -34,7 +34,7 @@ export function PortfolioCard({ item, onCategory }: { item: PortfolioItem; onCat
               key={id}
               variant="outline"
               render={<button type="button" onClick={() => onCategory(id)} />}
-              className="h-6 cursor-pointer border-white/40 bg-white/10 px-2.5 text-xs text-white backdrop-blur hover:bg-white/25"
+              className="caps h-6 cursor-pointer border-white/40 bg-white/10 px-2.5 text-[10px] font-normal text-white backdrop-blur hover:bg-white/25"
             >
               {categoryLabel(id)}
             </Badge>
@@ -42,12 +42,12 @@ export function PortfolioCard({ item, onCategory }: { item: PortfolioItem; onCat
         </div>
         <div className="flex items-end justify-between gap-3">
           <div className="min-w-0">
-            <h3 className="text-xl leading-tight font-semibold">{item.title}</h3>
-            <p className="truncate text-sm text-white/75">{item.couple}</p>
+            <h3 className="text-2xl leading-tight">{item.title}</h3>
+            <p className="truncate text-white/80 italic">{item.couple}</p>
           </div>
           <span
             aria-hidden
-            className="flex shrink-0 items-center gap-1 rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium backdrop-blur transition-colors group-hover:bg-white group-hover:text-black"
+            className="caps flex shrink-0 items-center gap-1 rounded-full bg-white/15 px-3 py-1.5 text-[10px] backdrop-blur transition-colors group-hover:bg-white group-hover:text-black"
           >
             Lihat demo
             <HugeiconsIcon icon={ArrowUpRight01Icon} strokeWidth={2} className="size-3.5" />

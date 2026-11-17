@@ -163,7 +163,7 @@ body.locked {
 }
 .loader-text {
   margin: 0.35rem 0 0;
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: "Book Antiqua", Palatino, "Palatino Linotype", "Cardo", serif;
   font-size: 15px;
   font-style: italic;
   letter-spacing: 0.08em;

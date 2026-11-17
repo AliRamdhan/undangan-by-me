@@ -21,3 +21,18 @@ photos). Replace them with the couple's own photos when this folder becomes a re
 | `demo/gallery-6.webp` | https://unsplash.com/photos/jx_ctWmirK4 | Wesley Tingey |
 
 `demo/musik.mp3` is the shared demo track supplied with the portfolio.
+
+# Fonts
+
+All web fonts load from [Google Fonts](https://fonts.google.com) under the
+[SIL Open Font License](https://openfontlicense.org); no font files are bundled here.
+
+| Role | Stack |
+|---|---|
+| Hero, names caps, section titles | Cinzel |
+| Body, tracked caps labels | Baskerville → Libre Baskerville |
+| Italic emphasis (names, quotes) | Libre Caslon Text (italic) |
+| Ampersand | Bell MT → IM Fell English (italic) |
+
+Baskerville and Bell MT are system fonts, used when installed on the viewer's device;
+otherwise the Google Fonts lookalike after them in the stack renders.

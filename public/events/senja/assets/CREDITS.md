@@ -21,3 +21,13 @@ comes from CSS (`.warm` in style.css); the files are unedited.
 | `demo/gallery-6.webp` | `ivory/assets/demo/gallery-6.webp` | https://unsplash.com/photos/L5gTFp1iGHE | Kiet Trinh |
 
 `demo/musik.mp3` is the shared demo track supplied with the portfolio.
+
+## Fonts
+
+Loaded from Google Fonts under the [SIL Open Font License](https://openfontlicense.org);
+no font files are stored in this folder.
+
+- **Libre Baskerville** (400, 400 italic, 700) for headings and display text. The stack
+  lists system **Baskerville** first, so devices that have it installed (e.g. macOS/iOS)
+  use it and Libre Baskerville is the web fallback.
+- **Lora** (400–700) for body text and the tracked small-caps labels.

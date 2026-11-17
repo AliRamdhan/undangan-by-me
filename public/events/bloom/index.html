@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@400;500;600&family=Pinyon+Script&display=swap"
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Pinyon+Script&display=swap"
       rel="stylesheet"
     />
     <!-- Files in public/ skip Vite, so Tailwind runs in the browser. -->
@@ -32,8 +32,9 @@
         --color-gold: #b9975b;
         --color-ink: #3e4756;
         --font-script: "Pinyon Script", cursive;
-        --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
-        --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+        --font-serif: "EB Garamond", Garamond, serif;
+        /* Tracked caps labels and buttons: Garamond, never a sans */
+        --font-sans: "EB Garamond", Garamond, serif;
       }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
@@ -271,7 +272,7 @@
           <svg class="sway block w-full origin-bottom-right [animation-delay:-1.5s]" viewBox="0 0 240 240" aria-hidden="true"><use href="#g-corner" transform="rotate(180 120 120)" /></svg>
         </div>
 
-        <p class="cover-in relative pl-[0.45em] font-sans text-[10px] font-semibold uppercase tracking-[0.45em] text-dusty" style="--d: 0.5s">The Wedding of</p>
+        <p class="cover-in relative pl-[0.45em] font-sans text-[11px] font-semibold uppercase tracking-[0.45em] text-dusty" style="--d: 0.5s">The Wedding of</p>
         <div class="cover-in cover-zoom relative mt-7 aspect-[3/4] h-[33svh] max-h-[300px] min-h-[170px]" style="--d: 0.7s">
           <img
             src="assets/cover.webp"
@@ -313,7 +314,7 @@
           <svg class="sway block w-full origin-top-right [animation-delay:-3s]" viewBox="0 0 240 240" aria-hidden="true"><use href="#g-corner" transform="matrix(-1 0 0 1 240 0)" /></svg>
         </div>
 
-        <p class="pl-[0.45em] font-sans text-[10px] font-semibold uppercase tracking-[0.45em] text-dusty" data-aos="fade-down" data-aos-delay="300">The Wedding of</p>
+        <p class="pl-[0.45em] font-sans text-[11px] font-semibold uppercase tracking-[0.45em] text-dusty" data-aos="fade-down" data-aos-delay="300">The Wedding of</p>
         <div class="relative mt-8 w-[66%]" data-aos="zoom-in" data-aos-delay="400">
           <img src="assets/header.webp" alt="Foto mempelai" class="aspect-[4/5] w-full rounded-t-full object-cover shadow-xl ring-1 ring-gold/70 ring-offset-[7px] ring-offset-ivory" />
           <svg class="pointer-events-none absolute -bottom-11 left-1/2 w-[132%] -translate-x-1/2" viewBox="0 0 260 110" aria-hidden="true"><use href="#g-cluster" /></svg>
@@ -364,7 +365,7 @@
           Kita adalah dua tangkai yang tumbuh dari tanah yang sama — saling menopang ketika angin datang, dan mekar bersama saat
           musimnya tiba.
         </blockquote>
-        <p class="mt-6 pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-dusty" data-aos="fade-up" data-aos-delay="300">Puisi untuk Kita</p>
+        <p class="mt-6 pl-[0.35em] font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-dusty" data-aos="fade-up" data-aos-delay="300">Puisi untuk Kita</p>
       </section>
 
       <!-- 4. Couple -->
@@ -380,7 +381,7 @@
             <img src="assets/wanita.webp" alt="Mempelai wanita" class="aspect-[3/4] w-full rounded-t-full object-cover object-top shadow-lg ring-1 ring-gold/70 ring-offset-[6px] ring-offset-ivory" />
             <svg class="pointer-events-none absolute -bottom-9 left-1/2 w-[128%] -translate-x-1/2" viewBox="0 0 260 110" aria-hidden="true"><use href="#g-cluster" /></svg>
           </div>
-          <p class="mt-14 pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold">Mempelai Wanita</p>
+          <p class="mt-14 pl-[0.35em] font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-gold">Mempelai Wanita</p>
           <h3 class="mt-2 font-script text-[2.6rem] leading-tight text-dusty-dark" data-bind="couple.wanita.lengkap"></h3>
           <p class="mx-auto mt-2 max-w-xs text-balance text-lg italic leading-snug text-ink/80" data-bind="$ortuWanita"></p>
         </div>
@@ -392,7 +393,7 @@
             <img src="assets/pria.webp" alt="Mempelai pria" class="aspect-[3/4] w-full rounded-t-full object-cover object-top shadow-lg ring-1 ring-gold/70 ring-offset-[6px] ring-offset-ivory" />
             <svg class="pointer-events-none absolute -bottom-9 left-1/2 w-[128%] -translate-x-1/2" viewBox="0 0 260 110" aria-hidden="true"><use href="#g-cluster" transform="matrix(-1 0 0 1 260 0)" /></svg>
           </div>
-          <p class="mt-14 pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold">Mempelai Pria</p>
+          <p class="mt-14 pl-[0.35em] font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-gold">Mempelai Pria</p>
           <h3 class="mt-2 font-script text-[2.6rem] leading-tight text-dusty-dark" data-bind="couple.pria.lengkap"></h3>
           <p class="mx-auto mt-2 max-w-xs text-balance text-lg italic leading-snug text-ink/80" data-bind="$ortuPria"></p>
         </div>
@@ -404,7 +405,7 @@
         <svg class="pointer-events-none absolute -bottom-2 -left-3 w-32" viewBox="0 0 180 130" aria-hidden="true" data-aos="fade"><use href="#g-spray" transform="matrix(1 0 0 -1 0 130)" /></svg>
 
         <h2 class="font-script text-6xl text-dusty-dark" data-aos="fade-up">Save the Date</h2>
-        <p class="mt-1 pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold" data-aos="fade-up" data-aos-delay="100">Hari Bahagia Kami</p>
+        <p class="mt-1 pl-[0.35em] font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-gold" data-aos="fade-up" data-aos-delay="100">Hari Bahagia Kami</p>
 
         <div class="mx-auto mt-8 max-w-[22rem] rounded-[1.75rem] border border-dusty/25 bg-ivory px-4 pb-3 pt-5 shadow-[0_14px_36px_-20px_rgba(79,100,128,0.5)]" data-aos="fade-up" data-aos-delay="200">
           <div class="flex items-center justify-center gap-3">
@@ -422,19 +423,19 @@
         <div id="cd" class="mx-auto mt-5 grid max-w-[22rem] grid-cols-4 gap-2.5 text-center">
           <div class="rounded-t-full border border-dusty/35 bg-ivory px-1 pb-3 pt-6 shadow-sm" data-aos="fade-up" data-aos-delay="0">
             <b class="block font-serif text-[2.1rem] font-semibold leading-none text-dusty-dark" data-cd="d">00</b>
-            <span class="mt-2 block font-sans text-[9px] font-semibold uppercase tracking-[0.2em] text-dusty">Hari</span>
+            <span class="mt-2 block font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-dusty">Hari</span>
           </div>
           <div class="rounded-t-full border border-dusty/35 bg-ivory px-1 pb-3 pt-6 shadow-sm" data-aos="fade-up" data-aos-delay="120">
             <b class="block font-serif text-[2.1rem] font-semibold leading-none text-dusty-dark" data-cd="h">00</b>
-            <span class="mt-2 block font-sans text-[9px] font-semibold uppercase tracking-[0.2em] text-dusty">Jam</span>
+            <span class="mt-2 block font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-dusty">Jam</span>
           </div>
           <div class="rounded-t-full border border-dusty/35 bg-ivory px-1 pb-3 pt-6 shadow-sm" data-aos="fade-up" data-aos-delay="240">
             <b class="block font-serif text-[2.1rem] font-semibold leading-none text-dusty-dark" data-cd="m">00</b>
-            <span class="mt-2 block font-sans text-[9px] font-semibold uppercase tracking-[0.2em] text-dusty">Menit</span>
+            <span class="mt-2 block font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-dusty">Menit</span>
           </div>
           <div class="rounded-t-full border border-dusty/35 bg-ivory px-1 pb-3 pt-6 shadow-sm" data-aos="fade-up" data-aos-delay="360">
             <b class="block font-serif text-[2.1rem] font-semibold leading-none text-dusty-dark" data-cd="s">00</b>
-            <span class="mt-2 block font-sans text-[9px] font-semibold uppercase tracking-[0.2em] text-dusty">Detik</span>
+            <span class="mt-2 block font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-dusty">Detik</span>
           </div>
         </div>
         <p id="cd-done" hidden class="mt-6 text-lg italic">Acara telah berlangsung. Terima kasih atas doa dan restunya.</p>
@@ -457,7 +458,7 @@
       <section id="story" class="relative px-6 py-20 text-center">
         <svg class="mx-auto w-64" viewBox="0 0 280 44" aria-hidden="true" data-aos="fade"><use href="#g-divider" /></svg>
         <h2 class="mt-4 font-script text-5xl text-dusty-dark" data-aos="fade-up">Kisah Kami</h2>
-        <p class="mt-1 pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold" data-aos="fade-up" data-aos-delay="100">Our Love Story</p>
+        <p class="mt-1 pl-[0.35em] font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-gold" data-aos="fade-up" data-aos-delay="100">Our Love Story</p>
 
         <div class="relative mx-auto mt-10 w-[78%]" data-aos="zoom-in">
           <img src="assets/story.webp" alt="" class="aspect-[4/5] w-full rounded-t-full object-cover shadow-lg ring-1 ring-gold/70 ring-offset-[6px] ring-offset-ivory" />
@@ -466,7 +467,7 @@
 
         <ol class="mt-16 space-y-2">
           <li data-aos="fade-up">
-            <p class="pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold"><b class="font-semibold">2019</b></p>
+            <p class="pl-[0.35em] font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-gold"><b class="font-semibold">2019</b></p>
             <h3 class="mt-1 font-script text-4xl text-dusty-dark">Pertemuan Pertama</h3>
             <p class="mx-auto mt-3 max-w-sm text-lg leading-relaxed text-pretty">
               Sebuah kelas fotografi botani di Kebun Raya Bogor. Ia sibuk memotret anggrek, aku sibuk mencari tutup lensa yang
@@ -479,7 +480,7 @@
             <span class="h-8 w-px bg-dusty/30"></span>
           </li>
           <li data-aos="fade-up">
-            <p class="pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold"><b class="font-semibold">2021</b></p>
+            <p class="pl-[0.35em] font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-gold"><b class="font-semibold">2021</b></p>
             <h3 class="mt-1 font-script text-4xl text-dusty-dark">Tumbuh Bersama</h3>
             <p class="mx-auto mt-3 max-w-sm text-lg leading-relaxed text-pretty">
               Dari bertukar foto bunga, menjadi obrolan panjang tentang mimpi dan rumah. Jarak Jakarta–Bandung tak pernah terasa
@@ -492,7 +493,7 @@
             <span class="h-8 w-px bg-dusty/30"></span>
           </li>
           <li data-aos="fade-up">
-            <p class="pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold"><b class="font-semibold">2026</b></p>
+            <p class="pl-[0.35em] font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-gold"><b class="font-semibold">2026</b></p>
             <h3 class="mt-1 font-script text-4xl text-dusty-dark">Sebuah Janji</h3>
             <p class="mx-auto mt-3 max-w-sm text-lg leading-relaxed text-pretty">
               Di bawah pohon kenari tua tempat semuanya bermula, sebuah pertanyaan sederhana diajukan — dan dijawab dengan
@@ -511,7 +512,7 @@
         <svg class="pointer-events-none absolute -right-3 -top-2 w-32" viewBox="0 0 180 130" aria-hidden="true" data-aos="fade"><use href="#g-spray" transform="matrix(-1 0 0 1 180 0)" /></svg>
 
         <h2 class="mt-6 font-script text-5xl text-dusty-dark" data-aos="fade-up">Rangkaian Acara</h2>
-        <p class="mt-1 pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold" data-aos="fade-up" data-aos-delay="100">Waktu &amp; Tempat</p>
+        <p class="mt-1 pl-[0.35em] font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-gold" data-aos="fade-up" data-aos-delay="100">Waktu &amp; Tempat</p>
         <div id="session-list" class="mt-10 grid gap-4 min-[380px]:grid-cols-2"></div>
         <div id="venue-list" class="mt-6 space-y-6"></div>
       </section>
@@ -520,7 +521,7 @@
       <section id="gallery" class="relative px-6 py-20 text-center">
         <svg class="mx-auto w-64" viewBox="0 0 280 44" aria-hidden="true" data-aos="fade"><use href="#g-divider" /></svg>
         <h2 class="mt-4 font-script text-5xl text-dusty-dark" data-aos="fade-up">Galeri Kami</h2>
-        <p class="mt-1 pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold" data-aos="fade-up" data-aos-delay="100">Momen Bahagia</p>
+        <p class="mt-1 pl-[0.35em] font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-gold" data-aos="fade-up" data-aos-delay="100">Momen Bahagia</p>
         <div id="gallery-grid" class="mt-10 grid grid-cols-2 gap-x-4 gap-y-5"></div>
       </section>
 
@@ -551,7 +552,7 @@
               <use href="#g-fleur" transform="scale(1.35)" color="#f3e6c8" />
             </svg>
             <div class="relative px-6 pb-20 pt-36">
-              <p class="pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold">Transfer Bank</p>
+              <p class="pl-[0.35em] font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-gold">Transfer Bank</p>
               <p class="mt-1 font-script text-5xl leading-tight text-dusty-dark" data-bind="gift.bank"></p>
               <p class="mt-2 font-serif text-[1.7rem] tracking-[0.12em] text-ink" data-bind="gift.norek"></p>
               <p class="mt-1 text-lg italic text-ink/80">a.n. <span data-bind="gift.atas_nama"></span></p>
@@ -576,17 +577,17 @@
       <section id="wishes" class="relative px-6 py-20 text-center">
         <svg class="mx-auto w-64" viewBox="0 0 280 44" aria-hidden="true" data-aos="fade"><use href="#g-divider" /></svg>
         <h2 class="mt-4 font-script text-5xl text-dusty-dark" data-aos="fade-up">Ucapan &amp; Doa</h2>
-        <p class="mt-1 pl-[0.35em] font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-gold" data-aos="fade-up" data-aos-delay="100">Wishes</p>
+        <p class="mt-1 pl-[0.35em] font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-gold" data-aos="fade-up" data-aos-delay="100">Wishes</p>
         <p class="mx-auto mt-4 max-w-sm text-lg leading-relaxed text-pretty" data-aos="fade-up" data-aos-delay="150">Titipkan doa dan harapan terbaik Anda untuk perjalanan kami.</p>
         <form id="wish-form" class="mx-auto mt-8 max-w-[340px] rounded-2xl border border-dusty/25 bg-white p-5 text-left shadow-[0_18px_44px_-26px_rgba(79,100,128,0.6)]" hidden>
-          <p class="font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-gold">Dari</p>
+          <p class="font-sans text-[11px] font-semibold uppercase tracking-[0.3em] text-gold">Dari</p>
           <p id="wish-name" class="font-serif text-xl italic text-dusty-dark"></p>
           <label for="wish-text" class="sr-only">Ucapan dan doa</label>
           <textarea id="wish-text" rows="4" maxlength="500" required placeholder="Tulis ucapan dan doa…" class="mt-3 block w-full resize-none rounded-xl border border-dusty/30 bg-ivory px-4 py-3 text-lg leading-snug text-ink placeholder:text-ink/40 focus:border-dusty focus:outline-none"></textarea>
           <button id="wish-send" type="submit" class="mt-4 w-full rounded-full bg-dusty-dark px-5 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-ivory shadow-md transition hover:bg-dusty disabled:opacity-50">Kirim Ucapan</button>
         </form>
         <p id="wish-locked" class="mx-auto mt-8 max-w-[340px] rounded-2xl bg-mist px-5 py-4 text-base italic" hidden>Buka undangan dari link pribadi Anda untuk mengirim ucapan.</p>
-        <p class="mt-10 font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-gold"><span id="wish-count">0</span> Ucapan</p>
+        <p class="mt-10 font-sans text-[11px] font-semibold uppercase tracking-[0.3em] text-gold"><span id="wish-count">0</span> Ucapan</p>
         <div id="wish-list" class="mx-auto mt-4 flex max-h-[30rem] max-w-[340px] flex-col gap-3 overflow-y-auto pr-1 text-left [scrollbar-color:rgb(125_147_173/0.4)_transparent] [scrollbar-width:thin]" aria-live="polite"></div>
         <p id="wish-empty" class="mt-6 text-lg italic text-ink/60" hidden>Belum ada ucapan. Jadilah yang pertama.</p>
       </section>
@@ -617,7 +618,7 @@
           <span data-bind="couple.wanita.panggilan"></span> <span class="font-serif text-[0.8em] font-normal italic text-gold">&amp;</span> <span data-bind="couple.pria.panggilan"></span>
         </p>
         <p class="mt-2 font-sans text-xs font-medium tracking-[0.15em] text-dusty" data-bind="couple.hashtag" data-aos="fade" data-aos-delay="300"></p>
-        <p class="mt-12 font-sans text-[10px] tracking-[0.2em] text-ink/45">Undangan digital · by.me</p>
+        <p class="mt-12 font-sans text-[11px] uppercase tracking-[0.2em] text-ink/45">Undangan digital · by.me</p>
       </footer>
     </main>
 
@@ -628,7 +629,7 @@
         <svg class="mx-auto h-6 w-6 text-rose" viewBox="-12 -12 24 24" aria-hidden="true"><use href="#g-fleur" /></svg>
         <h3 class="mt-1 flex min-h-20 items-center justify-center font-script text-[1.95rem] leading-[1.15] text-dusty-dark" data-f="label"></h3>
         <span class="mx-auto my-3 block h-px w-10 bg-gold/60" aria-hidden="true"></span>
-        <p class="font-sans text-[10px] font-semibold uppercase leading-relaxed tracking-[0.18em] text-dusty" data-f="$tanggal"></p>
+        <p class="font-sans text-[11px] font-semibold uppercase leading-relaxed tracking-[0.18em] text-dusty" data-f="$tanggal"></p>
         <p class="mt-2 inline-flex items-center gap-1.5 text-lg text-ink">
           <svg class="h-4 w-4 text-dusty" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
             <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />

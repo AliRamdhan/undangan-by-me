@@ -2,6 +2,11 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 @import '@fontsource-variable/inter';
+@import '@fontsource/libre-baskerville/400.css';
+@import '@fontsource/libre-baskerville/400-italic.css';
+@import '@fontsource/libre-baskerville/700.css';
+@import '@fontsource-variable/eb-garamond';
+@import '@fontsource-variable/eb-garamond/wght-italic.css';
 
 /* Dark mode follows the `.dark` class set by next-themes (light / dark / system toggle). */
 @custom-variant dark (&:is(.dark *));
@@ -149,6 +154,10 @@
 @theme inline {
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-sans);
+  /* Public site (landing, portfolio, login): classic invitation type. Real Baskerville where installed (Apple), Libre Baskerville elsewhere. */
+  --font-display: 'Baskerville', 'Libre Baskerville', Georgia, serif;
+  --font-text: 'EB Garamond Variable', 'EB Garamond', Garamond, Georgia, serif;
+  --font-drop: 'Times New Roman', Times, serif;
   --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
 
   --color-background: var(--background);
@@ -221,6 +230,52 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+/*
+ * Public-site typography. The admin keeps Inter; anything inside .public-type
+ * reads in Garamond with Baskerville headings, following classic invitation sets.
+ */
+.public-type {
+  font-family: var(--font-text);
+  font-size: 1.0625rem;
+  font-feature-settings: 'kern', 'liga', 'onum';
+}
+.public-type :is(h1, h2, h3) {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+/* Prices, stats and counts: lining numerals. */
+.public-type .tabular-nums,
+.public-type .lnum {
+  font-feature-settings: 'kern', 'lnum', 'tnum';
+}
+
+/* Section label: tracked serif caps (the invitation "judulSub"). */
+@utility eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+}
+/* Nav and small controls: tracked caps, a touch tighter than the eyebrow. */
+@utility caps {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+/* Opening paragraph drop cap, set in Times. */
+@utility dropcap {
+  &::first-letter {
+    float: left;
+    font-family: var(--font-drop);
+    font-size: 3.4em;
+    line-height: 0.82;
+    padding: 0.06em 0.1em 0 0;
+    color: var(--primary);
   }
 }
 

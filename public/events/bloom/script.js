@@ -33,7 +33,7 @@ const LOOK = {
   numClass: 'font-semibold',
   // Calendar strip (renderCalendar): the weekday row, then the date row.
   calLabel: (i) =>
-    `pb-2 font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-dusty ${i < 2 ? 'border-r border-dusty/25' : ''}`,
+    `pb-2 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-dusty ${i < 2 ? 'border-r border-dusty/25' : ''}`,
   calCell: (i) => `relative flex h-24 items-center justify-center border-t border-dusty/25 ${i < 2 ? 'border-r' : ''}`,
   // The wedding day sits in the heart of a blossom (the #g-blossom sprite in index.html).
   calDay: (tgl, main) =>

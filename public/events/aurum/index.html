@@ -14,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=IM+Fell+English:ital@1&family=Libre+Baskerville&family=Libre+Caslon+Text:ital@1&display=swap"
       rel="stylesheet"
     />
     <!-- Files in public/ skip Vite, so Tailwind runs in the browser. -->
@@ -28,8 +28,11 @@
         --color-gold-deep: #9c7e46;
         --color-ivory: #f5f1e8;
         --font-display: "Cinzel", ui-serif, Georgia, serif;
-        --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
-        --font-sans: "Jost", ui-sans-serif, system-ui, sans-serif;
+        --font-serif: "Baskerville", "Libre Baskerville", Georgia, serif;
+        /* Body and tracked caps labels: Baskerville, never a sans */
+        --font-sans: "Baskerville", "Libre Baskerville", Georgia, serif;
+        --font-caslon: "Libre Caslon Text", Georgia, serif;
+        --font-amp: "Bell MT", "IM Fell English", serif;
       }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
@@ -41,7 +44,7 @@
   </head>
 
   <!-- When copying this template for a new event, change data-event (01_Event.ID; admin URL /admin/events/{ID}) and data-slug (fallback). -->
-  <body data-event="" data-slug="aurum" class="locked loading bg-charcoal font-sans font-light text-ivory antialiased">
+  <body data-event="" data-slug="aurum" class="locked loading bg-charcoal font-sans text-ivory antialiased">
     <!-- Art-deco ornaments, drawn once and reused with <use> -->
     <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden">
       <symbol id="i-corner" viewBox="0 0 80 80" fill="none" stroke="currentColor">
@@ -114,13 +117,13 @@
             <div class="absolute inset-0 rounded-t-full bg-linear-to-t from-charcoal/70 via-transparent to-transparent"></div>
             <!-- Monogram seal -->
             <div class="absolute -bottom-7 left-1/2 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full border border-gold bg-charcoal shadow-[0_0_0_4px_#0f0f10,0_0_0_5px_rgba(201,169,110,0.35)]">
-              <span class="font-serif text-3xl italic leading-none text-gold-light">&amp;</span>
+              <span class="font-amp text-3xl italic leading-none text-gold-light">&amp;</span>
             </div>
           </div>
         </div>
 
-        <h1 id="greeting-title" class="cover-in mt-12 font-serif text-[2.6rem] italic leading-tight text-ivory sm:text-5xl" style="--d: 0.8s">
-          <span data-bind="couple.pria.panggilan"></span> <span class="text-gold">&amp;</span> <span data-bind="couple.wanita.panggilan"></span>
+        <h1 id="greeting-title" class="cover-in mt-12 font-caslon text-[2.6rem] italic leading-tight text-ivory sm:text-5xl" style="--d: 0.8s">
+          <span data-bind="couple.pria.panggilan"></span> <span class="font-amp text-gold">&amp;</span> <span data-bind="couple.wanita.panggilan"></span>
         </h1>
         <p class="cover-in mt-2 font-display text-xs tracking-[0.4em] text-gold" style="--d: 0.95s" data-bind="$tanggalTitik"></p>
 
@@ -142,7 +145,7 @@
         </button>
         <p id="load-error" hidden class="mt-5 text-sm text-ivory/80">
           Undangan gagal dimuat.
-          <button type="button" class="font-medium text-gold underline underline-offset-4" onclick="location.reload()">Muat ulang</button>
+          <button type="button" class="text-gold underline underline-offset-4" onclick="location.reload()">Muat ulang</button>
         </p>
       </div>
     </div>
@@ -168,9 +171,9 @@
 
       <div class="absolute inset-x-0 bottom-0 px-10 pb-32 text-center [text-shadow:0_2px_20px_rgba(0,0,0,0.55)] lg:pb-28">
         <p class="hero-in font-display text-[11px] uppercase tracking-[0.55em] text-gold-light lg:text-xs" style="--d: 0.3s">The Wedding of</p>
-        <h2 class="mt-5 font-serif italic leading-[0.95] text-ivory">
+        <h2 class="mt-5 font-caslon italic leading-[0.95] text-ivory">
           <span class="hero-in block text-[4.25rem] lg:text-8xl" style="--d: 0.5s" data-bind="couple.pria.panggilan"></span>
-          <span class="hero-in my-2 flex items-center justify-center gap-4 font-display text-xl not-italic text-gold lg:my-3 lg:text-2xl" style="--d: 0.7s">
+          <span class="hero-in my-2 flex items-center justify-center gap-4 font-amp text-xl text-gold lg:my-3 lg:text-2xl" style="--d: 0.7s">
             <span class="h-px w-12 bg-gold/60"></span>&amp;<span class="h-px w-12 bg-gold/60"></span>
           </span>
           <span class="hero-in block text-[4.25rem] lg:text-8xl" style="--d: 0.9s" data-bind="couple.wanita.panggilan"></span>
@@ -181,7 +184,7 @@
       </div>
 
       <div class="hero-in absolute inset-x-0 bottom-9 flex flex-col items-center gap-2 lg:hidden" style="--d: 1.8s" aria-hidden="true">
-        <span class="text-[9px] uppercase tracking-[0.4em] text-ivory/50">Gulir</span>
+        <span class="text-[10px] uppercase tracking-[0.4em] text-ivory/50">Gulir</span>
         <span class="scroll-cue block h-8 w-px bg-gold/40"></span>
       </div>
     </header>
@@ -189,16 +192,16 @@
     <main class="relative overflow-hidden bg-charcoal lg:ml-[58%]">
       <!-- 3. Opening + music -->
       <section id="intro" class="relative px-8 py-20 lg:py-24 text-center lg:flex lg:min-h-svh lg:flex-col lg:justify-center lg:px-12">
-        <p class="text-[10px] font-medium uppercase tracking-[0.5em] text-gold" data-aos="fade-up">Undangan Pernikahan</p>
+        <p class="text-[10px] uppercase tracking-[0.5em] text-gold" data-aos="fade-up">Undangan Pernikahan</p>
         <div class="relative mx-auto mt-9 flex h-32 w-32 items-center justify-center" data-aos="zoom-in" data-aos-delay="150">
           <svg class="absolute inset-0 h-full w-full text-gold" viewBox="0 0 120 120" fill="none" stroke="currentColor" aria-hidden="true">
             <circle cx="60" cy="60" r="58" stroke-width=".8" />
             <circle cx="60" cy="60" r="52" stroke-width=".6" stroke-dasharray="1 3" opacity=".7" />
             <path d="M60 0l3 3-3 3-3-3zM60 114l3 3-3 3-3-3zM0 60l3-3 3 3-3 3zM114 60l3-3 3 3-3 3z" fill="currentColor" stroke="none" />
           </svg>
-          <span class="font-serif text-6xl italic leading-none text-gold-light">&amp;</span>
+          <span class="font-amp text-6xl italic leading-none text-gold-light">&amp;</span>
         </div>
-        <p class="mx-auto mt-9 max-w-sm font-serif text-xl italic leading-relaxed text-ivory/90" data-aos="fade-up" data-aos-delay="250">
+        <p class="mx-auto mt-9 max-w-sm font-caslon text-xl italic leading-relaxed text-ivory/90" data-aos="fade-up" data-aos-delay="250">
           Dengan penuh sukacita, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dan berbagi kebahagiaan di hari pernikahan kami.
         </p>
         <div class="mt-8 flex items-center justify-center gap-4" data-aos="fade-up" data-aos-delay="350">
@@ -211,8 +214,8 @@
         <div id="player" data-aos="fade-up" data-aos-delay="450" data-aos-offset="0" class="mx-auto mt-12 flex w-full max-w-sm items-center gap-4 border border-gold/35 bg-charcoal-2/80 p-3 text-left">
           <img src="assets/cover.webp" alt="" class="h-16 w-16 shrink-0 object-cover ring-1 ring-gold/40" />
           <div class="min-w-0 flex-1">
-            <p class="text-[9px] font-medium uppercase tracking-[0.35em] text-gold">Lagu Kami</p>
-            <p class="mt-0.5 truncate font-serif text-lg italic text-ivory" data-bind="media.judul_musik"></p>
+            <p class="text-[10px] uppercase tracking-[0.35em] text-gold">Lagu Kami</p>
+            <p class="mt-0.5 truncate font-caslon text-lg italic text-ivory" data-bind="media.judul_musik"></p>
             <div class="mt-2 h-[2px] overflow-hidden bg-gold/20"><div id="progress" class="h-full w-0 bg-gold"></div></div>
             <div class="mt-1.5 flex justify-between text-[10px] text-ivory/50"><span id="t-cur"><b class="font-normal">0</b>:<b class="font-normal">00</b></span><span id="t-dur"><b class="font-normal">0</b>:<b class="font-normal">00</b></span></div>
           </div>
@@ -231,7 +234,7 @@
       <!-- 4. Opening quote -->
       <section id="quote" class="relative border-t border-gold/10 bg-charcoal-2 px-8 py-20 lg:py-24 text-center lg:px-12">
         <svg class="mx-auto h-10 w-20 text-gold/80" data-aos="fade-up" aria-hidden="true"><use href="#i-fan" /></svg>
-        <p class="mx-auto mt-8 max-w-sm font-serif text-[1.75rem] italic leading-snug text-gold-light" data-aos="fade-up" data-aos-delay="100">
+        <p class="mx-auto mt-8 max-w-sm font-caslon text-[1.75rem] italic leading-snug text-gold-light" data-aos="fade-up" data-aos-delay="100">
           “Grow old along with me, the best is yet to be.”
         </p>
         <p class="mx-auto mt-5 max-w-xs text-sm leading-relaxed text-ivory/70" data-aos="fade-up" data-aos-delay="200">
@@ -243,7 +246,7 @@
       <!-- 5. Couple -->
       <section id="couple" class="relative border-t border-gold/10 px-8 py-20 lg:py-24 lg:px-12">
         <div class="text-center">
-          <p class="font-serif text-xl italic text-gold" data-aos="fade-up">The Bride &amp; Groom</p>
+          <p class="font-caslon text-xl italic text-gold" data-aos="fade-up">The Bride &amp; Groom</p>
           <h2 class="mt-2 font-display text-3xl tracking-[0.18em] text-ivory" data-aos="fade-up" data-aos-delay="100">MEMPELAI</h2>
           <svg class="mx-auto mt-5 h-4 w-40 text-gold" data-aos="rule" data-aos-delay="200" aria-hidden="true"><use href="#i-rule" /></svg>
         </div>
@@ -256,8 +259,8 @@
               <img src="assets/pria.webp" alt="Mempelai pria" loading="lazy" class="relative aspect-[3/4.4] w-full rounded-t-full object-cover" />
             </div>
             <div data-aos="fade-left" data-aos-delay="150">
-              <p class="text-[10px] font-medium uppercase tracking-[0.4em] text-gold">The Groom</p>
-              <h3 class="mt-3 font-serif text-[2rem] italic leading-tight text-ivory" data-bind="couple.pria.lengkap"></h3>
+              <p class="text-[10px] uppercase tracking-[0.4em] text-gold">The Groom</p>
+              <h3 class="mt-3 font-caslon text-[2rem] italic leading-tight text-ivory" data-bind="couple.pria.lengkap"></h3>
               <span class="mt-4 block h-px w-12 bg-gold/60"></span>
               <p class="mt-4 text-sm leading-relaxed text-ivory/70" data-bind="$ortuPria"></p>
             </div>
@@ -265,15 +268,15 @@
 
           <div class="my-10 flex items-center justify-center gap-5" data-aos="zoom-in">
             <span class="h-px w-16 bg-gold/40"></span>
-            <span class="font-serif text-5xl italic leading-none text-gold">&amp;</span>
+            <span class="font-amp text-5xl italic leading-none text-gold">&amp;</span>
             <span class="h-px w-16 bg-gold/40"></span>
           </div>
 
           <!-- Bride -->
           <div class="grid grid-cols-[1fr_44%] items-center gap-6 text-right">
             <div data-aos="fade-right" data-aos-delay="150">
-              <p class="text-[10px] font-medium uppercase tracking-[0.4em] text-gold">The Bride</p>
-              <h3 class="mt-3 font-serif text-[2rem] italic leading-tight text-ivory" data-bind="couple.wanita.lengkap"></h3>
+              <p class="text-[10px] uppercase tracking-[0.4em] text-gold">The Bride</p>
+              <h3 class="mt-3 font-caslon text-[2rem] italic leading-tight text-ivory" data-bind="couple.wanita.lengkap"></h3>
               <span class="ml-auto mt-4 block h-px w-12 bg-gold/60"></span>
               <p class="mt-4 text-sm leading-relaxed text-ivory/70" data-bind="$ortuWanita"></p>
             </div>
@@ -287,7 +290,7 @@
 
       <!-- 6. Save the date + countdown -->
       <section id="countdown" class="deco-pattern relative border-t border-gold/10 bg-charcoal-2 px-8 py-20 lg:py-24 text-center lg:px-12">
-        <p class="font-serif text-xl italic text-gold" data-aos="fade-up">Save the Date</p>
+        <p class="font-caslon text-xl italic text-gold" data-aos="fade-up">Save the Date</p>
         <h2 class="mt-2 font-display text-3xl tracking-[0.18em] text-ivory" data-aos="fade-up" data-aos-delay="100">HARI BAHAGIA</h2>
         <svg class="mx-auto mt-5 h-4 w-40 text-gold" data-aos="rule" data-aos-delay="200" aria-hidden="true"><use href="#i-rule" /></svg>
 
@@ -305,20 +308,20 @@
           </p>
         </div>
 
-        <p class="mt-14 text-[10px] font-medium uppercase tracking-[0.45em] text-gold" data-aos="fade-up">Menuju Hari Bahagia</p>
+        <p class="mt-14 text-[10px] uppercase tracking-[0.45em] text-gold" data-aos="fade-up">Menuju Hari Bahagia</p>
         <div id="cd" class="mx-auto mt-5 grid max-w-sm grid-cols-4 gap-2.5">
-          <div class="border border-gold/30 bg-charcoal/70 py-5" data-aos="fade-up" data-aos-delay="0"><b class="block font-serif text-4xl font-medium leading-none tabular-nums lining-nums text-gold-light" data-cd="d">00</b><span class="mt-2 block text-[9px] uppercase tracking-[0.3em] text-ivory/55">Hari</span></div>
-          <div class="border border-gold/30 bg-charcoal/70 py-5" data-aos="fade-up" data-aos-delay="120"><b class="block font-serif text-4xl font-medium leading-none tabular-nums lining-nums text-gold-light" data-cd="h">00</b><span class="mt-2 block text-[9px] uppercase tracking-[0.3em] text-ivory/55">Jam</span></div>
-          <div class="border border-gold/30 bg-charcoal/70 py-5" data-aos="fade-up" data-aos-delay="240"><b class="block font-serif text-4xl font-medium leading-none tabular-nums lining-nums text-gold-light" data-cd="m">00</b><span class="mt-2 block text-[9px] uppercase tracking-[0.3em] text-ivory/55">Menit</span></div>
-          <div class="border border-gold/30 bg-charcoal/70 py-5" data-aos="fade-up" data-aos-delay="360"><b class="block font-serif text-4xl font-medium leading-none tabular-nums lining-nums text-gold-light" data-cd="s">00</b><span class="mt-2 block text-[9px] uppercase tracking-[0.3em] text-ivory/55">Detik</span></div>
+          <div class="border border-gold/30 bg-charcoal/70 py-5" data-aos="fade-up" data-aos-delay="0"><b class="block font-serif text-4xl leading-none tabular-nums lining-nums text-gold-light" data-cd="d">00</b><span class="mt-2 block text-[10px] uppercase tracking-[0.3em] text-ivory/55">Hari</span></div>
+          <div class="border border-gold/30 bg-charcoal/70 py-5" data-aos="fade-up" data-aos-delay="120"><b class="block font-serif text-4xl leading-none tabular-nums lining-nums text-gold-light" data-cd="h">00</b><span class="mt-2 block text-[10px] uppercase tracking-[0.3em] text-ivory/55">Jam</span></div>
+          <div class="border border-gold/30 bg-charcoal/70 py-5" data-aos="fade-up" data-aos-delay="240"><b class="block font-serif text-4xl leading-none tabular-nums lining-nums text-gold-light" data-cd="m">00</b><span class="mt-2 block text-[10px] uppercase tracking-[0.3em] text-ivory/55">Menit</span></div>
+          <div class="border border-gold/30 bg-charcoal/70 py-5" data-aos="fade-up" data-aos-delay="360"><b class="block font-serif text-4xl leading-none tabular-nums lining-nums text-gold-light" data-cd="s">00</b><span class="mt-2 block text-[10px] uppercase tracking-[0.3em] text-ivory/55">Detik</span></div>
         </div>
-        <p id="cd-done" hidden class="mx-auto mt-6 max-w-xs font-serif text-xl italic text-gold-light">Hari bahagia telah tiba. Terima kasih atas doa dan kehadiran Anda.</p>
+        <p id="cd-done" hidden class="mx-auto mt-6 max-w-xs font-caslon text-xl italic text-gold-light">Hari bahagia telah tiba. Terima kasih atas doa dan kehadiran Anda.</p>
         <div class="mt-10" data-aos="fade-up">
           <a
             id="cal-link"
             target="_blank"
             rel="noopener"
-            class="inline-flex items-center gap-2.5 border border-gold px-7 py-3.5 text-[11px] font-medium uppercase tracking-[0.3em] text-gold transition hover:bg-gold hover:text-charcoal"
+            class="inline-flex items-center gap-2.5 border border-gold px-7 py-3.5 text-[11px] uppercase tracking-[0.3em] text-gold transition hover:bg-gold hover:text-charcoal"
           >
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
               <rect x="3" y="5" width="18" height="16" rx="1" /><path d="M16 3v4M8 3v4M3 11h18" />
@@ -331,7 +334,7 @@
       <!-- 7. Our story -->
       <section id="story" class="relative border-t border-gold/10 px-8 py-20 lg:py-24 lg:px-12">
         <div class="text-center">
-          <p class="font-serif text-xl italic text-gold" data-aos="fade-up">Our Story</p>
+          <p class="font-caslon text-xl italic text-gold" data-aos="fade-up">Our Story</p>
           <h2 class="mt-2 font-display text-3xl tracking-[0.18em] text-ivory" data-aos="fade-up" data-aos-delay="100">KISAH KAMI</h2>
           <svg class="mx-auto mt-5 h-4 w-40 text-gold" data-aos="rule" data-aos-delay="200" aria-hidden="true"><use href="#i-rule" /></svg>
         </div>
@@ -367,7 +370,7 @@
 
       <!-- 8. Events: sessions & venues -->
       <section id="location" class="deco-pattern relative border-t border-gold/10 bg-charcoal-2 px-8 py-20 lg:py-24 text-center lg:px-12">
-        <p class="font-serif text-xl italic text-gold" data-aos="fade-up">The Celebration</p>
+        <p class="font-caslon text-xl italic text-gold" data-aos="fade-up">The Celebration</p>
         <h2 class="mt-2 font-display text-3xl tracking-[0.18em] text-ivory" data-aos="fade-up" data-aos-delay="100">RANGKAIAN ACARA</h2>
         <svg class="mx-auto mt-5 h-4 w-40 text-gold" data-aos="rule" data-aos-delay="200" aria-hidden="true"><use href="#i-rule" /></svg>
         <div id="session-list" class="mx-auto mt-12 max-w-md space-y-6"></div>
@@ -382,7 +385,7 @@
 
       <!-- 9. Gallery -->
       <section id="gallery" class="relative border-t border-gold/10 px-6 py-20 lg:py-24 text-center lg:px-12">
-        <p class="font-serif text-xl italic text-gold" data-aos="fade-up">Captured Moments</p>
+        <p class="font-caslon text-xl italic text-gold" data-aos="fade-up">Captured Moments</p>
         <h2 class="mt-2 font-display text-3xl tracking-[0.18em] text-ivory" data-aos="fade-up" data-aos-delay="100">GALERI</h2>
         <svg class="mx-auto mt-5 h-4 w-40 text-gold" data-aos="rule" data-aos-delay="200" aria-hidden="true"><use href="#i-rule" /></svg>
         <div id="gallery-grid" class="mx-auto mt-12 grid max-w-md grid-cols-2 gap-2.5"></div>
@@ -390,7 +393,7 @@
 
       <!-- 10. Gift -->
       <section id="gift" class="relative border-t border-gold/10 bg-charcoal-2 px-8 py-20 lg:py-24 text-center lg:px-12">
-        <p class="font-serif text-xl italic text-gold" data-aos="fade-up">Wedding Gift</p>
+        <p class="font-caslon text-xl italic text-gold" data-aos="fade-up">Wedding Gift</p>
         <h2 class="mt-2 font-display text-3xl tracking-[0.18em] text-ivory" data-aos="fade-up" data-aos-delay="100">TANDA KASIH</h2>
         <svg class="mx-auto mt-5 h-4 w-40 text-gold" data-aos="rule" data-aos-delay="200" aria-hidden="true"><use href="#i-rule" /></svg>
         <p class="mx-auto mt-8 max-w-sm text-sm leading-relaxed text-ivory/70" data-aos="fade-up" data-aos-delay="200">
@@ -417,7 +420,7 @@
             <p class="relative text-[1.35rem] font-normal tracking-[0.2em] text-ivory" data-bind="gift.norek"></p>
             <div class="relative flex items-end justify-between">
               <div>
-                <p class="text-[8px] font-medium uppercase tracking-[0.35em] text-ivory/45">Atas Nama</p>
+                <p class="text-[9px] uppercase tracking-[0.35em] text-ivory/45">Atas Nama</p>
                 <p class="mt-1 font-display text-sm tracking-[0.15em] text-gold-light" data-bind="gift.atas_nama"></p>
               </div>
               <svg class="h-6 w-6 text-gold/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
@@ -428,7 +431,7 @@
           <button
             id="copy-btn"
             type="button"
-            class="mt-8 inline-flex items-center gap-2.5 border border-gold px-7 py-3.5 text-[11px] font-medium uppercase tracking-[0.3em] text-gold transition hover:bg-gold hover:text-charcoal"
+            class="mt-8 inline-flex items-center gap-2.5 border border-gold px-7 py-3.5 text-[11px] uppercase tracking-[0.3em] text-gold transition hover:bg-gold hover:text-charcoal"
           >
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
               <rect x="8" y="8" width="13" height="13" rx="1" /><path d="M16 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4" />
@@ -444,20 +447,20 @@
 
       <!-- 11. Wishes -->
       <section id="wishes" class="relative border-t border-gold/10 px-8 py-20 lg:py-24 text-center lg:px-12">
-        <p class="font-serif text-xl italic text-gold" data-aos="fade-up">Wishes &amp; Prayers</p>
+        <p class="font-caslon text-xl italic text-gold" data-aos="fade-up">Wishes &amp; Prayers</p>
         <h2 class="mt-2 font-display text-3xl tracking-[0.18em] text-ivory" data-aos="fade-up" data-aos-delay="100">UCAPAN &amp; DOA</h2>
         <svg class="mx-auto mt-5 h-4 w-40 text-gold" data-aos="rule" data-aos-delay="200" aria-hidden="true"><use href="#i-rule" /></svg>
         <p class="mx-auto mt-8 max-w-sm text-sm leading-relaxed text-ivory/70" data-aos="fade-up">Kirimkan doa dan ucapan terbaik Anda untuk kami.</p>
         <form id="wish-form" class="mx-auto mt-10 max-w-sm text-left" hidden>
-          <p class="text-[10px] font-medium uppercase tracking-[0.3em] text-ivory/50">Dari <span id="wish-name" class="ml-1 font-display normal-case tracking-[0.12em] text-gold-light"></span></p>
+          <p class="text-[10px] uppercase tracking-[0.3em] text-ivory/50">Dari <span id="wish-name" class="ml-1 font-display normal-case tracking-[0.12em] text-gold-light"></span></p>
           <label for="wish-text" class="sr-only">Ucapan dan doa</label>
           <textarea id="wish-text" rows="4" maxlength="500" required placeholder="Tulis ucapan dan doa…" class="mt-3 block w-full resize-none border border-gold/30 bg-charcoal-2 px-4 py-3 text-sm leading-relaxed text-ivory placeholder:text-ivory/35 focus:border-gold focus:outline-none"></textarea>
-          <button id="wish-send" type="submit" class="mt-4 w-full border border-gold px-7 py-3.5 text-[11px] font-medium uppercase tracking-[0.3em] text-gold transition hover:bg-gold hover:text-charcoal disabled:opacity-50">Kirim Ucapan</button>
+          <button id="wish-send" type="submit" class="mt-4 w-full border border-gold px-7 py-3.5 text-[11px] uppercase tracking-[0.3em] text-gold transition hover:bg-gold hover:text-charcoal disabled:opacity-50">Kirim Ucapan</button>
         </form>
         <p id="wish-locked" class="mx-auto mt-10 max-w-sm border border-gold/20 px-5 py-4 text-xs leading-relaxed text-ivory/60" hidden>Buka undangan dari link pribadi Anda untuk mengirim ucapan.</p>
-        <p class="mt-12 text-[10px] font-medium uppercase tracking-[0.3em] text-ivory/50"><span id="wish-count">0</span> Ucapan</p>
+        <p class="mt-12 text-[10px] uppercase tracking-[0.3em] text-ivory/50"><span id="wish-count">0</span> Ucapan</p>
         <div id="wish-list" class="mx-auto mt-4 flex max-h-[30rem] max-w-sm flex-col gap-3 overflow-y-auto pr-1 text-left [scrollbar-color:rgb(201_169_110/0.4)_transparent] [scrollbar-width:thin]" aria-live="polite"></div>
-        <p id="wish-empty" class="mt-6 font-serif text-lg italic text-ivory/50" hidden>Belum ada ucapan. Jadilah yang pertama.</p>
+        <p id="wish-empty" class="mt-6 font-caslon text-lg italic text-ivory/50" hidden>Belum ada ucapan. Jadilah yang pertama.</p>
       </section>
 
       <!-- 12. Closing -->
@@ -466,14 +469,14 @@
         <div class="absolute inset-0 bg-linear-to-b from-charcoal via-charcoal/80 to-charcoal"></div>
         <div class="relative">
           <svg class="mx-auto h-10 w-20 text-gold/80" data-aos="fade-up" aria-hidden="true"><use href="#i-fan" /></svg>
-          <p class="mt-6 font-serif text-xl italic text-gold" data-aos="fade-up">With Love</p>
+          <p class="mt-6 font-caslon text-xl italic text-gold" data-aos="fade-up">With Love</p>
           <h2 class="mt-2 font-display text-3xl tracking-[0.18em] text-ivory" data-aos="fade-up" data-aos-delay="100">TERIMA KASIH</h2>
           <p class="mx-auto mt-8 max-w-sm text-sm leading-relaxed text-ivory/70" data-aos="fade-up" data-aos-delay="200">
             Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu di hari bahagia kami.
           </p>
-          <p class="mt-12 text-[10px] font-medium uppercase tracking-[0.4em] text-ivory/55" data-aos="fade-up">Kami yang berbahagia</p>
-          <p class="mt-4 font-serif text-5xl italic leading-tight text-ivory" data-aos="zoom-in" data-aos-delay="150">
-            <span data-bind="couple.pria.panggilan"></span> <span class="text-gold">&amp;</span> <span data-bind="couple.wanita.panggilan"></span>
+          <p class="mt-12 text-[10px] uppercase tracking-[0.4em] text-ivory/55" data-aos="fade-up">Kami yang berbahagia</p>
+          <p class="mt-4 font-caslon text-5xl italic leading-tight text-ivory" data-aos="zoom-in" data-aos-delay="150">
+            <span data-bind="couple.pria.panggilan"></span> <span class="font-amp text-gold">&amp;</span> <span data-bind="couple.wanita.panggilan"></span>
           </p>
           <svg class="mx-auto mt-6 h-4 w-40 text-gold" data-aos="rule" data-aos-delay="250" aria-hidden="true"><use href="#i-rule" /></svg>
           <p class="mt-5 font-display text-sm tracking-[0.4em] text-gold-light" data-bind="$tanggalTitik" data-aos="fade" data-aos-delay="300"></p>
@@ -492,7 +495,7 @@
         <svg class="absolute bottom-2 right-2 h-6 w-6 rotate-180 text-gold" aria-hidden="true"><use href="#i-corner-sm" /></svg>
         <h3 class="font-display text-2xl tracking-[0.12em] text-gold-light" data-f="label"></h3>
         <svg class="mx-auto mt-4 h-3 w-28 text-gold/70" aria-hidden="true"><use href="#i-rule" /></svg>
-        <p class="mt-5 font-serif text-2xl italic text-ivory" data-f="$tanggal"></p>
+        <p class="mt-5 font-caslon text-2xl italic text-ivory" data-f="$tanggal"></p>
         <p class="mt-2 inline-flex items-center gap-2 text-sm tracking-[0.15em] text-ivory/75">
           <svg class="h-4 w-4 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
             <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
@@ -500,7 +503,7 @@
           <span data-f="$jam"></span>
         </p>
         <p class="mt-6" data-opt="dress_code">
-          <span class="inline-flex items-center gap-2 border border-gold/40 bg-charcoal-2/60 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.3em] text-gold">
+          <span class="inline-flex items-center gap-2 border border-gold/40 bg-charcoal-2/60 px-4 py-2 text-[10px] uppercase tracking-[0.3em] text-gold">
             <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true">
               <path d="M2 7l8 5-8 5zM22 7l-8 5 8 5z" /><rect x="10" y="10" width="4" height="4" rx=".5" />
             </svg>
@@ -531,7 +534,7 @@
             data-href="maps"
             target="_blank"
             rel="noopener"
-            class="inline-flex items-center gap-2 bg-gold px-6 py-3 text-[11px] font-medium uppercase tracking-[0.3em] text-charcoal transition hover:bg-gold-light"
+            class="inline-flex items-center gap-2 bg-gold px-6 py-3 text-[11px] uppercase tracking-[0.3em] text-charcoal transition hover:bg-gold-light"
           >
             <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z" /><circle cx="12" cy="9" r="2.5" />
@@ -542,7 +545,7 @@
             data-href="live_stream"
             target="_blank"
             rel="noopener"
-            class="inline-flex items-center border border-gold/60 px-6 py-3 text-[11px] font-medium uppercase tracking-[0.3em] text-gold transition hover:bg-gold hover:text-charcoal"
+            class="inline-flex items-center border border-gold/60 px-6 py-3 text-[11px] uppercase tracking-[0.3em] text-gold transition hover:bg-gold hover:text-charcoal"
             >Live Streaming</a
           >
         </div>

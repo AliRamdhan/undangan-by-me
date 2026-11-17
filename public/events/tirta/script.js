@@ -33,7 +33,7 @@ const LOOK = {
   // Numbers keep the weight of the text around them.
   numClass: '[font-weight:inherit]',
   // Calendar strip (renderCalendar) on deep sea: the wedding day is a coral sun on the horizon.
-  calLabel: (i) => `pb-4 text-[10px] font-medium uppercase tracking-[0.3em] ${i === 1 ? 'text-karang' : 'text-buih/50'}`,
+  calLabel: (i) => `pb-4 text-[11px] font-medium uppercase tracking-[0.3em] ${i === 1 ? 'text-karang' : 'text-buih/50'}`,
   calCell: () => 'relative flex h-28 items-center justify-center overflow-hidden',
   calDay: (tgl, main) =>
     main

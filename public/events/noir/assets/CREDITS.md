@@ -25,3 +25,17 @@ the couple's own photos when this folder becomes a real event.
 
 `demo/musik.mp3` is the shared demo track used by the other portfolio templates.
 The barcode, rules and numerals are drawn in the page itself (no third-party artwork).
+
+## Fonts
+
+Loaded from [Google Fonts](https://fonts.google.com) under the
+[SIL Open Font License](https://openfontlicense.org); no font files are stored here.
+
+| Family | Used for |
+|---|---|
+| Playfair Display (400, 400 italic, 900) | Hero names, headings, issue numerals, drop cap |
+| Tinos (400, 400 italic) | Body text, tracked uppercase labels, barcode digits |
+
+The body and label stacks ask for the system **Times New Roman** / Times first
+when installed (the display stack tries Didot / Bodoni 72 after Playfair);
+Tinos is the open-licensed fallback.

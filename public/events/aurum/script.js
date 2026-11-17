@@ -40,7 +40,7 @@ const LOOK = {
     main
       ? `<span class="cal-ring absolute h-[4.5rem] w-[4.5rem] rounded-full border border-gold"></span>
          <span class="absolute h-[5.25rem] w-[5.25rem] rounded-full border border-gold/25"></span>
-         <b class="relative font-serif text-4xl font-medium lining-nums text-gold-light">${tgl}</b>`
+         <b class="relative font-serif text-4xl lining-nums text-gold-light">${tgl}</b>`
       : `<b class="font-serif text-3xl font-normal lining-nums text-ivory/45">${tgl}</b>`,
   // Gallery tile (button) and its photo; i is the photo's index. Every third tile runs full width.
   galleryTile: (i) =>

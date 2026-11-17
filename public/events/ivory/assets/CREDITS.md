@@ -20,3 +20,18 @@ when this folder becomes a real event.
 | `assets/demo/gallery-6.webp` | https://unsplash.com/photos/L5gTFp1iGHE | Kiet Trinh |
 
 `assets/demo/musik.mp3` is the shared demo track used by the portfolio templates.
+
+## Fonts
+
+Loaded from [Google Fonts](https://fonts.google.com) under the
+[SIL Open Font License](https://openfontlicense.org); no font files are stored here.
+
+| Family | Used for |
+|---|---|
+| Libre Caslon Display (400) | Headings, couple names, numerals |
+| Libre Caslon Text (400 italic) | The italic ampersand between the names |
+| Tinos (400) | Body text, tracked uppercase labels, drop cap |
+
+The body stack asks for the system **Times New Roman** / Times first (and the
+display stack for **Big Caslon**) when installed; Tinos and Libre Caslon are the
+open-licensed fallbacks.

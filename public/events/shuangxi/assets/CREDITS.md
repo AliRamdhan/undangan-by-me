@@ -20,3 +20,15 @@ couple's own photos when this folder becomes a real event.
 | `demo/gallery-6.webp` | https://unsplash.com/photos/5uAmanGv7HA | East Meets Dress |
 
 Music (`demo/musik.mp3`): the same demo track used by the other portfolio templates.
+
+## Fonts
+
+Loaded from Google Fonts under the [SIL Open Font License](https://openfontlicense.org);
+no font files are stored in this folder.
+
+- **Cinzel** (400, 600, 700) for Latin headings.
+- **Ma Shan Zheng** for the 囍 and other Chinese characters (falls back to installed
+  Kaiti/Songti faces).
+- **Libre Baskerville** (400, 400 italic, 700) for body text and the tracked capital
+  labels. The stack lists system **Baskerville** first, so devices that have it
+  installed (e.g. macOS/iOS) use it and Libre Baskerville is the web fallback.

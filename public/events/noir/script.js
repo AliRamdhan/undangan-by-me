@@ -30,9 +30,9 @@ const LOOK = {
   sonOf: 'Putra dari',
   daughterOf: 'Putri dari',
   venue: 'Lokasi',
-  // Digits keep the text's weight and face; lining figures sit level in Bodoni.
+  // Digits keep the text's weight and face; lining figures sit level.
   numClass: 'font-normal lining-nums',
-  // Calendar strip (renderCalendar): mono weekdays over big serif dates, ink on paper.
+  // Calendar strip (renderCalendar): tracked Times caps over big Playfair dates, ink on paper.
   // The day itself is printed in reverse, paper on an ink block.
   calLabel: (i) =>
     `pb-3 font-label text-[10px] uppercase tracking-[0.25em] ${i === 1 ? 'text-ink' : 'text-ink/40'} ${i < 2 ? 'border-r border-ink/15' : ''}`,
@@ -40,8 +40,8 @@ const LOOK = {
   calDay: (tgl, main) =>
     main
       ? `<span class="cal-mark absolute inset-x-3 inset-y-2 bg-ink"></span>
-         <b class="relative font-serif text-6xl font-normal italic lining-nums text-paper">${tgl}</b>`
-      : `<b class="font-serif text-4xl font-normal lining-nums text-ink/25">${tgl}</b>`,
+         <b class="relative font-display text-6xl font-normal italic lining-nums text-paper">${tgl}</b>`
+      : `<b class="font-display text-4xl font-normal lining-nums text-ink/25">${tgl}</b>`,
   // Gallery tile (button) and its photo; i is the photo's index. Two portraits, then a
   // full-width landscape. Photos print in black and white and take colour on hover.
   galleryTile: (i) =>

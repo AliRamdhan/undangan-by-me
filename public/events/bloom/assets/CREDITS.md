@@ -19,3 +19,13 @@ the couple's own photos when this folder becomes a real event.
 | `demo/gallery-6.webp` | https://unsplash.com/photos/ZYNbJcl4mAo | Annie Spratt |
 
 The botanical ornaments are inline SVG drawn for this template (no third-party artwork).
+
+# Fonts
+
+All web fonts load from [Google Fonts](https://fonts.google.com) under the
+[SIL Open Font License](https://openfontlicense.org); no font files are bundled here.
+
+| Role | Stack |
+|---|---|
+| Names, script titles | Pinyon Script |
+| Body, headings, tracked caps labels | EB Garamond (system Garamond as fallback) |

@@ -38,7 +38,7 @@ body.locked {
   place-items: center;
   width: 76px;
   height: 76px;
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: "Bell MT", "IM Fell English", serif;
   font-size: 2.5rem;
   font-style: italic;
   line-height: 1;
@@ -70,7 +70,7 @@ body.locked {
 }
 .loader-text {
   margin: 0.6rem 0 0;
-  font-family: "Jost", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Baskerville", "Libre Baskerville", Georgia, serif;
   font-size: 10px;
   letter-spacing: 0.35em;
   text-transform: uppercase;

@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Jost:wght@300;400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital@1&family=Tinos&display=swap"
       rel="stylesheet"
     />
     <!-- Files in public/ skip Vite, so Tailwind runs in the browser. -->
@@ -25,8 +25,9 @@
         --color-ink: #111111;
         --color-muted: #6b6b66;
         --color-terra: #b26841;
-        --font-display: "DM Serif Display", ui-serif, Georgia, serif;
-        --font-sans: "Jost", ui-sans-serif, system-ui, sans-serif;
+        --font-display: "Libre Caslon Display", "Big Caslon", Georgia, serif;
+        --font-italic: "Libre Caslon Text", Georgia, serif;
+        --font-serif: "Times New Roman", Times, "Tinos", serif;
       }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
@@ -38,7 +39,7 @@
   </head>
 
   <!-- When copying this template for a new event, change data-event (01_Event.ID; admin URL /admin/events/{ID}) and data-slug (fallback). -->
-  <body data-event="" data-slug="ivory" class="locked loading bg-paper font-sans font-light text-ink antialiased selection:bg-terra/20">
+  <body data-event="" data-slug="ivory" class="locked loading bg-paper font-serif text-ink antialiased selection:bg-terra/20">
     <!-- 0. Loader: plain CSS (style.css) so it paints before Tailwind compiles; hidden by script.js once data is ready -->
     <div id="loader" role="status" aria-live="polite">
       <p class="loader-title">The Wedding</p>
@@ -112,7 +113,7 @@
             <h2 class="mt-5 break-words font-display text-[5.25rem] leading-[0.88] tracking-tight md:text-[4.75rem]">
               <span class="block" data-aos="fade-up" data-aos-delay="300" data-bind="couple.wanita.panggilan"></span>
               <span class="block pl-12 md:pl-8" data-aos="fade-up" data-aos-delay="450"
-                ><i class="text-terra">&amp;</i> <span data-bind="couple.pria.panggilan"></span
+                ><i class="font-italic text-terra">&amp;</i> <span data-bind="couple.pria.panggilan"></span
               ></span>
             </h2>
             <p class="mt-8 max-w-[19rem] text-sm leading-relaxed text-muted" data-aos="fade-up" data-aos-delay="550">
@@ -150,7 +151,7 @@
             <svg data-icon="pause" hidden class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5h3.5v17H6zM14.5 3.5H18v17h-3.5z" /></svg>
           </button>
           <div class="min-w-0 flex-1">
-            <p class="text-[9px] font-normal uppercase tracking-[0.35em] text-muted">Now Playing</p>
+            <p class="text-[10px] font-normal uppercase tracking-[0.35em] text-muted">Now Playing</p>
             <p class="mt-1 truncate font-display text-[1.05rem] leading-snug" data-bind="media.judul_musik"></p>
             <div class="mt-2 h-px bg-ink/15"><div id="progress" class="h-full w-0 bg-terra"></div></div>
           </div>
@@ -175,7 +176,7 @@
         </div>
         <span class="mt-3 block h-px origin-left bg-ink/15" data-aos="rule" data-aos-duration="1200"></span>
 
-        <p class="mt-10 max-w-md text-sm leading-relaxed text-muted" data-aos="fade-up">
+        <p class="dropcap mt-10 max-w-md text-sm leading-relaxed text-muted" data-aos="fade-up">
           Dengan penuh rasa syukur, kami mengundang Bapak/Ibu/Saudara/i untuk merayakan hari ketika dua perjalanan menjadi satu.
         </p>
 
@@ -184,7 +185,7 @@
             <div class="overflow-hidden" data-aos="reveal" data-aos-duration="1400">
               <img src="assets/wanita.webp" alt="Mempelai wanita" class="aspect-[3/4] w-full object-cover grayscale transition duration-700 hover:grayscale-0" />
             </div>
-            <p class="mt-5 text-[9px] font-normal uppercase tracking-[0.35em] text-muted" data-aos="fade-up">Mempelai Wanita</p>
+            <p class="mt-5 text-[10px] font-normal uppercase tracking-[0.35em] text-muted" data-aos="fade-up">Mempelai Wanita</p>
             <h3 class="mt-2 font-display text-[1.65rem] leading-[1.1] sm:text-3xl" data-aos="fade-up" data-aos-delay="100" data-bind="couple.wanita.lengkap"></h3>
             <p class="mt-3 text-xs leading-relaxed text-muted" data-aos="fade-up" data-aos-delay="200" data-bind="$ortuWanita"></p>
           </article>
@@ -192,7 +193,7 @@
             <div class="overflow-hidden" data-aos="reveal" data-aos-duration="1400" data-aos-delay="250">
               <img src="assets/pria.webp" alt="Mempelai pria" class="aspect-[3/4] w-full object-cover grayscale transition duration-700 hover:grayscale-0" />
             </div>
-            <p class="mt-5 text-[9px] font-normal uppercase tracking-[0.35em] text-muted" data-aos="fade-up">Mempelai Pria</p>
+            <p class="mt-5 text-[10px] font-normal uppercase tracking-[0.35em] text-muted" data-aos="fade-up">Mempelai Pria</p>
             <h3 class="mt-2 font-display text-[1.65rem] leading-[1.1] sm:text-3xl" data-aos="fade-up" data-aos-delay="100" data-bind="couple.pria.lengkap"></h3>
             <p class="mt-3 text-xs leading-relaxed text-muted" data-aos="fade-up" data-aos-delay="200" data-bind="$ortuPria"></p>
           </article>
@@ -227,10 +228,10 @@
 
         <p class="mt-16 text-center text-[10px] font-normal uppercase tracking-[0.35em] text-muted" data-aos="fade-up">Menuju hari bahagia</p>
         <div id="cd" class="mt-6 grid grid-cols-4 divide-x divide-ink/15 text-center">
-          <div data-aos="fade-up" data-aos-delay="0"><b class="block font-display text-[2.75rem] font-normal leading-none" data-cd="d">00</b><span class="mt-3 block text-[9px] font-normal uppercase tracking-[0.3em] text-muted">Hari</span></div>
-          <div data-aos="fade-up" data-aos-delay="100"><b class="block font-display text-[2.75rem] font-normal leading-none" data-cd="h">00</b><span class="mt-3 block text-[9px] font-normal uppercase tracking-[0.3em] text-muted">Jam</span></div>
-          <div data-aos="fade-up" data-aos-delay="200"><b class="block font-display text-[2.75rem] font-normal leading-none" data-cd="m">00</b><span class="mt-3 block text-[9px] font-normal uppercase tracking-[0.3em] text-muted">Menit</span></div>
-          <div data-aos="fade-up" data-aos-delay="300"><b class="block font-display text-[2.75rem] font-normal leading-none" data-cd="s">00</b><span class="mt-3 block text-[9px] font-normal uppercase tracking-[0.3em] text-muted">Detik</span></div>
+          <div data-aos="fade-up" data-aos-delay="0"><b class="block font-display text-[2.75rem] font-normal leading-none" data-cd="d">00</b><span class="mt-3 block text-[10px] font-normal uppercase tracking-[0.3em] text-muted">Hari</span></div>
+          <div data-aos="fade-up" data-aos-delay="100"><b class="block font-display text-[2.75rem] font-normal leading-none" data-cd="h">00</b><span class="mt-3 block text-[10px] font-normal uppercase tracking-[0.3em] text-muted">Jam</span></div>
+          <div data-aos="fade-up" data-aos-delay="200"><b class="block font-display text-[2.75rem] font-normal leading-none" data-cd="m">00</b><span class="mt-3 block text-[10px] font-normal uppercase tracking-[0.3em] text-muted">Menit</span></div>
+          <div data-aos="fade-up" data-aos-delay="300"><b class="block font-display text-[2.75rem] font-normal leading-none" data-cd="s">00</b><span class="mt-3 block text-[10px] font-normal uppercase tracking-[0.3em] text-muted">Detik</span></div>
         </div>
         <p id="cd-done" hidden class="mt-6 text-center font-display text-xl">Acara telah berlangsung. Terima kasih atas doa dan restunya.</p>
         <div class="mt-12 text-center" data-aos="fade-up">
@@ -264,28 +265,28 @@
             <li class="grid grid-cols-[4.5rem_1fr] gap-4 border-t border-ink/15 py-6" data-aos="fade-up">
               <span class="font-display text-2xl leading-none">2019</span>
               <div>
-                <p class="text-[9px] font-normal uppercase tracking-[0.35em] text-muted">Pertemuan</p>
+                <p class="text-[10px] font-normal uppercase tracking-[0.35em] text-muted">Pertemuan</p>
                 <p class="mt-2 text-sm leading-relaxed">Kami bertemu di sebuah toko buku kecil di sudut Jakarta, saat tangan kami meraih buku yang sama. Satu mengalah, lalu menawarkan kopi sebagai gantinya.</p>
               </div>
             </li>
             <li class="grid grid-cols-[4.5rem_1fr] gap-4 border-t border-ink/15 py-6" data-aos="fade-up">
               <span class="font-display text-2xl leading-none">2021</span>
               <div>
-                <p class="text-[9px] font-normal uppercase tracking-[0.35em] text-muted">Perjalanan</p>
+                <p class="text-[10px] font-normal uppercase tracking-[0.35em] text-muted">Perjalanan</p>
                 <p class="mt-2 text-sm leading-relaxed">Kopi itu menjadi kebiasaan: pameran di akhir pekan, kereta ke luar kota, dan obrolan panjang tentang rumah seperti apa yang ingin kami bangun.</p>
               </div>
             </li>
             <li class="grid grid-cols-[4.5rem_1fr] gap-4 border-t border-ink/15 py-6" data-aos="fade-up">
               <span class="font-display text-2xl leading-none">2026</span>
               <div>
-                <p class="text-[9px] font-normal uppercase tracking-[0.35em] text-muted">Lamaran</p>
+                <p class="text-[10px] font-normal uppercase tracking-[0.35em] text-muted">Lamaran</p>
                 <p class="mt-2 text-sm leading-relaxed">Di bawah langit sore yang sederhana, sebuah pertanyaan kecil diajukan. Jawabannya ternyata sudah lama kami ketahui.</p>
               </div>
             </li>
             <li class="grid grid-cols-[4.5rem_1fr] gap-4 border-t border-ink/15 py-6" data-aos="fade-up">
               <span class="font-display text-2xl leading-none text-terra">2027</span>
               <div>
-                <p class="text-[9px] font-normal uppercase tracking-[0.35em] text-muted">Selamanya</p>
+                <p class="text-[10px] font-normal uppercase tracking-[0.35em] text-muted">Selamanya</p>
                 <p class="mt-2 text-sm leading-relaxed">Kini kami siap menulis bab berikutnya, bersama, dan kami ingin Anda hadir di halaman pertamanya.</p>
               </div>
             </li>
@@ -335,7 +336,7 @@
 
         <div id="envelope" class="mx-auto mt-12 max-w-sm border border-ink/80 p-2" data-aos="fade-up">
           <div class="border border-ink/15 px-6 py-10 text-center">
-            <p class="text-[9px] font-normal uppercase tracking-[0.4em] text-muted">Transfer Bank</p>
+            <p class="text-[10px] font-normal uppercase tracking-[0.4em] text-muted">Transfer Bank</p>
             <p class="mt-5 font-display text-4xl leading-none" data-bind="gift.bank"></p>
             <span class="mx-auto mt-6 block h-px w-10 bg-ink/30"></span>
             <p class="mt-6 text-[1.4rem] tracking-[0.18em]" data-bind="gift.norek"></p>
@@ -368,7 +369,7 @@
         <form id="wish-form" class="mt-10 max-w-md" hidden>
           <p class="text-[10px] font-normal uppercase tracking-[0.35em] text-muted">Dari <span id="wish-name" class="ml-1 normal-case tracking-normal text-ink"></span></p>
           <label for="wish-text" class="sr-only">Ucapan dan doa</label>
-          <textarea id="wish-text" rows="4" maxlength="500" required placeholder="Tulis ucapan dan doa…" class="mt-3 block w-full resize-none border-0 border-b border-ink/30 bg-transparent px-0 py-3 text-sm font-light leading-relaxed placeholder:text-ink/35 focus:border-terra focus:outline-none focus:ring-0"></textarea>
+          <textarea id="wish-text" rows="4" maxlength="500" required placeholder="Tulis ucapan dan doa…" class="mt-3 block w-full resize-none border-0 border-b border-ink/30 bg-transparent px-0 py-3 text-sm leading-relaxed placeholder:text-ink/35 focus:border-terra focus:outline-none focus:ring-0"></textarea>
           <button id="wish-send" type="submit" class="mt-6 border border-ink px-8 py-3 text-[10px] font-normal uppercase tracking-[0.35em] transition-colors hover:bg-ink hover:text-paper disabled:opacity-50">Kirim Ucapan</button>
         </form>
         <p id="wish-locked" class="mt-10 max-w-md border-l border-terra pl-4 text-sm text-muted" hidden>Buka undangan dari link pribadi Anda untuk mengirim ucapan.</p>
@@ -388,7 +389,7 @@
           <span data-bind="couple.wanita.panggilan"></span> <i class="text-terra">&amp;</i> <span data-bind="couple.pria.panggilan"></span>
         </p>
         <p class="mt-5 text-sm tracking-[0.15em] text-muted" data-bind="couple.hashtag" data-aos="fade" data-aos-delay="300"></p>
-        <div class="mt-20 flex items-center justify-between gap-4 border-t border-ink/15 pt-4 text-[9px] font-normal uppercase tracking-[0.3em] text-muted">
+        <div class="mt-20 flex items-center justify-between gap-4 border-t border-ink/15 pt-4 text-[10px] font-normal uppercase tracking-[0.3em] text-muted">
           <span>Undangan digital · by.me</span>
           <span data-bind="$tanggalTitik"></span>
         </div>
@@ -400,11 +401,11 @@
       <article class="grid gap-5 border-t border-ink/15 py-8 text-left sm:grid-cols-[12rem_1fr] sm:gap-8">
         <h3 class="font-display text-[2rem] leading-tight" data-f="label"></h3>
         <dl class="grid grid-cols-[5.5rem_1fr] gap-x-4 gap-y-3 text-sm">
-          <dt class="pt-[3px] text-[9px] font-normal uppercase tracking-[0.3em] text-muted">Tanggal</dt>
+          <dt class="pt-[3px] text-[10px] font-normal uppercase tracking-[0.3em] text-muted">Tanggal</dt>
           <dd data-f="$tanggal"></dd>
-          <dt class="pt-[3px] text-[9px] font-normal uppercase tracking-[0.3em] text-muted">Waktu</dt>
+          <dt class="pt-[3px] text-[10px] font-normal uppercase tracking-[0.3em] text-muted">Waktu</dt>
           <dd data-f="$jam"></dd>
-          <dt class="pt-[3px] text-[9px] font-normal uppercase tracking-[0.3em] text-muted" data-opt="dress_code">Busana</dt>
+          <dt class="pt-[3px] text-[10px] font-normal uppercase tracking-[0.3em] text-muted" data-opt="dress_code">Busana</dt>
           <dd data-opt="dress_code" data-f="dress_code"></dd>
         </dl>
       </article>
@@ -413,12 +414,12 @@
     <template id="tpl-wish">
       <article class="py-5">
         <p class="font-display text-lg" data-f="nama"></p>
-        <p class="mt-1 text-sm font-light leading-relaxed text-ink/75" data-f="pesan"></p>
+        <p class="mt-1 text-sm leading-relaxed text-ink/75" data-f="pesan"></p>
       </article>
     </template>
     <template id="tpl-venue">
       <article class="grid gap-4 border-t border-ink/15 py-8 text-left sm:grid-cols-[12rem_1fr] sm:gap-8">
-        <p class="pt-1 text-[9px] font-normal uppercase tracking-[0.35em] text-muted" data-f="$judul"></p>
+        <p class="pt-1 text-[10px] font-normal uppercase tracking-[0.35em] text-muted" data-f="$judul"></p>
         <div>
           <h3 class="font-display text-[1.75rem] leading-tight" data-opt="tempat" data-f="tempat"></h3>
           <p class="mt-2 max-w-sm text-sm leading-relaxed text-muted" data-f="alamat"></p>
