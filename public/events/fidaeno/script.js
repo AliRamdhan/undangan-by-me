@@ -241,7 +241,7 @@ function renderCountdown(ev, utama, sesi, tz) {
   if (!utama) return ($('#countdown').hidden = true)
   renderCalendar(utama)
 
-  const first = sesi[0]
+  const first = sesi[1] // akad nikah [0] , resepsi [1]
   const target = instant(first?.tanggal || utama, first?.mulai, tz)
   const cell = (k) => $(`[data-cd="${k}"]`)
   let timer
