@@ -332,10 +332,14 @@
             <path d="M0 70 L160 0 L320 70 V210 H0 Z" fill="#a6b485" stroke="#6e7f4a" stroke-width="1.5" />
           </svg>
           <div class="relative z-10 mx-6 bg-white px-5 pb-36 pt-5 shadow-md" data-aos="card-rise" data-aos-delay="500" data-aos-duration="1100" data-aos-easing="ease-out-back" data-aos-anchor="#envelope">
-            <svg class="mx-auto h-7 w-7 text-sage-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-              <path d="M3 10 12 4l9 6M5 10v8M9 10v8M15 10v8M19 10v8M3 20h18" />
-            </svg>
-            <p class="mt-2 font-script text-3xl text-pink-deep" data-bind="gift.bank"></p>
+            <!-- Bank logo from #bank-logos (script.js); #bank-text stays when there is no logo -->
+            <img id="bank-logo" hidden alt="" class="mx-auto h-16 w-auto max-w-full object-contain" />
+            <div id="bank-text">
+              <svg class="mx-auto h-7 w-7 text-sage-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <path d="M3 10 12 4l9 6M5 10v8M9 10v8M15 10v8M19 10v8M3 20h18" />
+              </svg>
+              <p class="mt-2 font-script text-3xl text-pink-deep" data-bind="gift.bank"></p>
+            </div>
             <p class="mt-1 text-xl tracking-wider" data-bind="gift.norek"></p>
             <p class="mt-1 text-xs">a.n. <span data-bind="gift.atas_nama"></span></p>
             <button
@@ -419,6 +423,60 @@
         >
       </article>
     </template>
+
+    <!--
+      Bank logo per gift.bank: key = the bank name in lowercase, without the word "bank" and without
+      spaces/symbols ("BCA", "Bank BCA" → bca). Value = file in public/bank/ (coloured, not *-light:
+      the card is white). No key → the bank name shows as text.
+    -->
+    <script type="application/json" id="bank-logos">
+      {
+        "bca": "bank-bca-big.png",
+        "bcasyariah": "bank-bca-syariah.png",
+        "blu": "bank-blu-bca.png",
+        "bni": "bank-bni-big.png",
+        "bri": "bank-bri-big.png",
+        "mandiri": "bank-mandiri.png",
+        "bsi": "bank-bsi.png",
+        "bjb": "bank-bjb.png",
+        "cimbniaga": "bank-cimb-niaga.png",
+        "cimbniagasyariah": "bank-cimb-niaga-syariah.png",
+        "danamon": "bank-danamon.png",
+        "jago": "bank-jago.png",
+        "permata": "bank-permata2.png",
+        "ocbc": "bank-ocbc.png",
+        "maybank": "bank-maybank.png",
+        "nobu": "bank-nobu.png",
+        "sinarmas": "bank-sinarmas.png",
+        "uob": "bank-uob.png",
+        "dbs": "bank-dbs.png",
+        "hsbc": "bank-hsbc.png",
+        "shinhan": "bank-shinhan.png",
+        "woori": "bank-woori.png",
+        "hana": "bank-hanabank.png",
+        "smbc": "bank-smbc.png",
+        "standardchartered": "bank-standard-chartered.png",
+        "sultra": "bank-sultra.png",
+        "jenius": "payment-jenius.png",
+        "gopay": "payment-gopay.png",
+        "ovo": "payment-ovo.png",
+        "paypal": "payment-paypal.png",
+        "commonwealth": "bank-commonwealth.png",
+        "nab": "bank-nab.png",
+        "asb": "bank-asb.png",
+        "commerzbank": "bank-commerz.png",
+        "fintro": "bank-fintro.png",
+        "ing": "bank-ing-belgie.png",
+        "raiffeisen": "bank-raiffeisen.png",
+        "frankfurtersparkasse": "frankfurter-sparkasse.png",
+        "zelle": "bank-zelle.png",
+        "venmo": "bank-venmo.png",
+        "payid": "bank-payid.png",
+        "paynow": "payment-paynow.png",
+        "kakaopay": "payment-kakaopay.png",
+        "interac": "interact-cad.png"
+      }
+    </script>
 
     <!-- Gallery lightbox -->
     <div

@@ -308,6 +308,7 @@ function renderGift(gift) {
   if (!gift.norek && !qris) return ($('#gift').hidden = true)
 
   $('#envelope').hidden = !gift.norek
+  renderBankLogo(gift.bank)
   $('#copy-btn').addEventListener('click', async () => {
     const text = String(gift.norek).replace(/\s/g, '')
     try {
@@ -320,6 +321,35 @@ function renderGift(gift) {
 
   if (qris) $('#qris').src = qris
   else $('#qris-wrap').hidden = true
+}
+
+// "Bank BCA" → "bca": the key of the #bank-logos map in index.html.
+const bankKey = (bank) => String(bank).toLowerCase().replace(/\bbank\b/g, '').replace(/[^a-z0-9]/g, '')
+
+// Bank logo. Only pages with #bank-logo and the #bank-logos map use it. With no key,
+// or a logo that fails to load, the bank name text (#bank-text) stays.
+function renderBankLogo(bank) {
+  const img = $('#bank-logo')
+  const map = $('#bank-logos')
+  if (!img || !map || !bank) return
+  let logos
+  try {
+    logos = JSON.parse(map.textContent)
+  } catch {
+    return
+  }
+  const file = logos[bankKey(bank)]
+  if (!file) return
+  img.addEventListener(
+    'load',
+    () => {
+      img.alt = bank
+      img.hidden = false
+      $('#bank-text').hidden = true
+    },
+    { once: true },
+  )
+  img.src = `/bank/${file}`
 }
 
 function renderGallery(photos) {
